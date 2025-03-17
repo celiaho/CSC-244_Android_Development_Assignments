@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Button Clicking App</string> <!-- ??? Why isn't this here by default? -->
+    <string name="click_prompt">Click to the target</string>
+    <string name="click_numberDisplay">0</string>
+    <string name="click_minusBtnLabel">-</string>
+    <string name="click_plusBtnLabel">+</string>
+
+    <string name="target_prompt">Set the target</string>
+    <string name="target_numberDisplay">0</string>
+    <string name="target_setBtnLabel">SET</string>
+</resources>
