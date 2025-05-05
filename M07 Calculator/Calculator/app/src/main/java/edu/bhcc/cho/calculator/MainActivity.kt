@@ -1,14 +1,16 @@
 package edu.bhcc.cho.calculator
 
+import java.math.BigDecimal
+import java.math.RoundingMode
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-// import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import edu.bhcc.cho.calculator.HistoryActivity
+// import androidx.activity.enableEdgeToEdge
+// import edu.bhcc.cho.calculator.HistoryActivity
 
 class MainActivity : AppCompatActivity() {
     // Declare vars for all UI elements with "lateinit var" keyword (will initialize later in onCreate())
@@ -36,9 +38,11 @@ class MainActivity : AppCompatActivity() {
 
     // Vars for operations and equals
     private var operand1: Double? = null
+    private var pendingOperand2: String = ""
     private var currentOperation: String? = null
     private var equalsJustPressed: Boolean = false  // Flag to indicate if = button was just pressed
-    private var operationJustPressed: Boolean = false // Flag to indicate if an operation button (+,-,*,/) was just pressed
+    private var operationJustPressed: Boolean =
+        false // Flag to indicate if an operation button (+,-,*,/) was just pressed
 
     // For history storage
     private val calculationHistory = mutableListOf<HistoryItem>()
@@ -95,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         // Set OnClickListeners for operation & equals buttons
         btnAdd.setOnClickListener { performOperation("+") }
         btnSubtract.setOnClickListener { performOperation("-") }
-        btnMultiply.setOnClickListener { performOperation("*") }
+        btnMultiply.setOnClickListener { performOperation("x") }
         btnDivide.setOnClickListener { performOperation("/") }
         btnEquals.setOnClickListener { performEquals() }
 
@@ -111,161 +115,319 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+        // CATEGORIES OF BUTTONS
+        // numbers
+        // operation buttons
+        // equals button
+        // clear button
+        // history button
+        // toggle sign button
+        // percent button
+        // decimal button
+
+        // what was pressed = newText
+        // what's in the display = display.text.toString()
+            //// displayText = display.text.toString()
+
+        // If display =
+            // wholeNum
+            // wholeNum & operation
+            // wholeNum & operation & wholeNum
+            // wholeNum & operation & decimalNum
+            // decimalNum
+            // decimalNum & operation
+            // decimalNum & operation & wholeNum
+            // decimalNum & operation & decimalNum
+
+        // ROOT LOGIC
+            // When (we have operand1 + operation + operand2) + (another operation or =) >> THEN calculate operation
+            // WHEN a 2nd nonNum is entered >> then calculate
+            // OTHERWISE keep allowing input
+
+        /*
+        If it's the 2nd operator
+        -if operatorJustPressed and operatorsPressed = 1 (or operation exists in current calculation and another operator just pressed
+
+        if (newText == +-x or /) && (displayText contains +-x or /) {    // If a 2nd operator was entered
+                calculate()
+           } else { // A second operator was not entered
+                // Display what was entered until an operator/= is pressed
+                // Save that input
+           }
+         */
+
     // Function to append text to tv_display
-    private fun appendToDisplay(newText: String) {  // For when number/decimal buttons are clicked
-        Log.d("AppendToDisplay", "Text: $newText, Display: ${display.text}, equalsJustPressed: $equalsJustPressed, operationJustPressed: $operationJustPressed")
-        // If display is "0" OR "=" was just pressed OR (an operation was just pressed AND the display text is ONLY the operator)...
-        if (display.text == "0" || equalsJustPressed || (operationJustPressed && (display.text == "+" || display.text == "-" || display.text == "x" || display.text == "/"))) {
-            display.text = if (newText == ".") "0." else newText    // Prepend "0" if the first input is "."
-            equalsJustPressed = false
-            operationJustPressed = false
-        } else {
-            if (newText == ".") {   // If user presses "."
-                if (!display.text.contains(".")) {  // and current display text doesn't already contain "."
-                    display.text = display.text.toString() + newText    // append "." to current display text
+    private fun appendToDisplay(newText: String) {
+        Log.d("AppendToDisplay", "Text: $newText," +
+                "Display: ${display.text}, equalsJustPressed: $equalsJustPressed"
+        )
+
+        if (newText == ".") {   // If user presses "."
+            when {
+                // If display string ends with an operation, append "0."
+                display.text.toString().endsWith("+") || display.text.toString().endsWith("-") ||
+                        display.text.toString().endsWith("x") || display.text.toString()
+                    .endsWith("/") -> {
+                    display.text = display.text.toString() + "0."
                 }
-            } else {    // If user presses something other than "."
-                display.text = display.text.toString() + newText    // append new input to current display text
+                // If display is 0 or equals was just pressed, reset with "0."
+                display.text == "0" || equalsJustPressed -> {
+                    display.text = "0."
+                    equalsJustPressed = false
+                }
+                // If an operation was just pressed, add "0." after the operation
+                operationJustPressed -> {
+                    display.text = display.text.toString() + "0."
+                    operationJustPressed = false
+                } else -> {   // If we're in the middle of entering a number
+                    // Check if the current number already has a decimal
+                    val displayText = display.text.toString()
+                    val parts = displayText.split(Regex("[+\\-*/]"))
+                    // Get the last part (current number being entered)
+                    val currentNumber = parts.last()
+                    // Add decimal if current number doesn't already have one
+                    if (!currentNumber.contains(".")) {
+                        display.text = "$displayText."
+                    }
+                }
+            }
+        } else {    // Handling for number inputs
+            when {
+                // If display is 0 or equals was just pressed, replace with new number
+                display.text == "0" || equalsJustPressed -> {
+                    display.text = newText
+                    equalsJustPressed = false
+                }
+                // If an operation was just pressed, add new number after operation
+                operationJustPressed -> {
+                    display.text = display.text.toString() + newText
+                    operationJustPressed = false
+                    pendingOperand2 = newText // Start building the 2nd operand
+                }
+
+                else -> {    // If we're in the middle of entering a number
+                    display.text = display.text.toString() + newText
+                    // If we're entering the second operand, keep track of it
+                    if (currentOperation != null && !operationJustPressed) {
+                        pendingOperand2 += newText
+                    }
+                }
             }
         }
     }
-//    private fun appendToDisplay(newText: String) {  // For when number/decimal buttons are clicked
-//        // If display is 0 OR = was just pressed OR an operation button was just pressed & the display text is one of the operators...
-//        if (display.text == "0" || equalsJustPressed || (operationJustPressed && (display.text == "+" || display.text == "-" || display.text == "x" || display.text == "/"))) {
-//            display.text = if (newText == ".") "0." else newText // Prepend "0" if the first input is "."
-//            equalsJustPressed = false
-//            operationJustPressed = false
-//        } else {
-//            if (newText == ".") {   // If user presses "."
-//                if (!display.text.contains(".")) {  // and current display text doesn't already contain "."
-//                    display.text = display.text.toString() + newText    // append "." to current display text
-//                }
-//            } else {    // If user presses something other than "."
-//                display.text = display.text.toString() + newText    // append new input to current display text
-//            }
-//        }
-//    }
 
     // Function to clear display & reset operands/operation
     private fun clearDisplay() {
         display.text = "0" // Set the text of the display TextView back to "0"
         operand1 = null // Clear the 1st operand
+        pendingOperand2 = "" // Clear the pending 2nd operand
         currentOperation = null // Clear the current operation
-        equalsJustPressed = false // Reset the equalsJustPressed flag to false (ready for a new calculation)
+        equalsJustPressed =
+            false // Reset the equalsJustPressed flag to false (ready for a new calculation)
     }
 
     // Function to handle operation button clicks
     private fun performOperation(operation: String) {
-        Log.d("PerformOperation", "Operation: $operation, Display: ${display.text}, operand1: $operand1, currentOperation: $currentOperation, operationJustPressed: $operationJustPressed")
-        val currentDisplayValue = display.text.toString() // Get the current display text
-        val currentValue = currentDisplayValue.toDoubleOrNull() // Convert to Double if possible
+        Log.d(
+            "PerformOperation",
+            "Operation: $operation, Display: ${display.text}, operand1: $operand1," +
+                    "currentOperation: $currentOperation"
+        )
 
-        if (operand1 == null) { // If this is the first operand
-            operand1 = currentValue // Store the current display value
-            currentOperation = operation // Set the operation
-            operationJustPressed = true // Flag that an operation was pressed
-            display.text = currentDisplayValue + operation // Append the operator to the display
-        } else { // If there's already a first operand
-            if (!operationJustPressed) { // If a second operand has been entered
-                if (currentValue != null) { // If the second operand is valid
-                    val result = calculate(operand1!!, currentValue, currentOperation!!) // Perform calculation
-                    operand1 = result // Store the result
-                    currentOperation = operation // Set the new operation
-                    display.text = formatResult(result) + operation // Display result + new operator
-                    operationJustPressed = true // Flag that an operation was pressed
-                } else { // If no valid second operand
-                    currentOperation = operation // Update the operation
-                    display.text = formatResult(operand1 ?: 0.0) + operation // Display first operand + new operator
-                    operationJustPressed = true // Flag that an operation was pressed
-                }
-            } else { // If an operation was pressed immediately after another
-                currentOperation = operation // Update the operation
-                display.text = formatResult(operand1 ?: 0.0) + operation // Display first operand + new operator
-                operationJustPressed = true // Flag that an operation was pressed
+        val displayString = display.text.toString() // Get the current display text
+
+        // If we already have a pending operation, calculate it first
+        if (operand1 != null && currentOperation != null && pendingOperand2.isNotEmpty()) {
+            val operand2 = pendingOperand2.toDoubleOrNull() ?: 0.0
+            val result = calculate(operand1!!, operand2, currentOperation!!)
+
+            // Store the calculation in history
+            val historyItem = HistoryItem(
+                "${formatResult(operand1!!)} $currentOperation ${formatResult(operand2)} =",
+                formatResult(result)
+            )
+            calculationHistory.add(historyItem)
+            if (calculationHistory.size > historyLimit) {
+                calculationHistory.removeAt(0)
             }
-        }
-    }
 
-//        if (operand1 == null) { // If this is the 1st operand...
-//            // Convert the current display string to a double and store as the first operand
-//            operand1 = currentDisplay.toDoubleOrNull()
-//            currentOperation = operation // Set the currentOperation to the operation just pressed
-//            operationJustPressed = true // Indicate that an operation button was just pressed
-//            display.text = currentDisplay + operation // Append the operation to the currentDisplay string
-//        } else { // If there's already a first operand
-//            if (!operationJustPressed) { // If a second operand has been entered
-//                if (currentDisplayValue != null) { // If the second operand is a valid number
-//                    val result = calculate(operand1!!, currentDisplayValue, currentOperation!!) // Perform the calculation
-//                    operand1 = result // Store the result as the new first operand
-//                    currentOperation = operation // Set the new operation
-//                    display.text = formatResult(result) + operation // Display the result followed by the new operation
-//                    operationJustPressed = true // Indicate that an operation button was pressed
-//                } else { // If no valid second operand
-//                    currentOperation = operation // Just update the current operation
-//                    // Display the first operand followed by the new operation
-//                    display.text = formatResult(operand1 ?: 0.0) + operation
-//                    operationJustPressed = true // Indicate that an operation button was pressed
+            operand1 = result
+            display.text = formatResult(result) + operation
+            pendingOperand2 = ""
+        } else {
+            // First operation in a calculation
+            operand1 = displayString.toDoubleOrNull() ?: 0.0
+            display.text = displayString + operation
+            pendingOperand2 = ""
+        }
+
+        currentOperation = operation
+        operationJustPressed = true
+        equalsJustPressed = false
+    }
+    //        // Check if the display already has an operation in progress
+//        val hasExistingOperation = displayString.contains("+") || displayString.contains("-") ||
+//                displayString.contains("x") || displayString.contains("/")
+//
+//        if (hasExistingOperation && !operationJustPressed) {
+//            performEquals()     // If there's an existing operation, evaluate it first
+//            val resultString = display.text.toString()  // After evaluation, store display text as "resultString"
+//            operand1 = resultString.toDoubleOrNull()    // Store result as operand1 for next operation
+//            currentOperation = operation                // Set the new operation
+//            display.text = resultString + operation
+//        } else {    // No existing operation or operation just pressed
+//            if (operand1 == null) { // If this is the first operand
+//                operand1 = displayString.toDoubleOrNull()    // Store current display val as operand1
+//                currentOperation = operation    // Set the new operation
+//                display.text = displayString + operation
+//            } else {    // Operation button pressed after another operation
+//                currentOperation = operation    // Just update the operation
+//                // Update display with new operation and replace last char if needed
+//                if (operationJustPressed) {
+//                    display.text = displayString.substring(0, displayString.length - 1) + operation
+//                } else {
+//                    display.text = displayString + operation
 //                }
-//            } else { // If an operation button was pressed immediately after another operation
-//                currentOperation = operation // Update the current operation
-//                // Display the first operand followed by the new operation
-//                display.text = formatResult(operand1 ?: 0.0) + operation
-//                operationJustPressed = true // Indicate that an operation button was pressed
 //            }
 //        }
+
+    /////////////////// Now = doesn't work. wtf.
+//        if (operand1 != null && currentOperation != null && !operationJustPressed) {
+//            // Perform the pending calculation
+//            val operand2 = displayString.substringAfter(currentOperation!!).toDoubleOrNull()
+//            if (operand2 != null) {
+//                val result = calculate(operand1!!, operand2, currentOperation!!)
+//                operand1 = result
+//                currentOperation = operation
+//                display.text = formatResult(result) + operation
+//            } else {
+//                // If no second operand, just update the operation
+//                currentOperation = operation
+//                val currentOperand1 = operand1 // Create a local immutable copy
+//                if (currentOperand1 != null) {
+//                    display.text = formatResult(currentOperand1) + operation
+//                } else {
+//                    // This case should ideally not happen if operand1 was checked for null earlier
+//                    display.text = "0" + operation
+//                }
+//            }
+//        } else {
+//            // First operand or operation after equals/clear
+//            operand1 = displayString.toDoubleOrNull()
+//            currentOperation = operation
+//            display.text = displayString + operation
+//        }
+//
+//        ////
+//        operationJustPressed = true
+//        equalsJustPressed = false
 //    }
 
     // Function to handle equals button click
     private fun performEquals() {
-        if (operand1 != null && currentOperation != null) { // If there's a 1st operand & an operation
-            val displayText = display.text.toString() // Get the current display text
-            // Extract the second operand by removing the first operand and the operation
-            val operand2String = displayText.substringAfter(currentOperation!!)
-            val operand2 = operand2String.toDoubleOrNull() // Convert the extracted part to a double
+        if (currentOperation != null && operand1 != null) {
+            // Only proceed if we have a second operand
+            if (pendingOperand2.isNotEmpty()) {
+                // Convert and calculate
+                val operand2 = pendingOperand2.toDoubleOrNull() ?: 0.0
+                val result = calculate(operand1!!, operand2, currentOperation!!)
 
-            if (operand2 != null) { // If operand2 is a valid number...
-                val result = calculate(operand1!!, operand2, currentOperation!!) // Perform the calculation
-                display.text = formatResult(result) // Display the result
-                operand1 = null // Reset operand1
-                currentOperation = null // Reset current operation
-                equalsJustPressed = true    // Indicate = was just pressed
+                // Store in history
+                val historyItem = HistoryItem(
+                    "${formatResult(operand1!!)} $currentOperation ${formatResult(operand2)} =",
+                    formatResult(result)
+                )
+                calculationHistory.add(historyItem)
+                if (calculationHistory.size > historyLimit) {
+                    calculationHistory.removeAt(0)
+                }
+
+                // Update display and reset for next calculation
+                display.text = formatResult(result)
+                operand1 = result
+                pendingOperand2 = ""
+                currentOperation = null
+                equalsJustPressed = true
             }
+            // If no second operand, do nothing and wait for user to enter one
         }
     }
 
-//                    val formattedResult = formatResult(result)  // Store the formatted result in formattedResult
-//                    val instruction = "${formatResult(operand1!!)} $currentOperation ${formatResult(operand2)} ="
-//                    display.text = formattedResult
+//                if (currentOperation != null) {
+//                val displayString = display.text.toString()
 //
-//                    // Add the calculation to the history
-//                    val historyItem = HistoryItem(instruction, formattedResult)
+//                // Split the display text by the operation to get the operands
+//                val operationIndex = when (currentOperation) {
+//                    "+" -> displayString.lastIndexOf("+")
+//                    "-" -> displayString.lastIndexOf("-")
+//                    "x" -> displayString.lastIndexOf("x")
+//                    "/" -> displayString.lastIndexOf("/")
+//                    else -> -1
+//                }
+//
+//                if (operationIndex > 0) {
+//                    // Extract operands
+//                    val leftOperand =
+//                        displayString.substring(0, operationIndex).toDoubleOrNull() ?: 0.0
+//                    val rightOperand =
+//                        displayString.substring(operationIndex + 1).toDoubleOrNull() ?: 0.0
+//
+//                    // Perform calculation
+//                    val result = calculate(leftOperand, rightOperand, currentOperation!!)
+//
+//                    // Format and display result
+//                    display.text = formatResult(result)
+//
+//                    // Store the calculation in history
+//                    val historyItem = HistoryItem(
+//                        "$leftOperand $currentOperation $rightOperand =",
+//                        formatResult(result)
+//                    )
 //                    calculationHistory.add(historyItem)
-//                    // Keep only the last 'historyLimit' items
 //                    if (calculationHistory.size > historyLimit) {
 //                        calculationHistory.removeAt(0)
 //                    }
 //
-//                    operand1 = null // Clear operand1 to prepare for a new operation
-//                    currentOperation = null // Clear currentOperation to prepare for a new operation
-//                    equalsJustPressed = true // Set the equalsJustPressed flag to true to handle the next number input
+//                    // Reset for next calculation
+//                    operand1 = result
+//                    currentOperation = null
+//                    equalsJustPressed = true
+////                }
+//            }
 
     // Function to perform the calculation
     private fun calculate(num1: Double, num2: Double, operation: String): Double {
-        return when (operation) {
-            "+" -> num1 + num2
-            "-" -> num1 - num2
-            "x" -> num1 * num2
-            "/" -> if (num2 != 0.0) num1 / num2 else Double.NaN // Handle division by zero
-            else -> Double.NaN // Should not happen
+        // Convert to BigDecimal for precise calculations
+        val bd1 = BigDecimal.valueOf(num1)
+        val bd2 = BigDecimal.valueOf(num2)
+
+        val result = when (operation) {
+            "+" -> bd1.add(bd2)
+            "-" -> bd1.subtract(bd2)
+            "x" -> bd1.multiply(bd2)
+            "/" -> if (bd2.compareTo(BigDecimal.ZERO) != 0) {
+                bd1.divide(bd2, 10, RoundingMode.HALF_UP)
+            } else {
+                return Double.NaN // Handle division by zero
+            }
+
+            else -> return Double.NaN // Should not happen
         }
+
+        return result.toDouble()
     }
 
-    // Function to format the result (remove trailing .0 if it's an integer)
+    // Function to format the result
     private fun formatResult(result: Double): String {
-        return if (result == result.toInt().toDouble()) {   // If the result is a whole number
-            result.toInt().toString()   // format it as an integer string
+        if (result.isNaN()) return "Error"
+
+        val bd = BigDecimal.valueOf(result) // Use BigDecimal to properly format the result
+
+        return if (bd.stripTrailingZeros().scale() <= 0) {  // If it's a whole number...
+            bd.toBigInteger().toString()    // ...return the number as an int
         } else {
-            result.toString()   // format it as a regular string
+            bd.stripTrailingZeros()
+                .toPlainString()     // Return decimal value with trailing zeros removed
         }
     }
 
@@ -273,7 +435,8 @@ class MainActivity : AppCompatActivity() {
     private fun toggleSign() {
         val currentValue = display.text.toString().toDoubleOrNull() // Get the current value
         if (currentValue != null) {
-            display.text = formatResult(currentValue * -1) // Multiply currentValue by -1 and update display
+            display.text =
+                formatResult(currentValue * -1) // Multiply currentValue by -1 and update display
         }
     }
 
@@ -281,7 +444,11 @@ class MainActivity : AppCompatActivity() {
     private fun performPercent() {
         val currentValue = display.text.toString().toDoubleOrNull() // Get the current value
         if (currentValue != null) {
-            display.text = formatResult(currentValue / 100.0) // Divide currentValue by 100 and update display
+            display.text =
+                formatResult(currentValue / 100.0) // Divide currentValue by 100 and update display
         }
     }
 }
+
+// Complete HistoryItem data class for storing history entries
+//data class HistoryItem(val expression: String, val result: String)

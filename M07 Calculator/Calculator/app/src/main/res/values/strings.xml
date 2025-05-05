@@ -1,4 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Calculator</string>
     <string name="initial_display_value">0</string>
+    <string name="CLEAR">CLEAR</string>
+    <string name="_7">7</string>
+    <string name="_4">4</string>
+    <string name="_1">1</string>
+    <string name="HISTORY">HISTORY</string>
+    <string name="plusMinusSymbols">+/-</string>
+    <string name="_8">8</string>
+    <string name="_5">5</string>
+    <string name="_2">2</string>
+    <string name="_0">0</string>
+    <string name="percentSymbol">%</string>
+    <string name="_9">9</string>
+    <string name="_6">6</string>
+    <string name="decimalSymbol">.</string>
+    <string name="divideSymbol">/</string>
+    <string name="multiplySymbol">x</string>
+    <string name="minusSymbol">-</string>
+    <string name="plusSymbol">+</string>
+    <string name="equalsSymbol">=</string>
+    <string name="_3">3</string>
 </resources>

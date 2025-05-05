@@ -1,0 +1,23 @@
+YOU CAN DO IT CELIA
+CLAUDE CAN HELP YOU
+
+AGENDA
+2 - history
+3 - landscape view
+
+
+DONE
+1 - test basic function 4/28
+
+OK
+1+3=4
+2-1=1
+10*.5=5 (should display 0.5)
+10*0.5=5
+7.5/2=3.75
+0.0 display
+1+3=4-2=2 string operation
+7/0= (displays Error)
+
+NOT OK
+10*4=40 (= does not trigger)
