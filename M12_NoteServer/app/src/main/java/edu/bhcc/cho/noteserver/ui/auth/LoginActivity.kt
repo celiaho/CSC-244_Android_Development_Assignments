@@ -2,41 +2,65 @@ package edu.bhcc.cho.noteserver.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.inputmethod.EditorInfo
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import edu.bhcc.cho.noteserver.R
-import edu.bhcc.cho.noteserver.ui.document.DocumentManagementActivity
+import edu.bhcc.cho.noteserver.ui.document.DocumentActivity
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var emailInput: EditText
-    private lateinit var passwordInput: EditText
-    private lateinit var signInButton: Button
+    private lateinit var emailEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var loginButton: Button
+    private lateinit var errorTextView: TextView
     private lateinit var forgotPasswordLink: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        emailInput = findViewById(R.id.etEmail)
-        passwordInput = findViewById(R.id.etPassword)
-        signInButton = findViewById(R.id.btnLogin)
-        forgotPasswordLink = findViewById(R.id.tvForgotPassword)
+        // Delay hiding until layout is fully loaded
+        window.decorView.post {
+            var iconRow = findViewById<View>(R.id.icon_row)
+            iconRow?.visibility = View.GONE
 
-        signInButton.setOnClickListener {
-            Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, DocumentManagementActivity::class.java))
+            val appNameTextView = findViewById<TextView>(R.id.app_name)
+            appNameTextView.text = "GOTT NOTES"
+            appNameTextView.maxLines = 1
         }
 
+        // Init form views
+        emailEditText = findViewById(R.id.login_email)
+        passwordEditText = findViewById(R.id.login_password)
+        loginButton = findViewById(R.id.login_button)
+        errorTextView = findViewById(R.id.login_error)
+        forgotPasswordLink = findViewById(R.id.forgot_password_link)
+
+        // Forgot password redirect
         forgotPasswordLink.setOnClickListener {
             startActivity(Intent(this, PasswordForgotActivity::class.java))
         }
 
-        passwordInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                signInButton.performClick()
-                true
-            } else false
+        // Handle login
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            if (email.isBlank() || password.isBlank()) {
+                errorTextView.text = "Please enter both email and password."
+                errorTextView.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
+            // TODO: Replace with actual server login
+            if (email == "test@example.com" && password == "password") {
+                errorTextView.visibility = View.GONE
+                startActivity(Intent(this, DocumentActivity::class.java))
+                finish()
+            } else {
+                errorTextView.text = "Invalid credentials. Please try again."
+                errorTextView.visibility = View.VISIBLE
+            }
         }
     }
 }

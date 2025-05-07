@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@android:color/darker_gray"
+    android:padding="24dp"
+    android:orientation="vertical">
 
+    <!-- Title -->
     <TextView
-        android:id="@+id/share_title"
-        android:text="Document Sharing"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:text="Document Sharing"
+        android:textSize="24sp"
+        android:textColor="@color/blue"
+        android:textStyle="bold" />
 
+    <!-- Instruction -->
     <TextView
-        android:layout_marginTop="8dp"
-        android:text="Tap the users you would like to share this document with. Shared users will have editing access. Click the X to exit this window."
-        android:textColor="@color/gray"
-        android:textSize="14sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Tap the users you would like to share this document with..."
+    android:textColor="@color/dark_gray"
+    android:textSize="18sp"
+    android:layout_marginBottom="12dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_user_list"
+    <!-- Shared User List -->
+    <ListView
+        android:id="@+id/share_user_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        android:layout_height="300dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp" />
 </LinearLayout>

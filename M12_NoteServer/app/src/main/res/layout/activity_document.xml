@@ -1,110 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="?android:colorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top App Bar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/blue"
-        android:paddingLeft="12dp"
-        android:paddingRight="0dp"
-        android:paddingVertical="8dp"
-        android:gravity="center_vertical"
-        android:baselineAligned="false">
-
-        <!-- Left: App name with fixed width -->
-        <TextView
-            android:id="@+id/app_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="GOTT\nNOTES"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:maxLines="3"
-            android:lineSpacingExtra="2dp" />
-
-        <!-- Right: Horizontal icon row -->
-        <LinearLayout
-            android:id="@+id/icon_row"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end|center_vertical"
-            android:baselineAligned="false">
-
-            <ImageButton
-                android:id="@+id/icon_new_doc"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_add"
-                android:contentDescription="New Document"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/white" />
-
-            <ImageButton
-                android:id="@+id/icon_open_folder"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_folder"
-                android:contentDescription="Open Folder"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/white" />
-
-            <ImageButton
-                android:id="@+id/icon_save"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_save"
-                android:contentDescription="Save"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/white" />
-
-            <ImageButton
-                android:id="@+id/icon_share"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_share"
-                android:contentDescription="Share"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/white" />
-
-            <ImageButton
-                android:id="@+id/icon_delete"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_delete"
-                android:contentDescription="Delete"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/white" />
-
-            <ImageButton
-                android:id="@+id/icon_settings"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_settings"
-                android:contentDescription="Settings"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/white" />
-
-            <ImageButton
-                android:id="@+id/icon_logout"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_logout"
-                android:contentDescription="Logout"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/white" />
-        </LinearLayout>
-    </LinearLayout>
+    <!-- App Bar -->
+    <include layout="@layout/toolbar_postauth" />
 
     <!-- Content -->
     <ScrollView
@@ -121,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Document Title:"
+                android:text="Document Title"
                 android:textColor="@color/dark_gray"
                 android:textSize="16sp" />
 

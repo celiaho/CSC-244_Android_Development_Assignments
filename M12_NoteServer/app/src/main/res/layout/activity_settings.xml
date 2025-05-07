@@ -1,92 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="?android:colorBackground"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:orientation="vertical"
+    android:background="?android:colorBackground">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <!-- App Bar -->
+    <include layout="@layout/toolbar_postauth" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:text="Settings"
-            android:textColor="@color/blue"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingBottom="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView android:text="First Name" android:textColor="@color/gray" />
-        <EditText
-            android:id="@+id/first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_input"
-            android:layout_marginBottom="8dp" />
-
-        <TextView android:text="Last Name" android:textColor="@color/gray" />
-        <EditText
-            android:id="@+id/last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_input"
-            android:layout_marginBottom="8dp" />
-
-        <TextView android:text="Current Password" android:textColor="@color/gray" />
-        <EditText
-            android:id="@+id/current_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:background="@drawable/rounded_input"
-            android:layout_marginBottom="8dp" />
-
-        <TextView android:text="New Password" android:textColor="@color/gray" />
-        <EditText
-            android:id="@+id/new_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:background="@drawable/rounded_input"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/btn_save"
-            style="@style/CustomButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Changes" />
-
-        <TextView
-            android:text="Change app theme"
-            android:textColor="@color/dark_gray"
-            android:paddingTop="32dp"
-            android:paddingBottom="8dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="24dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_light"
+            <!-- Back Link -->
+            <TextView
+                android:id="@+id/settings_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Light"
-                android:backgroundTint="@color/white"
-                android:textColor="@color/dark_gray" />
+                android:text="<   Back"
+                android:textColor="@color/dark_gray"
+                android:textSize="14sp"
+                android:layout_marginBottom="24dp" />
 
-            <Button
-                android:id="@+id/btn_dark"
+            <!-- Header -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dark"
-                android:layout_marginStart="16dp"
-                android:backgroundTint="@color/dark_gray"
-                android:textColor="@color/white" />
+                android:text="Settings"
+                android:textSize="28sp"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Change Info -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update account details"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/dark_gray"
+                android:layout_marginBottom="12dp" />
+
+            <!-- First Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Name"
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/settings_first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/rounded_input"
+                android:minHeight="48dp" />
+
+            <!-- Last Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Name"
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/settings_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/rounded_input"
+                android:minHeight="48dp" />
+
+            <!-- Passwords -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Password"
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/settings_current_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/rounded_input"
+                android:inputType="textPassword"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Password (minimum 8 characters)"
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/settings_new_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:background="@drawable/rounded_input"
+                android:layout_marginBottom="12dp" />
+
+            <Button
+                android:id="@+id/settings_save_button"
+                style="@style/CustomButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save Changes"
+                android:textSize="18sp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Theme toggle -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change app theme"
+                android:textStyle="bold"
+                android:textColor="@color/dark_gray"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="start">
+
+                <Button
+                    android:id="@+id/theme_light_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Light"
+                    android:textColor="@color/dark_gray"
+                    android:background="@color/white"
+                    android:layout_marginEnd="16dp" />
+
+                <Button
+                    android:id="@+id/theme_dark_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dark"
+                    android:textColor="@color/white"
+                    android:background="@color/dark_gray" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
