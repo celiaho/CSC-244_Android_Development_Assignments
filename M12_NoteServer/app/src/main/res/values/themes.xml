@@ -8,17 +8,35 @@
 <!--    <style name="Theme.NoteServer" parent="Base.Theme.NoteServer" />-->
 <!--</resources>-->
 
+
+<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
+<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
+<!--    <style name="Base.Theme.NoteServer" parent="Theme.MaterialComponents.DayNight.DarkActionBar">-->
+<!--        &lt;!&ndash; <item name="colorPrimary">@color/my_light_primary</item> &ndash;&gt;-->
+<!--        &lt;!&ndash; Customizes light theme color palette here &ndash;&gt;-->
+<!--        <item name="colorPrimary">#1976D2</item> &lt;!&ndash; Blue &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant">#1565C0</item>-->
+<!--        <item name="colorOnPrimary">#FFFFFF</item> &lt;!&ndash; White text &ndash;&gt;-->
+<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
+<!--        <item name="android:navigationBarColor">?attr/colorPrimary</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.NoteServer" parent="Base.Theme.NoteServer" />-->
+<!--</resources>-->
+
+
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.NoteServer" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <!-- Customizes light theme color palette here -->
-        <item name="colorPrimary">#1976D2</item> <!-- Blue -->
-        <item name="colorPrimaryVariant">#1565C0</item>
-        <item name="colorOnPrimary">#FFFFFF</item> <!-- White text -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+    <style name="Theme.NoteServer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/dark_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:buttonStyle">@style/CustomButton</item>
     </style>
 
-    <style name="Theme.NoteServer" parent="Base.Theme.NoteServer" />
+    <style name="CustomButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 </resources>

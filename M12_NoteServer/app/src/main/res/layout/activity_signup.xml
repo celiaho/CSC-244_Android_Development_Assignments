@@ -1,85 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:padding="24dp">
 
-    <!-- App Bar with app title -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/signup_toolbar"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:title="Notes App"
-        android:titleTextColor="@android:color/white"
-        app:titleCentered="true"
-        app:layout_scrollFlags="scroll|enterAlways" />
+        android:layout_height="wrap_content">
 
-    <!-- Signup Form in a ScrollView -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:padding="24dp"
-        android:fitsSystemWindows="true">
+        <TextView
+            android:text="Sign up"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        <LinearLayout
+        <TextView
+            android:text="Welcome! Create a new user account."
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:paddingBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:text="Email" android:textColor="@color/gray" />
+        <EditText
+            android:id="@+id/signup_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="32dp">
+            android:hint="Email"
+            android:background="@drawable/rounded_input"
+            android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Welcome—create a user account!"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:layout_marginBottom="12dp" />
+        <TextView android:text="First Name" android:textColor="@color/gray" />
+        <EditText
+            android:id="@+id/signup_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:background="@drawable/rounded_input"
+            android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:id="@+id/signup_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FF0000"
-                android:visibility="gone"
-                android:layout_marginBottom="8dp" />
+        <TextView android:text="Last Name" android:textColor="@color/gray" />
+        <EditText
+            android:id="@+id/signup_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
+            android:background="@drawable/rounded_input"
+            android:layout_marginBottom="8dp" />
 
-            <EditText
-                android:id="@+id/signup_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:layout_marginBottom="12dp" />
+        <TextView android:text="Password (minimum 8 characters)" android:textColor="@color/gray" />
+        <EditText
+            android:id="@+id/signup_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="Password"
+            android:background="@drawable/rounded_input"
+            android:layout_marginBottom="16dp" />
 
-            <EditText
-                android:id="@+id/signup_first_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="First Name"
-                android:layout_marginBottom="12dp" />
+        <Button
+            android:id="@+id/signup_button"
+            style="@style/CustomButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue" />
+    </LinearLayout>
+</ScrollView>
 
-            <EditText
-                android:id="@+id/signup_last_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Last Name"
-                android:layout_marginBottom="12dp" />
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
 
-            <EditText
-                android:id="@+id/signup_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:layout_marginBottom="16dp" />
+<!--    &lt;!&ndash; App Bar with app title &ndash;&gt;-->
+<!--    <com.google.android.material.appbar.MaterialToolbar-->
+<!--        android:id="@+id/signup_toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="?attr/colorPrimary"-->
+<!--        android:title="Notes App"-->
+<!--        android:titleTextColor="@android:color/white"-->
+<!--        app:titleCentered="true"-->
+<!--        app:layout_scrollFlags="scroll|enterAlways" />-->
 
-            <Button
-                android:id="@+id/signup_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create Account" />
-        </LinearLayout>
-    </ScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+<!--    &lt;!&ndash; Signup Form in a ScrollView &ndash;&gt;-->
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="?attr/actionBarSize"-->
+<!--        android:padding="24dp"-->
+<!--        android:fitsSystemWindows="true">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:paddingBottom="32dp">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Welcome—create a user account!"-->
+<!--                android:textAppearance="?android:textAppearanceLarge"-->
+<!--                android:layout_marginBottom="12dp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/signup_error"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="#FF0000"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_marginBottom="8dp" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/signup_email"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Email"-->
+<!--                android:inputType="textEmailAddress"-->
+<!--                android:layout_marginBottom="12dp" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/signup_first_name"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="First Name"-->
+<!--                android:layout_marginBottom="12dp" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/signup_last_name"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Last Name"-->
+<!--                android:layout_marginBottom="12dp" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/signup_password"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Password"-->
+<!--                android:inputType="textPassword"-->
+<!--                android:layout_marginBottom="16dp" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/signup_button"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Create Account" />-->
+<!--        </LinearLayout>-->
+<!--    </ScrollView>-->
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
