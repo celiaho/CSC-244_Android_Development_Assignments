@@ -3,6 +3,10 @@
 
     <!-- Base application theme in Dark mode -->
     <style name="Theme.GOTTNotes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Ensure status bar is not covered by the app toolbar -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+
         <!-- Primary brand colors -->
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/blue</item>
