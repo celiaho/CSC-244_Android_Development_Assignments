@@ -7,9 +7,10 @@
     android:orientation="vertical"
     android:background="?android:colorBackground">
 
-    <!-- App toolbar for authenticated screens -->
+    <!-- App toolbar for authentication screens -->
     <include layout="@layout/toolbar_auth" />
 
+    <!-- Scrollable screen content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,17 +22,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Back link -->
+            <!-- Back navigation -->
             <TextView
                 android:id="@+id/verify_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="<   Back"
+                android:text="&lt;   Back"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Header -->
+            <!-- Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,6 +41,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/blue" />
 
+            <!-- Instructions -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +50,7 @@
                 android:textSize="18sp"
                 android:layout_marginBottom="32dp" />
 
-            <!-- Error message -->
+            <!-- Error message (initially hidden) -->
             <TextView
                 android:id="@+id/verify_error"
                 android:layout_width="wrap_content"
@@ -58,28 +60,35 @@
                 android:text="Error text"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Temporary Password Input -->
+            <!-- Temporary Password label -->
             <TextView
+                android:id="@+id/label_verify_temp_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Temporary Password"
                 android:textColor="@color/dark_gray"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:labelFor="@id/verify_temp_password" />
 
+            <!-- Temporary Password input field -->
             <EditText
                 android:id="@+id/verify_temp_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:background="@drawable/rounded_input"
                 android:inputType="textPassword"
+                android:autofillHints="password"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="24dp" />
 
+            <!-- Continue button -->
             <Button
                 android:id="@+id/verify_button"
                 style="@style/CustomButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="320dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
                 android:text="Complete Signup"
                 android:textSize="18sp" />
         </LinearLayout>

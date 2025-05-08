@@ -1,122 +1,39 @@
 package edu.bhcc.cho.noteserver.data.network
 
 import android.content.Context
-import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import edu.bhcc.cho.noteserver.data.model.Document
+import edu.bhcc.cho.noteserver.utils.SessionManager
 import edu.bhcc.cho.noteserver.utils.VolleySingleton
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
-import java.nio.charset.Charset
 
+/**
+ * Handles all document CRUD and content-query operations.
+ */
 class DocumentApiService(context: Context) {
-
-    private val requestQueue = VolleySingleton.Companion.getInstance(context).requestQueue
+    private val requestQueue = VolleySingleton.getInstance(context).requestQueue
     private val baseUrl = "http://10.0.2.2:8080"
-    private val tag = "DocumentApiService" // Tag to use for Volley requests, for cancellation
+    private val sessionManager = SessionManager(context)
 
-    /**
-     * Creates a new document on the server.
-     *
-     * @param content The content of the document as a JSONObject.
-     * @param onSuccess Callback for a successful document creation, returns the created document as JSONObject.
-     * @param onError Callback for handling errors during the request.
-     */
+    private fun authHeaders(): Map<String, String> =
+        mapOf("Authorization" to "Bearer ${sessionManager.getToken()}")
+
     fun createDocument(
         content: JSONObject,
         onSuccess: (JSONObject) -> Unit,
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents"
-
-        val jsonRequest = JsonObjectRequest(
-            Request.Method.POST, url, content, // Use the provided content JSONObject
-            { response ->
-                onSuccess(response) // Pass the whole JSONObject
-            },
-            { error ->
-                onError(error)
-            }
-        )
-        jsonRequest.tag = tag
-        requestQueue.add(jsonRequest)
+        val request = object : JsonObjectRequest(Method.POST, url, content, onSuccess, onError) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+        requestQueue.add(request)
     }
 
-    /**
-     * Retrieves all documents for the current user from the server.
-     *
-     * @param onSuccess Callback for a successful retrieval, providing a list of Document objects.
-     * @param onError Callback for handling errors during the request.
-     */
-    fun getDocuments(
-        onSuccess: (List<Document>) -> Unit,
-        onError: (VolleyError) -> Unit
-    ) {
-        val url = "$baseUrl/documents"
-
-        val jsonArrayRequest = JsonArrayRequest(
-            Request.Method.GET, url, null,
-            { response ->
-                try {
-                    val documents = parseDocumentList(response) // Use helper function
-                    onSuccess(documents)
-                } catch (e: Exception) {
-                    onError(VolleyError("Error parsing JSON: ${e.message}"))
-                }
-            },
-            { error ->
-                onError(error)
-            }
-        )
-        jsonArrayRequest.tag = tag
-        requestQueue.add(jsonArrayRequest)
-    }
-
-    /**
-     * Retrieves a single document from the server by its ID.
-     *
-     * @param documentId The ID of the document to retrieve.
-     * @param onSuccess Callback for a successful retrieval, providing the Document object.
-     * @param onError Callback for handling errors during the request.
-     */
-    fun getDocument(
-        documentId: String,
-        onSuccess: (Document) -> Unit,
-        onError: (VolleyError) -> Unit
-    ) {
-        val url = "$baseUrl/documents/$documentId"
-
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            { response ->
-                try {
-                    val document = parseDocument(response) // Use helper
-                    onSuccess(document)
-                } catch (e: Exception) {
-                    onError(VolleyError("Error parsing JSON: ${e.message}"))
-                }
-            },
-            { error ->
-                onError(error)
-            }
-        )
-        jsonObjectRequest.tag = tag
-        requestQueue.add(jsonObjectRequest)
-    }
-
-    /**
-     * Updates an existing document on the server.
-     *
-     * @param documentId The ID of the document to update.
-     * @param content The updated content of the document as a JSONObject.
-     * @param onSuccess Callback for a successful update. Returns the updated document.
-     * @param onError Callback for handling errors during the request.
-     */
     fun updateDocument(
         documentId: String,
         content: JSONObject,
@@ -124,118 +41,141 @@ class DocumentApiService(context: Context) {
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents/$documentId"
-
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.PUT, url, content, // Use the provided content
-            { response ->
-                onSuccess(response)
-            },
-            { error ->
-                onError(error)
-            }
-        )
-        jsonObjectRequest.tag = tag
-        requestQueue.add(jsonObjectRequest)
+        val request = object : JsonObjectRequest(Method.PUT, url, content, onSuccess, onError) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+        requestQueue.add(request)
     }
 
-    /**
-     * Deletes a document from the server.
-     *
-     * @param documentId The ID of the document to delete.
-     * @param onSuccess Callback for a successful deletion.  Returns a string.
-     * @param onError Callback for handling errors during the request.
-     */
     fun deleteDocument(
         documentId: String,
         onSuccess: (String) -> Unit,
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents/$documentId"
-
-        val stringRequest = StringRequest( // Use StringRequest for a simple DELETE
-            Request.Method.DELETE, url,
-            { response ->
-                onSuccess(response) // Return the response
-            },
-            { error ->
-                onError(error)
-            }
-        )
-        stringRequest.tag = tag
-        requestQueue.add(stringRequest)
+        val request = object : StringRequest(Method.DELETE, url, onSuccess, onError) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+        requestQueue.add(request)
     }
 
-    /**
-     * Retrieves documents based on a content query.
-     *
-     * @param query The content query string.
-     * @param onSuccess Callback for a successful retrieval, providing a list of Document objects.
-     * @param onError Callback for handling errors during the request.
-     */
-    fun getDocumentsByQuery(
-        query: String,
+    fun getDocuments(
         onSuccess: (List<Document>) -> Unit,
         onError: (VolleyError) -> Unit
     ) {
-        // URL encode the query parameter
-        val encodedQuery = try {
-            URLEncoder.encode(query, Charset.defaultCharset().toString())
-        } catch (e: UnsupportedEncodingException) {
-            onError(VolleyError("Error encoding query: ${e.message}"))
-            return // IMPORTANT: Return here to avoid further execution
+        val url = "$baseUrl/documents"
+        val request = object : JsonArrayRequest(Method.GET, url, null,
+            { array -> onSuccess(parseList(array)) },
+            onError
+        ) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
         }
-        val url = "$baseUrl/documents?content_query=$encodedQuery"
+        requestQueue.add(request)
+    }
 
-        val jsonArrayRequest = JsonArrayRequest(
-            Request.Method.GET, url, null,
+    private fun parseList(array: JSONArray): List<Document> {
+        val list = mutableListOf<Document>()
+        for (i in 0 until array.length()) {
+            val obj = array.getJSONObject(i)
+            list.add(Document(
+                id = obj.getString("id"),
+                ownerId = obj.getString("owner_id"),
+                creationDate = obj.getString("creation_date"),
+                lastModifiedDate = obj.getString("last_modified_date"),
+                title = obj.optString("title", ""),
+                content = obj.getJSONObject("content").toString()
+            ))
+        }
+        return list
+    }
+
+    fun getAllUsers(
+        onSuccess: (List<UserProfile>) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/profiles"
+        val request = object : JsonArrayRequest(Method.GET, url, null,
             { response ->
                 try {
-                    val documents = parseDocumentList(response)
-                    onSuccess(documents)
+                    val users = mutableListOf<UserProfile>()
+                    for (i in 0 until response.length()) {
+                        val obj = response.getJSONObject(i)
+                        users.add(
+                            UserProfile(
+                                id = obj.getString("id"),
+                                firstName = obj.getString("first_name"),
+                                lastName = obj.getString("last_name"),
+                                email = obj.getString("email")
+                            )
+                        )
+                    }
+                    onSuccess(users)
                 } catch (e: Exception) {
-                    onError(VolleyError("Error parsing JSON: ${e.message}"))
+                    onError("Error parsing users: ${e.message}")
                 }
             },
-            { error ->
-                onError(error)
-            }
-        )
-        jsonArrayRequest.tag = tag
-        requestQueue.add(jsonArrayRequest)
-    }
-
-    /**
-     * Helper function to parse a single Document JSON object.
-     * Handles nested JSON structure for content.
-     */
-    private fun parseDocument(jsonObject: JSONObject): Document {
-        return Document(
-            id = jsonObject.getString("id"),
-            ownerId = jsonObject.getString("owner_id"),
-            creationDate = jsonObject.getString("creation_date"),
-            lastModifiedDate = jsonObject.getString("last_modified_date"),
-            title = jsonObject.getString("title"),
-            content = jsonObject.getJSONObject("content")
-                .toString() // Convert the content JSONObject to a string
-        )
-    }
-
-    /**
-     * Helper function to parse a list of Document JSON objects.
-     */
-    private fun parseDocumentList(jsonArray: JSONArray): List<Document> {
-        val documents = mutableListOf<Document>()
-        for (i in 0 until jsonArray.length()) {
-            val documentJson = jsonArray.getJSONObject(i)
-            documents.add(parseDocument(documentJson))
+            { error -> onError(error.message ?: "Error fetching users") }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
         }
-        return documents
+        requestQueue.add(request)
     }
 
-    /**
-     * Cancels all pending requests with this tag.  Call this in your activity or fragment's onDestroy()
-     */
-    fun cancelRequests() {
-        requestQueue.cancelAll(tag)
+    fun getSharedUsers(
+        documentId: String,
+        onSuccess: (List<String>) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/documents/$documentId/shared"
+        val request = object : JsonArrayRequest(Method.GET, url, null,
+            { response ->
+                try {
+                    val sharedIds = mutableListOf<String>()
+                    for (i in 0 until response.length()) {
+                        sharedIds.add(response.getString(i))
+                    }
+                    onSuccess(sharedIds)
+                } catch (e: Exception) {
+                    onError("Error parsing shared user IDs: ${e.message}")
+                }
+            },
+            { error -> onError(error.message ?: "Error fetching shared users") }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+        requestQueue.add(request)
     }
+
+    fun shareDocumentWithUser(
+        documentId: String,
+        userId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/documents/$documentId/share/$userId"
+        val request = object : StringRequest(Method.POST, url, { onSuccess() }, { error ->
+            onError(error.message ?: "Error sharing document")
+        }) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+        requestQueue.add(request)
+    }
+
+    fun unshareDocumentWithUser(
+        documentId: String,
+        userId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/documents/$documentId/share/$userId"
+        val request = object : StringRequest(Method.DELETE, url, { onSuccess() }, { error ->
+            onError(error.message ?: "Error unsharing document")
+        }) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+        requestQueue.add(request)
+    }
+
+    // Add this data class inside or outside the service if not already available
+    data class UserProfile(val id: String, val firstName: String, val lastName: String, val email: String)
 }

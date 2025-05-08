@@ -11,7 +11,7 @@ class SignupVerificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup_verification)
 
-        val completeBtn = findViewById<Button>(R.id.btn_verify)
+        val completeBtn = findViewById<Button>(R.id.verify_button)
         completeBtn.setOnClickListener {
             Toast.makeText(this, "Account created. Log in.", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, LoginActivity::class.java))

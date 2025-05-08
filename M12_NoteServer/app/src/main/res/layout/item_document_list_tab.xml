@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="?android:selectableItemBackground">
+
+    <!-- Document Title -->
+    <TextView
+        android:id="@+id/text_document_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Document Title"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Document Subtitle (e.g., modified date or owner) -->
+    <TextView
+        android:id="@+id/text_document_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Last modified: 2025-05-06"
+        android:textColor="@color/medium_gray"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
+</LinearLayout>

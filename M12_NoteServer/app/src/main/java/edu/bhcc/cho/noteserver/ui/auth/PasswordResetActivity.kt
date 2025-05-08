@@ -11,7 +11,7 @@ class PasswordResetActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_reset)
 
-        val resetBtn = findViewById<Button>(R.id.btn_reset_password)
+        val resetBtn = findViewById<Button>(R.id.reset_continue_button)
         resetBtn.setOnClickListener {
             Toast.makeText(this, "Password changed. Log in.", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, LoginActivity::class.java))

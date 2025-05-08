@@ -3,13 +3,14 @@ package edu.bhcc.cho.noteserver.ui.document
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import edu.bhcc.cho.noteserver.R
-import edu.bhcc.cho.noteserver.ui.auth.LoginActivity
 import edu.bhcc.cho.noteserver.ui.settings.SettingsActivity
-import org.json.JSONObject
+import edu.bhcc.cho.noteserver.ui.auth.LoginActivity
 
 class DocumentActivity : AppCompatActivity() {
 

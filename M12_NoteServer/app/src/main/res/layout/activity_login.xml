@@ -2,15 +2,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?android:colorBackground">
 
-    <!-- Toolbar (No icons, single-line app name) -->
+    <!-- Toolbar for login -->
     <include layout="@layout/toolbar_auth" />
 
-    <!-- Login Form -->
+    <!-- Scrollable content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -22,16 +23,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Heading -->
+            <!-- Log in title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Log in"
                 android:textColor="@color/blue"
                 android:textSize="28sp"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp" />
+                android:textStyle="bold" />
 
+            <!-- Subtitle -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,18 +41,19 @@
                 android:textSize="18sp"
                 android:layout_marginBottom="36dp" />
 
-            <!-- Errors -->
+            <!-- Error Text -->
             <TextView
                 android:id="@+id/login_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/orange"
                 android:visibility="gone"
-                android:text="Error message will go here."
-                android:layout_marginBottom="8dp" />
+                android:text="Error text here"
+                android:layout_marginBottom="12dp" />
 
             <!-- Email -->
             <TextView
+                android:id="@+id/login_email_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
@@ -62,13 +64,17 @@
                 android:id="@+id/login_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:autofillHints="emailAddress"
                 android:background="@drawable/rounded_input"
                 android:inputType="textEmailAddress"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="12dp" />
+                android:labelFor="@id/login_email_label"
+                android:minHeight="48dp"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <!-- Password -->
             <TextView
+                android:id="@+id/login_password_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Password"
@@ -79,9 +85,12 @@
                 android:id="@+id/login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="password"
                 android:background="@drawable/rounded_input"
                 android:inputType="textPassword"
-                android:textColor="@android:color/black" />
+                android:labelFor="@id/login_password_label"
+                android:minHeight="48dp"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <!-- Forgot password -->
             <TextView
@@ -95,14 +104,26 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="14dp" />
 
-            <!-- Button -->
+            <!-- Sign In Button -->
             <Button
                 android:id="@+id/login_button"
                 style="@style/CustomButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="320dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
                 android:text="Sign In"
                 android:textSize="18sp" />
+
+            <!-- Create Account Button -->
+            <Button
+                android:id="@+id/create_account_button"
+                android:layout_width="320dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:text="Create Account"
+                android:textSize="18sp"
+                android:layout_marginTop="12dp"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

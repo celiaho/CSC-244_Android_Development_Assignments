@@ -1,49 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
 
-    <include layout="@layout/toolbar_postauth" />
-
+    <!-- Custom hardcoded toolbar -->
     <LinearLayout
+        android:id="@+id/toolbar_document_management"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:orientation="vertical">
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:background="@color/blue"
+        android:paddingStart="12dp"
+        android:paddingEnd="0dp"
+        android:paddingVertical="8dp"
+        android:gravity="center_vertical"
+        android:baselineAligned="false">
 
-        <!-- Header -->
+        <!-- App Name -->
         <TextView
+            android:id="@+id/app_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="2dp" />
+
+        <!-- Icon Row -->
+        <LinearLayout
+            android:id="@+id/icon_row"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Document Management"
-            android:textColor="@color/blue"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:orientation="horizontal"
+            android:gravity="end|center_vertical"
+            android:baselineAligned="false">
 
-        <!-- Tabs for files -->
-        <TabHost
-            android:id="@+id/tabhost"
+            <ImageButton
+                android:id="@+id/icon_new_doc"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_add"
+                android:contentDescription="New Document"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/white" />
+
+            <ImageButton
+                android:id="@+id/icon_open_folder"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_folder"
+                android:contentDescription="Open Folder"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/white" />
+
+            <ImageButton
+                android:id="@+id/icon_settings"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_settings"
+                android:contentDescription="Settings"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/white" />
+
+            <ImageButton
+                android:id="@+id/icon_logout"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_logout"
+                android:contentDescription="Logout"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Page Title -->
+    <TextView
+        android:id="@+id/document_management_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Document Management"
+        android:textColor="@color/blue"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <!-- Tabs -->
+    <LinearLayout
+        android:id="@+id/tab_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp">
+
+        <Button
+            android:id="@+id/tab_my_files"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:maxWidth="320dp"
+            android:layout_gravity="center"
+            android:text="My Files"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/tab_shared_files"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:maxWidth="320dp"
+            android:layout_gravity="center"
+            android:text="Shared With Me"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/dark_gray"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <!-- My Files Section -->
+    <LinearLayout
+        android:id="@+id/layout_my_files"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_my_files"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/empty_my_files"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No files exist"
+            android:textColor="@color/dark_gray"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </LinearLayout>
 
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+    <!-- Shared Files Section -->
+    <LinearLayout
+        android:id="@+id/layout_shared_files"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone">
 
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </TabHost>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_shared_files"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/empty_shared_files"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No shared files exist"
+            android:textColor="@color/dark_gray"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

@@ -4,21 +4,22 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
+import edu.bhcc.cho.noteserver.utils.SessionManager
 import edu.bhcc.cho.noteserver.utils.VolleySingleton
 import org.json.JSONArray
 import org.json.JSONObject
 
+/**
+ * Handles network operations for sharing documents with other users.
+ */
 class SharingApiService(context: Context) {
-    private val requestQueue = VolleySingleton.Companion.getInstance(context).requestQueue
+    private val requestQueue = VolleySingleton.getInstance(context).requestQueue
+    private val sessionManager = SessionManager(context)
     private val baseUrl = "http://10.0.2.2:8080"
     private val tag = "SharingApiService"
 
     /**
-     * Gets the list of user IDs the document is shared with.
-     *
-     * @param documentId The ID of the document.
-     * @param onSuccess Callback function to handle a successful response, providing the list of user IDs.
-     * @param onError Callback function to handle an error during the request.
+     * Gets the list of user IDs a document is shared with.
      */
     fun getSharedUsers(
         documentId: String,
@@ -26,131 +27,64 @@ class SharingApiService(context: Context) {
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents/$documentId/shares"
-
-        val jsonObjectRequest = JsonObjectRequest( // Expecting a JSON object, not array.
-            Request.Method.GET, url, null,
-            { response ->
-                try {
-                    //  The server returns a JSON object with a "sharedWith" key
-                    val sharedWithArray = response.getJSONArray("sharedWith")
-                    val sharedUserIds = mutableListOf<String>()
-                    for (i in 0 until sharedWithArray.length()) {
-                        sharedUserIds.add(sharedWithArray.getString(i))
-                    }
-                    onSuccess(sharedUserIds)
-                } catch (e: Exception) {
-                    onError(VolleyError("Error parsing JSON: ${e.message}"))
-                }
-            },
-            { error ->
-                onError(error)
+        val request = object : JsonObjectRequest(Method.GET, url, null, { response ->
+            val ids = mutableListOf<String>()
+            val sharedArray = response.optJSONArray("sharedWith") ?: JSONArray()
+            for (i in 0 until sharedArray.length()) {
+                ids.add(sharedArray.getString(i))
             }
-        )
-        jsonObjectRequest.tag = tag
-        requestQueue.add(jsonObjectRequest)
-    }
-
-    /**
-     * Sets (replaces) the list of users the document is shared with.
-     *
-     * @param documentId The ID of the document.
-     * @param sharedWith A list of user IDs to share the document with.
-     * @param onSuccess Callback function to handle a successful response.
-     * @param onError Callback function to handle an error during the request.
-     */
-    fun setSharedUsers(
-        documentId: String,
-        sharedWith: List<String>,
-        onSuccess: (JSONObject) -> Unit, //  Or Unit if the server returns an empty response
-        onError: (VolleyError) -> Unit
-    ) {
-        val url = "$baseUrl/documents/$documentId/shares"
-
-        //  Construct the JSON request body.  The key is "sharedWith" and the value is a JSON array.
-        val jsonArray = JSONArray()
-        sharedWith.forEach { userId ->
-            jsonArray.put(userId)
-        }
-        val jsonRequest = JSONObject().apply {
-            put("sharedWith", jsonArray)
-        }
-
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.PUT, url, jsonRequest,
-            { response ->
-                onSuccess(response)
-            },
-            { error ->
-                onError(error)
+            onSuccess(ids)
+        }, { error -> onError(error) }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf("Authorization" to "Bearer ${sessionManager.getToken()}")
             }
-        )
-        jsonObjectRequest.tag = tag
-        requestQueue.add(jsonObjectRequest)
+        }
+        request.tag = tag
+        requestQueue.add(request)
     }
 
     /**
      * Shares a document with a single user.
-     *
-     * @param documentId The ID of the document.
-     * @param profileId The ID of the user to share with.
-     * @param onSuccess Callback function to handle a successful response.
-     * @param onError Callback function to handle an error during the request.
      */
     fun shareWithUser(
         documentId: String,
         profileId: String,
-        onSuccess: (JSONObject) -> Unit,  // Or Unit
+        onSuccess: () -> Unit,
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents/$documentId/shares/$profileId"
-
-        // PUT with an empty JSON object as the body.  Check server API docs for expected body.
-        val jsonRequest = JSONObject()
-
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.PUT, url, jsonRequest,
-            { response ->
-                onSuccess(response)
-            },
-            { error ->
-                onError(error)
+        val request = object : JsonObjectRequest(Method.PUT, url, JSONObject(), { _ ->
+            onSuccess()
+        }, { error -> onError(error) }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf("Authorization" to "Bearer ${sessionManager.getToken()}")
             }
-        )
-        jsonObjectRequest.tag = tag
-        requestQueue.add(jsonObjectRequest)
+        }
+        request.tag = tag
+        requestQueue.add(request)
     }
 
     /**
-     * Stops sharing a document with a single user.
-     *
-     * @param documentId The ID of the document.
-     * @param profileId The ID of the user to stop sharing with.
-     * @param onSuccess Callback function to handle a successful response.
-     * @param onError Callback function to handle an error during the request.
+     * Stops sharing a document with a specific user.
      */
-    fun stopSharingWithUser(
+    fun unshareWithUser(
         documentId: String,
         profileId: String,
-        onSuccess: () -> Unit, // DELETE often has empty body
+        onSuccess: () -> Unit,
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents/$documentId/shares/$profileId"
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.DELETE, url, null, // No body for DELETE
-            { _ ->
-                onSuccess()
-            },
-            { error ->
-                onError(error)
+        val request = object : JsonObjectRequest(Method.DELETE, url, null, { _ ->
+            onSuccess()
+        }, { error -> onError(error) }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf("Authorization" to "Bearer ${sessionManager.getToken()}")
             }
-        )
-        jsonObjectRequest.tag = tag
-        requestQueue.add(jsonObjectRequest)
+        }
+        request.tag = tag
+        requestQueue.add(request)
     }
 
-    /**
-     * Cancels all pending requests with this tag.
-     */
     fun cancelRequests() {
         requestQueue.cancelAll(tag)
     }

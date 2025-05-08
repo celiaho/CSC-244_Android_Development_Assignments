@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="?android:colorBackground"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?android:colorBackground">
 
-    <!-- App Bar -->
+    <!-- Hardcoded App Bar -->
     <include layout="@layout/toolbar_postauth" />
 
-    <!-- Content -->
+    <!-- Scrollable document content area -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -20,32 +21,52 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Label for document title -->
             <TextView
+                android:id="@+id/document_title_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Document Title"
                 android:textColor="@color/dark_gray"
                 android:textSize="16sp" />
 
+            <!-- Title EditText -->
             <EditText
                 android:id="@+id/document_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_input"
+                android:inputType="textCapSentences"
+                android:autofillHints="username"
+                android:labelFor="@id/document_title_label"
                 android:hint="Enter title"
-                android:minHeight="48dp"
                 android:textColor="?android:textColor" />
 
+            <!-- Document content field -->
             <EditText
                 android:id="@+id/document_content"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="490dp"
+                android:minHeight="48dp"
                 android:background="@drawable/rounded_input"
                 android:gravity="top"
                 android:hint="Enter your note here"
                 android:inputType="textMultiLine"
+                android:autofillHints="text"
                 android:textColor="?android:textColor" />
+
+            <!-- Autosave info -->
+            <TextView
+                android:id="@+id/document_autosave_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="This document autosaves as you type."
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
