@@ -70,7 +70,11 @@
                 android:inputType="textEmailAddress"
                 android:labelFor="@id/login_email_label"
                 android:minHeight="48dp"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"/>
+                <!-- 3 lines above = Attempted fix for click in/keyboard display issues -->
 
             <!-- Password -->
             <TextView
@@ -104,15 +108,17 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="14dp" />
 
-            <!-- Sign In Button -->
+            <!-- Log In Button -->
             <Button
                 android:id="@+id/login_button"
                 style="@style/CustomButton"
                 android:layout_width="320dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:text="Sign In"
-                android:textSize="18sp" />
+                android:text="Log In"
+                android:textSize="18sp"
+                android:layout_marginTop="12dp"
+                android:textColor="@android:color/white"/>
 
             <!-- Create Account Button -->
             <Button

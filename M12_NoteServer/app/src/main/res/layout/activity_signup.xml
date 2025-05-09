@@ -23,8 +23,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Back text -->
+            <!-- Back navigation -->
             <TextView
+                android:id="@+id/signup_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="&lt;   Back"

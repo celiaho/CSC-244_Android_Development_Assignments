@@ -10,7 +10,7 @@ import edu.bhcc.cho.noteserver.data.model.SignupRequest
 import edu.bhcc.cho.noteserver.data.network.AuthApiService
 
 class SignupActivity : AppCompatActivity() {
-
+    private lateinit var backRedirect: TextView
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
     private lateinit var emailEditText: EditText
@@ -18,6 +18,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var signupButton: Button
     private lateinit var errorTextView: TextView
     private lateinit var loginRedirect: TextView
+    private lateinit var apiService: AuthApiService
 
     private lateinit var authApiService: AuthApiService
 
@@ -26,6 +27,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signup)
 
         // Initialize views
+        backRedirect = findViewById<TextView>(R.id.signup_back)
         firstNameEditText = findViewById(R.id.signup_first_name)
         lastNameEditText = findViewById(R.id.signup_last_name)
         emailEditText = findViewById(R.id.signup_email)
@@ -33,9 +35,13 @@ class SignupActivity : AppCompatActivity() {
         signupButton = findViewById(R.id.signup_button)
         errorTextView = findViewById(R.id.signup_error)
         loginRedirect = findViewById(R.id.signup_login_link)
+        apiService = AuthApiService(this)
 
         // Initialize API service
         authApiService = AuthApiService(this)
+
+        // "< Back" link to LoginActivity
+       backRedirect.setOnClickListener { finish() } // return to Login
 
         // Navigate back to LoginActivity
         loginRedirect.setOnClickListener {
@@ -51,8 +57,8 @@ class SignupActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             // Basic validation
-            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                errorTextView.text = "All fields are required."
+            if (email.isBlank() || password.isBlank() || firstName.isBlank() || lastName.isBlank()) {
+                errorTextView.text = "All fields are required. Password must be 8+ characters."
                 errorTextView.visibility = View.VISIBLE
                 return@setOnClickListener
             }
@@ -63,15 +69,14 @@ class SignupActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val request = SignupRequest(email, password, firstName, lastName, extra = null)
-
             // Call the API
+            val request = SignupRequest(email, password, firstName, lastName, extra = null)
             authApiService.signupUser(
                 request,
                 onSuccess = {
                     errorTextView.visibility = View.GONE
                     Toast.makeText(this, "Signup successful. Please log in.", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, LoginActivity::class.java))
+                    startActivity(Intent(this, SignupVerificationActivity::class.java))
                     finish()
                 },
                 onError = {

@@ -9,16 +9,38 @@ import edu.bhcc.cho.noteserver.utils.SessionManager
 import edu.bhcc.cho.noteserver.utils.VolleySingleton
 import org.json.JSONObject
 
-/**
- * Handles authentication operations: signup, login.
- */
 class AuthApiService(private val context: Context) {
-    private val requestQueue = VolleySingleton.getInstance(context).requestQueue
     private val baseUrl = "http://10.0.2.2:8080"
-    private val sessionManager = SessionManager(context)
+    private val requestQueue = VolleySingleton.getInstance(context).requestQueue
 
     /**
-     * Signs up a new user.
+     * Logs in a user and returns the JWT token string.
+     */
+    fun loginUser(
+        request: LoginRequest,
+        onSuccess: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/auth/login"
+        val json = JSONObject().apply {
+            put("email", request.email)
+            put("password", request.password)
+        }
+
+        val req = JsonObjectRequest(Request.Method.POST, url, json,
+            { response ->
+                val token = response.optString("token", "")
+                if (token.isNotEmpty()) onSuccess(token)
+                else onError("Missing token in response")
+            },
+            { error -> onError(error.message ?: "Login failed") }
+        )
+
+        requestQueue.add(req)
+    }
+
+    /**
+     * Signs up a user and returns the full response object.
      */
     fun signupUser(
         request: SignupRequest,
@@ -26,7 +48,7 @@ class AuthApiService(private val context: Context) {
         onError: (String) -> Unit
     ) {
         val url = "$baseUrl/auth/signup"
-        val body = JSONObject().apply {
+        val json = JSONObject().apply {
             put("email", request.email)
             put("password", request.password)
             put("first_name", request.firstName)
@@ -34,37 +56,56 @@ class AuthApiService(private val context: Context) {
             put("extra", request.extra)
         }
 
-        val jsonRequest = JsonObjectRequest(Request.Method.POST, url, body,
+        val req = JsonObjectRequest(Request.Method.POST, url, json,
             { response -> onSuccess(response) },
-            { error -> onError(error.message ?: "Signup error") }
+            { error -> onError(error.message ?: "Signup failed") }
         )
-        requestQueue.add(jsonRequest)
+
+        requestQueue.add(req)
     }
 
     /**
-     * Logs in an existing user and stores token + user ID in SessionManager.
+     * Uses OTP to reset a user's password.
      */
-    fun loginUser(
-        request: LoginRequest,
+    fun resetPassword(
+        email: String,
+        newPassword: String,
+        otp: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/auth/reset-password"
+        val json = JSONObject().apply {
+            put("email", email)
+            put("new_password", newPassword)
+            put("otp", otp)
+        }
+
+        val req = JsonObjectRequest(Request.Method.POST, url, json,
+            { onSuccess() },
+            { error -> onError(error.message ?: "Reset failed") }
+        )
+
+        requestQueue.add(req)
+    }
+
+    /**
+     * Fetches the current user's profile using JWT in header.
+     */
+    fun getMyProfile(
         onSuccess: (JSONObject) -> Unit,
         onError: (String) -> Unit
     ) {
-        val url = "$baseUrl/auth/login"
-        val body = JSONObject().apply {
-            put("email", request.email)
-            put("password", request.password)
+        val url = "$baseUrl/profiles/me"
+        val req = object : JsonObjectRequest(Method.GET, url, null,
+            { response -> onSuccess(response) },
+            { error -> onError(error.message ?: "Profile fetch failed") }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf("Authorization" to "Bearer ${SessionManager(context).getToken()}")
+            }
         }
 
-        val jsonRequest = JsonObjectRequest(Request.Method.POST, url, body,
-            { response ->
-                val token = response.getString("token")
-                val userId = response.getString("user_id")
-                sessionManager.saveToken(token)
-                sessionManager.saveUserId(userId)
-                onSuccess(response)
-            },
-            { error -> onError(error.message ?: "Login failed") }
-        )
-        requestQueue.add(jsonRequest)
+        requestQueue.add(req)
     }
 }

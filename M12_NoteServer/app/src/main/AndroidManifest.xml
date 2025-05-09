@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+
     <application
         android:theme="@style/Theme.GOTTNotes"
         android:allowBackup="true"
@@ -14,18 +15,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <activity android:name=".ui.settings.SettingsActivity" />
+        <activity android:name=".ui.settings.SettingsActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.document.DocumentManagementActivity" />
-        <activity android:name=".ui.document.DocumentActivity" />
+        <activity android:name=".ui.document.DocumentActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.document.DocumentSharePopupActivity"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dialog" />
-        <activity android:name=".ui.auth.SignupVerificationActivity" />
-        <activity android:name=".ui.auth.SignupActivity" />
-        <activity android:name=".ui.auth.PasswordResetActivity" />
-        <activity android:name=".ui.auth.PasswordForgotActivity" />
+        <activity android:name=".ui.auth.SignupVerificationActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.auth.SignupActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.auth.PasswordResetActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.auth.PasswordForgotActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.auth.LoginActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
