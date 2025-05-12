@@ -21,10 +21,10 @@ class PasswordForgotActivity : AppCompatActivity() {
         setContentView(R.layout.activity_password_forgot)
 
         // Get references to views
+        backLink = findViewById(R.id.forgot_back)
         emailInput = findViewById(R.id.forgot_email)
         errorText = findViewById(R.id.forgot_error)
         continueButton = findViewById(R.id.forgot_continue_button)
-        backLink = findViewById(R.id.forgot_back)
 
         // Handle continue button click
         continueButton.setOnClickListener {

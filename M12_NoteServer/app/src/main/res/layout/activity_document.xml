@@ -42,7 +42,7 @@
                 android:autofillHints="username"
                 android:labelFor="@id/document_title_label"
                 android:hint="Enter title"
-                android:textColor="?android:textColor" />
+                android:textColor="@color/dark_gray" />
 
             <!-- Document content field -->
             <EditText
@@ -55,7 +55,7 @@
                 android:hint="Enter your note here"
                 android:inputType="textMultiLine"
                 android:autofillHints="text"
-                android:textColor="?android:textColor" />
+                android:textColor="@color/dark_gray" />
 
             <!-- Autosave info -->
             <TextView

@@ -78,10 +78,10 @@ class DocumentManagementActivity : AppCompatActivity() {
             finish()
         }
 
-        // Hide icons not used on this screen
-        findViewById<View>(R.id.icon_save)?.visibility = View.GONE
-        findViewById<View>(R.id.icon_share)?.visibility = View.GONE
-        findViewById<View>(R.id.icon_delete)?.visibility = View.GONE
+//        // Hide icons not used on this screen
+//        findViewById<View>(R.id.icon_save)?.visibility = View.GONE
+//        findViewById<View>(R.id.icon_share)?.visibility = View.GONE
+//        findViewById<View>(R.id.icon_delete)?.visibility = View.GONE
     }
 
     private fun showMyFilesTab() {

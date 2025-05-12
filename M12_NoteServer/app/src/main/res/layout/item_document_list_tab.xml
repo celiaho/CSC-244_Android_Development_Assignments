@@ -17,7 +17,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <!-- Document Subtitle (e.g., modified date or owner) -->
+    <!-- Document Subtitle (e.g., modified date or owner)
+     //// Change this ID to LastModifiedDate-->
     <TextView
         android:id="@+id/text_document_subtitle"
         android:layout_width="match_parent"

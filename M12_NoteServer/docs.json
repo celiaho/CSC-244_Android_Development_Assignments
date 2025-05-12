@@ -18,6 +18,15 @@
       "creation_date": "2025-05-08T20:06:46.9061544Z",
       "last_modified_date": "2025-05-08T20:06:46.9071716Z"
     },
+    "8233859da890425b9662e0287e6f2174": {
+      "id": "8233859da890425b9662e0287e6f2174",
+      "first_name": "User",
+      "last_name": "iii",
+      "email": "useriii@gmail.com",
+      "password_hash": "$2a$12$XBR83Ajmcjv08VdJ00vVSO8GtQYTvx1at5lSxMYRIaXs295qWuhFW",
+      "creation_date": "2025-05-12T21:56:24.9725023Z",
+      "last_modified_date": "2025-05-12T21:56:24.9725023Z"
+    },
     "a92be6cb96f0497485f08ef86b0093d6": {
       "id": "a92be6cb96f0497485f08ef86b0093d6",
       "first_name": "user",

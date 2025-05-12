@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.model.LoginRequest
 import edu.bhcc.cho.noteserver.data.network.AuthApiService
+import edu.bhcc.cho.noteserver.ui.document.DocumentActivity
 import edu.bhcc.cho.noteserver.ui.document.DocumentManagementActivity
 import edu.bhcc.cho.noteserver.utils.SessionManager
 import org.json.JSONObject
@@ -41,18 +42,18 @@ class LoginActivity : AppCompatActivity() {
         apiService = AuthApiService(this)
         sessionManager = SessionManager(this)
 
-        // Attempt to automatically show the keyboard on email field
-        emailEditText.postDelayed({
-            emailEditText.requestFocus()
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(emailEditText, InputMethodManager.SHOW_IMPLICIT)
-//            emailEditText.setOnFocusChangeListener { _, hasFocus ->
-//                if (hasFocus) {
-//                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                    imm.showSoftInput(emailEditText, InputMethodManager.SHOW_IMPLICIT)
-//                }
-//            }
-        }, 100)  // Delay to ensure the layout is fully loaded
+//        // Attempt to automatically show the keyboard on email field
+//        emailEditText.postDelayed({
+//            emailEditText.requestFocus()
+//            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.showSoftInput(emailEditText, InputMethodManager.SHOW_IMPLICIT)
+////            emailEditText.setOnFocusChangeListener { _, hasFocus ->
+////                if (hasFocus) {
+////                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+////                    imm.showSoftInput(emailEditText, InputMethodManager.SHOW_IMPLICIT)
+////                }
+////            }
+//        }, 100)  // Delay to ensure the layout is fully loaded
 
         // Handle login button click
         loginButton.setOnClickListener {
@@ -79,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
                             val userId = profile.optString("id", "")
                             sessionManager.saveUserId(userId)
                             errorTextView.visibility = View.GONE
-                            startActivity(Intent(this, DocumentManagementActivity::class.java))
+                            startActivity(Intent(this, DocumentActivity::class.java))
                             finish()
                         },
                         onError = {
