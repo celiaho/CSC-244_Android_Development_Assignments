@@ -6,6 +6,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.model.Profile
 import edu.bhcc.cho.noteserver.data.network.ProfileApiService
@@ -27,6 +28,10 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        // Highlight Settings icon in toolbar
+        findViewById<ImageButton>(R.id.icon_settings)
+            .setColorFilter(ContextCompat.getColor(this, R.color.orange))
 
         // Initialize shared preferences and API
         sessionManager = SessionManager(this)
