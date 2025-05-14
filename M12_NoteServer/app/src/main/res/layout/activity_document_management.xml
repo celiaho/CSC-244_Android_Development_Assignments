@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?android:colorBackground">
 
-    <!-- Custom hardcoded toolbar -->
+    <!-- Custom hardcoded toolbar with app name and icon row -->
     <LinearLayout
         android:id="@+id/toolbar_document_management"
         android:layout_width="match_parent"
@@ -41,6 +41,7 @@
             android:gravity="end|center_vertical"
             android:baselineAligned="false">
 
+            <!-- New Document -->
             <ImageButton
                 android:id="@+id/icon_new_doc"
                 android:layout_width="48dp"
@@ -50,15 +51,17 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/white" />
 
+            <!-- Document Management -->
             <ImageButton
                 android:id="@+id/icon_open_folder"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_folder"
-                android:contentDescription="Open Folder"
+                android:contentDescription="Document Management"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/white" />
 
+            <!-- Settings -->
             <ImageButton
                 android:id="@+id/icon_settings"
                 android:layout_width="48dp"
@@ -68,6 +71,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/white" />
 
+            <!-- Logout -->
             <ImageButton
                 android:id="@+id/icon_logout"
                 android:layout_width="48dp"
@@ -103,6 +107,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp">
 
+        <!-- My Files tab -->
         <Button
             android:id="@+id/tab_my_files"
             android:layout_width="0dp"
@@ -115,6 +120,7 @@
             android:textColor="@color/white"
             android:textSize="15sp" />
 
+        <!-- Shared Files tab -->
         <Button
             android:id="@+id/tab_shared_files"
             android:layout_width="0dp"
@@ -128,7 +134,7 @@
             android:textSize="15sp" />
     </LinearLayout>
 
-    <!-- My Files Section -->
+    <!-- My Files list -->
     <LinearLayout
         android:id="@+id/layout_my_files"
         android:layout_width="match_parent"
@@ -158,7 +164,7 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Shared Files Section -->
+    <!-- Shared Files list -->
     <LinearLayout
         android:id="@+id/layout_shared_files"
         android:layout_width="match_parent"
