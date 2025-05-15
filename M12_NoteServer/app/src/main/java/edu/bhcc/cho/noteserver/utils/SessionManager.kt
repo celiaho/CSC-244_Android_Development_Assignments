@@ -8,9 +8,9 @@ import android.content.SharedPreferences
  */
 class SessionManager(context: Context) {
     // SharedPreferences file name
-    private val prefsName = "GottNotesSession"
+    private val prefsFileName = "GOTTNotesSession"
     private val prefs: SharedPreferences =
-        context.getSharedPreferences(prefsName, Context.MODE_PRIVATE)
+        context.getSharedPreferences(prefsFileName, Context.MODE_PRIVATE)
 
     // Key to store the auth token
     private val KEY_AUTH_TOKEN = "auth_token"
