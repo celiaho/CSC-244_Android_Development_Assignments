@@ -3,6 +3,7 @@ package edu.bhcc.cho.noteserver.ui.auth
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -41,6 +42,12 @@ class LoginActivity : AppCompatActivity() {
 
         apiService = AuthApiService(this)
         sessionManager = SessionManager(this)
+
+        // Log JWT and User ID
+        val prefs = getSharedPreferences("GOTTNotesSession", MODE_PRIVATE)
+        for ((key, value) in prefs.all) {
+            Log.d("SharedPrefs", "$key = $value")
+        }
 
 //        // Attempt to automatically show the keyboard on email field
 //        emailEditText.postDelayed({
@@ -98,7 +105,12 @@ class LoginActivity : AppCompatActivity() {
 
         // Handle "Forgot Password?" link
         forgotPasswordLink.setOnClickListener {
-            startActivity(Intent(this, PasswordForgotActivity::class.java))
+            val email = emailEditText.text.toString().trim()
+
+            //// Pass Login email to PasswordForgot screen - DOESN'T WORK
+            val intent = Intent(this, PasswordForgotActivity::class.java)
+            intent.putExtra("EMAIL", email)
+            startActivity(intent)
         }
 
         // Handle "Create Account" button
