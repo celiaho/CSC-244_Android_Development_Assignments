@@ -9,7 +9,6 @@ import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.network.AuthApiService
 
 class PasswordResetActivity : AppCompatActivity() {
-
     private lateinit var emailInput: EditText
     private lateinit var tempPasswordField: EditText
     private lateinit var newPasswordField: EditText
@@ -22,12 +21,6 @@ class PasswordResetActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_reset)
 
-        // Handle Back link click
-        backLink.setOnClickListener { finish() }
-
-        // Show a demo OTP for simulation purposes
-        Toast.makeText(this, "The temporary password sent to your email is: tempPassword123", Toast.LENGTH_LONG).show()
-
         // Initialize views
         emailInput = findViewById(R.id.reset_email)
         tempPasswordField = findViewById(R.id.reset_temp_password)
@@ -37,8 +30,14 @@ class PasswordResetActivity : AppCompatActivity() {
         backLink = findViewById(R.id.reset_back)
         apiService = AuthApiService(this)
 
+        // Handle Back link click
+        backLink.setOnClickListener { finish() }
+
         // Prefill email if passed from Forgot Password screen
         intent.getStringExtra("EMAIL")?.let { emailInput.setText(it) }
+
+        // Give demo OTP hint for simulation purposes
+        Toast.makeText(this, "Check server log for demo OTP.", Toast.LENGTH_LONG).show()
 
         // Handle the continue/reset button click
         continueButton.setOnClickListener {
@@ -74,8 +73,11 @@ class PasswordResetActivity : AppCompatActivity() {
                 otp = otp,
                 onSuccess = {
                     Toast.makeText(this, "Password changed. Please log in.", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, LoginActivity::class.java))
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.putExtra("EMAIL", email)
+                    startActivity(intent)
                     finish()
+
                 },
                 onError = {
                     errorText.text = it

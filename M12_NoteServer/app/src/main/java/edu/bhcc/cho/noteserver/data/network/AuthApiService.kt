@@ -1,8 +1,10 @@
 package edu.bhcc.cho.noteserver.data.network
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import edu.bhcc.cho.noteserver.data.model.LoginRequest
 import edu.bhcc.cho.noteserver.data.model.SignupRequest
 import edu.bhcc.cho.noteserver.utils.SessionManager
@@ -65,6 +67,37 @@ class AuthApiService(private val context: Context) {
     }
 
     /**
+     * Sends a password reset request for the given email address.
+     * Triggers the server to generate and store an OTP (one-time password)
+     * for the user to use in the password reset process.
+     */
+    fun requestPasswordReset(
+        email: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/auth/forgot-password"
+        val jsonBody = JSONObject()
+        jsonBody.put("email", email)
+        val requestBody = jsonBody.toString()
+
+        val request = object : StringRequest(Method.POST, url,
+            { onSuccess() },
+            { error -> onError("Failed to request reset: ${error.message}") }
+        ) {
+            override fun getBody(): ByteArray {
+                return requestBody.toByteArray(Charsets.UTF_8)
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+        }
+
+        requestQueue.add(request)
+    }
+
+    /**
      * Uses OTP to reset a user's password.
      */
     fun resetPassword(
@@ -74,19 +107,24 @@ class AuthApiService(private val context: Context) {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
+        Log.d("AuthApiService---", "---Calling updated resetPassword() using StringRequest")
+
         val url = "$baseUrl/auth/reset-password"
-        val json = JSONObject().apply {
+        val jsonBody = JSONObject().apply {
             put("email", email)
             put("new_password", newPassword)
             put("otp", otp)
         }
 
-        val req = JsonObjectRequest(Request.Method.POST, url, json,
-            { onSuccess() },
-            { error -> onError(error.message ?: "Reset failed") }
-        )
+        val request = object : StringRequest(Method.POST, url,
+            { onSuccess() }, // no response body to parse
+            { error -> onError("Reset failed: ${error.message}") }
+        ) {
+            override fun getBody(): ByteArray = jsonBody.toString().toByteArray(Charsets.UTF_8)
+            override fun getBodyContentType(): String = "application/json"
+        }
 
-        requestQueue.add(req)
+        requestQueue.add(request)
     }
 
     /**
