@@ -73,6 +73,7 @@
             <!-- Temporary Password input field -->
             <EditText
                 android:id="@+id/verify_temp_password"
+                style="@style/RoundedEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
