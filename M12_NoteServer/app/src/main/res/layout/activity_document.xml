@@ -33,12 +33,13 @@
             <!-- Title EditText -->
             <EditText
                 android:id="@+id/document_title"
+                style="@style/RoundedEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_input"
-                android:inputType="textCapSentences"
+                android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
                 android:autofillHints="username"
                 android:labelFor="@id/document_title_label"
                 android:hint="Enter title"
@@ -47,13 +48,14 @@
             <!-- Document content field -->
             <EditText
                 android:id="@+id/document_content"
+                style="@style/RoundedEditText"
                 android:layout_width="match_parent"
                 android:layout_height="490dp"
                 android:minHeight="48dp"
                 android:background="@drawable/rounded_input"
                 android:gravity="top"
                 android:hint="Enter your note here"
-                android:inputType="textMultiLine"
+                android:inputType="textCapSentences|textMultiLine|textAutoCorrect|textAutoComplete"
                 android:autofillHints="text"
                 android:textColor="@color/dark_gray" />
 

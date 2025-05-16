@@ -62,13 +62,14 @@
 
             <EditText
                 android:id="@+id/login_email"
+                style="@style/RoundedEditText"
                 android:text="a@a.a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:autofillHints="emailAddress"
                 android:background="@drawable/rounded_input"
-                android:inputType="textEmailAddress"
+                android:inputType="textEmailAddress|textAutoComplete"
                 android:labelFor="@id/login_email_label"
                 android:minHeight="48dp"
                 tools:ignore="SpeakableTextPresentCheck" />
@@ -85,7 +86,8 @@
 
             <EditText
                 android:id="@+id/login_password"
-                android:text="password"
+                style="@style/RoundedEditText"
+                android:text="88888888"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="password"
