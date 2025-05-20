@@ -2,6 +2,7 @@ package edu.bhcc.cho.noteserver.data.network
 
 import android.content.Context
 import android.util.Log
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
@@ -135,6 +136,34 @@ class AuthApiService(private val context: Context) {
         onError: (String) -> Unit
     ) {
         val url = "$baseUrl/profiles/me"
+        val req = object : JsonObjectRequest(Method.GET, url, null,
+            { response -> onSuccess(response) },
+            { error -> onError(error.message ?: "Profile fetch failed") }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf("Authorization" to "Bearer ${SessionManager(context).getToken()}")
+            }
+            // Test code to see if Volley is automatically retries failed profile fetches 1 time - it does.
+//        }.apply {
+//            // Prevent retry on failure (especially for 401)
+//            retryPolicy = DefaultRetryPolicy(
+//                0, // initial timeout in ms
+//                0, // no retries
+//                1f // backoff multiplier
+//            )
+        }
+
+        requestQueue.add(req)
+    }
+
+    //// Test code: Workaround to bypass /profiles/me on the server since server keeps rejecting fresh
+    // JWT tokens as expired regardless of exp timestamp
+    fun getProfileById(
+        userId: String,
+        onSuccess: (JSONObject) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val url = "$baseUrl/profiles/$userId"
         val req = object : JsonObjectRequest(Method.GET, url, null,
             { response -> onSuccess(response) },
             { error -> onError(error.message ?: "Profile fetch failed") }
