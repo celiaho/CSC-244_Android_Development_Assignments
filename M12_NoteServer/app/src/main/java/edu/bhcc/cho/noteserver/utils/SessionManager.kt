@@ -2,62 +2,77 @@ package edu.bhcc.cho.noteserver.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 /**
- * Handles storing and retrieving the authentication token and session-related info.
+ * Manages session data e.g. JWT auth token, user ID, and token expiration timestamp.
+ * Uses SharedPreferences to persist data across app launches.
  */
 class SessionManager(context: Context) {
-    // SharedPreferences file name
+
+    // SharedPreferences file name (private to the app)
     private val prefsFileName = "GOTTNotesSession"
+
+    // Reference to the SharedPreferences object
     private val prefs: SharedPreferences =
         context.getSharedPreferences(prefsFileName, Context.MODE_PRIVATE)
 
-    // Key to store the auth token
-    private val KEY_AUTH_TOKEN = "auth_token"
+    // Keys used to store and retrieve values from SharedPreferences
+    private val keyAuthToken = "auth_token" // JWT auth token
+    private val keyUserId = "user_id" // Logged-in user’s ID
+    private val keyTokenExpiration = "token_expiration" // JWT expiration in epoch millis
 
     /**
-     * Saves the auth token to shared preferences.
+     * Saves the auth token, user ID, and expiration time to SharedPreferences.
      *
-     * @param token The JWT token returned from the server.
+     * @param token The JWT token string.
+     * @param userId The authenticated user's ID.
+     * @param expirationMillis The expiration time of the token in milliseconds since epoch.
      */
-    fun saveToken(token: String) {
-        prefs.edit().putString(KEY_AUTH_TOKEN, token).apply()
+    fun saveSession(token: String, userId: String, expirationMillis: Long) {
+        prefs.edit().apply {
+            putString(keyAuthToken, token)
+            putString(keyUserId, userId)
+            putLong(keyTokenExpiration, expirationMillis)
+            apply() // Commit changes asynchronously
+        }
     }
 
     /**
-     * Retrieves the stored auth token.
+     * Retrieves the saved JWT auth token.
      *
-     * @return The token, or null if not found.
+     * @return The stored token, or null if not set.
      */
-    fun getToken(): String? {
-        return prefs.getString(KEY_AUTH_TOKEN, null)
+    fun getToken(): String? = prefs.getString(keyAuthToken, null)
+
+    /**
+     * Retrieves the stored user ID.
+     *
+     * @return The stored user ID, or null if not set.
+     */
+    fun getUserId(): String? = prefs.getString(keyUserId, null)
+
+    /**
+     * Retrieves the stored token expiration timestamp.
+     *
+     * @return Expiration time in millis since epoch, or 0 if not set.
+     */
+    fun getTokenExpiration(): Long = prefs.getLong(keyTokenExpiration, 0L)
+
+    /**
+     * Checks if the stored JWT token has expired.
+     *
+     * @return True if expired or no expiration is saved, false if still valid.
+     */
+    fun isTokenExpired(): Boolean {
+        val expiration = getTokenExpiration()
+        return expiration == 0L || System.currentTimeMillis() >= expiration
     }
 
     /**
-     * Saves the user ID to shared preferences.
+     * Clears all stored session values.
      */
-    fun saveUserId(userId: String) {
-        prefs.edit().putString("user_id", userId).apply()
-    }
-
-    /**
-     * Gets the user ID from shared preferences.
-     */
-    fun getUserId(): String? {
-        return prefs.getString("user_id", null)
-    }
-
-    /**
-     * Deletes the stored auth token (e.g. on logout).
-     */
-    fun clearToken() {
-        prefs.edit().remove(KEY_AUTH_TOKEN).apply()
-    }
-
-    /**
-     * Checks if a token exists (useful to check if user is logged in).
-     */
-    fun isLoggedIn(): Boolean {
-        return !getToken().isNullOrBlank()
+    fun clearSession() {
+        prefs.edit() { clear() } // Preferred syntax for prefs.edit().clear().apply()
     }
 }
