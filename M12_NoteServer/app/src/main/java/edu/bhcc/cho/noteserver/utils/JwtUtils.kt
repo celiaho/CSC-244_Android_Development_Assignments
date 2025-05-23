@@ -1,6 +1,7 @@
 package edu.bhcc.cho.noteserver.utils
 
 import android.util.Base64
+import android.util.Log
 import org.json.JSONObject
 
 /**
@@ -69,14 +70,24 @@ object JwtUtils {
     }
 
     //// WORKAROUND HELPER FUNCTION TEST CODE for LoginActivity
+    //// Extracts user ID from JWT token payload, logging the full payload to help confirm field name
     fun getUserId(token: String): String? {
         return try {
             val parts = token.split(".")
             if (parts.size != 3) return null
+
             val payloadBytes = Base64.decode(parts[1], Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
-            val payload = JSONObject(String(payloadBytes))
-            payload.optString("id", null) // or "sub" or whatever the server uses
+            val payloadJson = JSONObject(String(payloadBytes))
+
+            Log.d("---JWT_PAYLOAD", "---" + payloadJson.toString()) // 🔍 Logs full JWT payload to Logcat
+
+            // Try multiple field names to extract user ID
+            payloadJson.optString("id")
+                .ifBlank { payloadJson.optString("sub") }
+                .ifBlank { payloadJson.optString("user_id") }
+                .ifBlank { null }
         } catch (e: Exception) {
+            Log.e("---JWT_DECODE_ERROR", "---Failed to decode user ID from JWT: ${e.message}")
             null
         }
     }

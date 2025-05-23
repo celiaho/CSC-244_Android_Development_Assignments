@@ -2,6 +2,7 @@ package edu.bhcc.cho.noteserver.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,7 @@ class PasswordResetActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_reset)
 
-        // Initialize views
+        // Initialize views & services
         emailInput = findViewById(R.id.reset_email)
         tempPasswordField = findViewById(R.id.reset_temp_password)
         newPasswordField = findViewById(R.id.reset_new_password)
@@ -29,6 +30,8 @@ class PasswordResetActivity : AppCompatActivity() {
         continueButton = findViewById(R.id.reset_continue_button)
         backLink = findViewById(R.id.reset_back)
         apiService = AuthApiService(this)
+
+        Log.d("---RESET_PASSWORD_PAGE_LOADED", "---RESET_PASSWORD_PAGE_LOADED")
 
         // Handle Back link click
         backLink.setOnClickListener { finish() }

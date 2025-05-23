@@ -2,6 +2,7 @@ package edu.bhcc.cho.noteserver.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,8 @@ class SignupVerificationActivity : AppCompatActivity() {
         tempPasswordEditText = findViewById(R.id.verify_temp_password)
         errorTextView = findViewById(R.id.verify_error)
         completeBtn = findViewById(R.id.verify_button)
+
+        Log.d("---SIGNUP_VERIFICATION_PAGE_LOADED", "---SIGNUP_VERIFICATION_PAGE_LOADED")
 
         // "< Back" link to LoginActivity
         backRedirect.setOnClickListener { finish() }  // return to Login

@@ -1,6 +1,7 @@
 package edu.bhcc.cho.noteserver.ui.document
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
@@ -38,6 +39,8 @@ class DocumentSharePopupActivity : AppCompatActivity() {
         userListView = findViewById(R.id.listViewUsers)
         apiService = DocumentApiService(this)
         sessionManager = SessionManager(this)
+
+        Log.d("---DOCUMENT_SHARE_POPUP_LOADED", "---DOCUMENT_SHARE_POPUP_LOADED")
 
         // Start fetching users
         fetchSharableUsers()

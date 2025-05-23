@@ -2,6 +2,7 @@ package edu.bhcc.cho.noteserver.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -35,10 +36,11 @@ class SignupActivity : AppCompatActivity() {
         signupButton = findViewById(R.id.signup_button)
         errorTextView = findViewById(R.id.signup_error)
         loginRedirect = findViewById(R.id.signup_login_link)
-        apiService = AuthApiService(this)
 
         // Initialize API service
-        authApiService = AuthApiService(this)
+        apiService = AuthApiService(this)
+
+        Log.d("---SIGNUP_PAGE_LOADED", "---SIGNUP_PAGE_LOADED")
 
         // "< Back" link to LoginActivity
        backRedirect.setOnClickListener { finish() } // return to Login

@@ -3,6 +3,7 @@ package edu.bhcc.cho.noteserver.ui.document
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
@@ -35,6 +36,8 @@ class DocumentActivity : AppCompatActivity() {
         titleEditText = findViewById(R.id.document_title)
         contentEditText = findViewById(R.id.document_content)
         apiService = DocumentApiService(this)
+
+        Log.d("---NEW_DOCUMENT_PAGE_LOADED", "---NEW_DOCUMENT_PAGE_LOADED")
 
         // Load data passed from previous screen
         documentId = intent.getStringExtra("DOCUMENT_ID") // if passed in

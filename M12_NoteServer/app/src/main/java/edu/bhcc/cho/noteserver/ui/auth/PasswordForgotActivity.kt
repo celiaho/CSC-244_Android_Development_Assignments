@@ -21,11 +21,13 @@ class PasswordForgotActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_forgot)
 
-        // Get references to views
+        // Initialize views
         backLink = findViewById(R.id.forgot_back)
         emailInput = findViewById(R.id.forgot_email)
         errorText = findViewById(R.id.forgot_error)
         continueButton = findViewById(R.id.forgot_continue_button)
+
+        Log.d("---FORGOT_PASSWORD_PAGE_LOADED", "---FORGOT_PASSWORD_PAGE_LOADED")
 
         // Back link returns to Login screen
         backLink.setOnClickListener {

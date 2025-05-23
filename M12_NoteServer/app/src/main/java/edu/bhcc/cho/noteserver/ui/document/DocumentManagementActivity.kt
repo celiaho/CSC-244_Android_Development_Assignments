@@ -2,6 +2,7 @@ package edu.bhcc.cho.noteserver.ui.document
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -75,6 +76,8 @@ class DocumentManagementActivity : AppCompatActivity() {
         recyclerSharedFiles = findViewById(R.id.recycler_shared_files)
         emptyMyFiles = findViewById(R.id.empty_my_files)
         emptySharedFiles = findViewById(R.id.empty_shared_files)
+
+        Log.d("---DOCUMENT_MANAGEMENT_PAGE_LOADED", "---DOCUMENT_MANAGEMENT_PAGE_LOADED")
 
         // Set up Recycler Layout Views/layout managers
         recyclerMyFiles.layoutManager = LinearLayoutManager(this)

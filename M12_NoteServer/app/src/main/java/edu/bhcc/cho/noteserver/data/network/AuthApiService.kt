@@ -143,7 +143,7 @@ class AuthApiService(private val context: Context) {
             override fun getHeaders(): MutableMap<String, String> {
                 return mutableMapOf("Authorization" to "Bearer ${SessionManager(context).getToken()}")
             }
-            // Test code to see if Volley is automatically retries failed profile fetches 1 time - it does.
+            // ⚠️TEST CODE to see if Volley automatically retries failed profile fetches 1 time-- it does.
 //        }.apply {
 //            // Prevent retry on failure (especially for 401)
 //            retryPolicy = DefaultRetryPolicy(
@@ -156,8 +156,7 @@ class AuthApiService(private val context: Context) {
         requestQueue.add(req)
     }
 
-    //// Test code: Workaround to bypass /profiles/me on the server since server keeps rejecting fresh
-    // JWT tokens as expired regardless of exp timestamp
+    //⚠️TEST CODE: Workaround to bypass /profiles/me on the server since server rejects JWTs as expired regardless of exp timestamp
     fun getProfileById(
         userId: String,
         onSuccess: (JSONObject) -> Unit,

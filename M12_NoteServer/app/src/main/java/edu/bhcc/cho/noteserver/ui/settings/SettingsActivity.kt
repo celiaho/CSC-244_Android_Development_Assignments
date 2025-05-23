@@ -2,6 +2,7 @@ package edu.bhcc.cho.noteserver.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -44,6 +45,8 @@ class SettingsActivity : AppCompatActivity() {
         currentPasswordInput = findViewById(R.id.settings_current_password)
         newPasswordInput = findViewById(R.id.settings_new_password)
         saveButton = findViewById(R.id.settings_save_changes)
+
+        Log.d("---SETTINGS_PAGE_LOADED", "---SETTINGS_PAGE_LOADED")
 
         // Load current theme toggle state
         val isDark = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
