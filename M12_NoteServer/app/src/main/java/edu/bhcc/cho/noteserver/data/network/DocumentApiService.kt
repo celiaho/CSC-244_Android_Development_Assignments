@@ -1,6 +1,7 @@
 package edu.bhcc.cho.noteserver.data.network
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
@@ -28,6 +29,7 @@ class DocumentApiService(context: Context) {
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents"
+        // API EXAMPLE: val url = "$baseUrl/documents?scope=owned&sort_by=last_modified_date&order=asc&page=1&limit=10"
         val request = object : JsonObjectRequest(Method.POST, url, content, onSuccess, onError) {
             override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
         }
@@ -64,15 +66,51 @@ class DocumentApiService(context: Context) {
         onError: (VolleyError) -> Unit
     ) {
         val url = "$baseUrl/documents"
-        val request = object : JsonArrayRequest(Method.GET, url, null,
-            { array -> onSuccess(parseList(array)) },
-            onError
-        ) {
+        val request = object : JsonObjectRequest(Method.GET, url, null,
+            { response ->
+                Log.d("---DOCUMENTS_RAW", response.toString()) // ADD THIS LINE
+
+                try {
+                    val dataArray = response.optJSONArray("data") ?: JSONArray()
+                    val docs = parseList(dataArray)
+
+                    docs.forEach {
+                        Log.d("---DOC", "Parsed = ${it.id}, title=${it.title}, content=${it.content}")
+                    }
+
+                    onSuccess(docs)
+                    Log.d("---DOCUMENTS_FETCHED", "---DOCUMENTS FETCHED = " + docs.joinToString(", "))
+                } catch (e: Exception) {
+                    Log.e("---PARSE_ERROR", "Failed to parse documents: ${e.message}")
+                    onSuccess(emptyList()) // Fallback to avoid crash
+                }
+            },
+            { error ->
+                onError(error)
+                Log.e("---DOCUMENTS_FETCH_ERROR", "---ERROR FETCHING DOCUMENTS = " + error)
+            }
+        )
+        {
             override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
         }
         requestQueue.add(request)
     }
 
+    /**
+     * Parses a JSON array of document objects into a list of [Document] instances.
+     *
+     * Each object in the array must have the following fields:
+     * - "id": String — unique document ID
+     * - "owner_id": String — ID of the document's owner
+     * - "creation_date": String — ISO timestamp of when the document was created
+     * - "last_modified_date": String — ISO timestamp of last modification
+     * - "content": JSONObject containing:
+     *      - "title": String — document title
+     *      - "body": String — document content
+     *
+     * @param array The [JSONArray] to parse, typically received from the server response.
+     * @return A [List] of [Document] objects with parsed fields.
+     */
     private fun parseList(array: JSONArray): List<Document> {
         val list = mutableListOf<Document>()
         for (i in 0 until array.length()) {
@@ -82,11 +120,51 @@ class DocumentApiService(context: Context) {
                 ownerId = obj.getString("owner_id"),
                 creationDate = obj.getString("creation_date"),
                 lastModifiedDate = obj.getString("last_modified_date"),
-                title = obj.optString("title", ""),
-                content = obj.getJSONObject("content").toString()
+                title = obj.getJSONObject("content").get("title").toString(),
+                content = obj.getJSONObject("content").get("body").toString()
             ))
         }
         return list
+    }
+
+    /**
+     * Retrieves a specific document by its ID from the server.
+     *
+     * @param documentId The ID of the document to retrieve.
+     * @param onSuccess Callback when the document is successfully fetched.
+     * @param onError Callback when an error occurs.
+     */
+    fun getDocumentById(
+        documentId: String,
+        onSuccess: (Document) -> Unit,
+        onError: (VolleyError) -> Unit
+    ) {
+        val url = "$baseUrl/documents/$documentId"
+        val request = object : JsonObjectRequest(Method.GET, url, null,
+            { response ->
+                try {
+                    val obj = response
+                    val content = obj.getJSONObject("content")
+                    val document = Document(
+                        id = obj.getString("id"),
+                        ownerId = obj.getString("owner_id"),
+                        creationDate = obj.getString("creation_date"),
+                        lastModifiedDate = obj.getString("last_modified_date"),
+                        title = content.getString("title"),
+                        content = content.getString("body")
+                    )
+                    onSuccess(document)
+                } catch (e: Exception) {
+                    Log.e("---GET_DOC_BY_ID_PARSE", "Error parsing document: ${e.message}")
+                    onError(VolleyError("Parse error"))
+                }
+            },
+            { error -> onError(error) }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+
+        requestQueue.add(request)
     }
 
     fun getAllUsers(
@@ -94,25 +172,22 @@ class DocumentApiService(context: Context) {
         onError: (String) -> Unit
     ) {
         val url = "$baseUrl/profiles"
-        val request = object : JsonArrayRequest(Method.GET, url, null,
+        val request = object : JsonObjectRequest(Method.GET, url, null,
             { response ->
-                try {
-                    val users = mutableListOf<UserProfile>()
-                    for (i in 0 until response.length()) {
-                        val obj = response.getJSONObject(i)
-                        users.add(
-                            UserProfile(
-                                id = obj.getString("id"),
-                                firstName = obj.getString("first_name"),
-                                lastName = obj.getString("last_name"),
-                                email = obj.getString("email")
-                            )
+                val userArray = response.optJSONArray("data") ?: JSONArray()
+                val users = mutableListOf<UserProfile>()
+                for (i in 0 until userArray.length()) {
+                    val obj = userArray.getJSONObject(i)
+                    users.add(
+                        UserProfile(
+                            id = obj.getString("id"),
+                            firstName = obj.getString("first_name"),
+                            lastName = obj.getString("last_name"),
+                            email = obj.getString("email")
                         )
-                    }
-                    onSuccess(users)
-                } catch (e: Exception) {
-                    onError("Error parsing users: ${e.message}")
+                    )
                 }
+                onSuccess(users)
             },
             { error -> onError(error.message ?: "Error fetching users") }
         ) {
@@ -126,7 +201,7 @@ class DocumentApiService(context: Context) {
         onSuccess: (List<String>) -> Unit,
         onError: (String) -> Unit
     ) {
-        val url = "$baseUrl/documents/$documentId/shared"
+        val url = "$baseUrl/documents/$documentId/shares"
         val request = object : JsonArrayRequest(Method.GET, url, null,
             { response ->
                 try {
@@ -134,12 +209,23 @@ class DocumentApiService(context: Context) {
                     for (i in 0 until response.length()) {
                         sharedIds.add(response.getString(i))
                     }
+                    Log.d("---SHARED_USERS_FETCHED", "---SHARED USERS FETCHED = " + sharedIds.joinToString(", "))
                     onSuccess(sharedIds)
                 } catch (e: Exception) {
+                    Log.e("---SHARED_USERS_PARSE_ERROR", "Error parsing shared user IDs: ${e.message}")
                     onError("Error parsing shared user IDs: ${e.message}")
                 }
             },
-            { error -> onError(error.message ?: "Error fetching shared users") }
+            { error ->
+                if (error.networkResponse?.statusCode == 404) {
+                    Log.w("---SHARED_USERS_EMPTY", "---No share record found, treating as empty list")
+                    onSuccess(emptyList()) // No users shared yet — valid state - fallback to blank list
+                } else {
+                    Log.e("---SHARED_USERS_FETCH_ERROR", "---ERROR FETCHING SHARED USERS = " + error)
+                    onError(error.message ?: "Error fetching shared users")
+                }
+            }
+
         ) {
             override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
         }

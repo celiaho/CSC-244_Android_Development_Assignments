@@ -29,9 +29,10 @@ class DocumentAdapter(
             view.setOnClickListener {
                 val document = documents[adapterPosition]
                 val intent = Intent(context, DocumentActivity::class.java).apply {
+                    val (parsedTitle, parsedBody) = document.getParsedContent()
                     putExtra("DOCUMENT_ID", document.id)
-                    putExtra("DOCUMENT_TITLE", document.title)
-                    putExtra("DOCUMENT_CONTENT", document.content)
+                    putExtra("DOCUMENT_TITLE", parsedTitle)
+                    putExtra("DOCUMENT_CONTENT", parsedBody)
                 }
                 context.startActivity(intent)
             }
