@@ -31,23 +31,14 @@ class LauncherActivity : AppCompatActivity() {
 
         // Check token validity and route accordingly
         val nextActivity = if (!token.isNullOrBlank() && !JwtUtils.isTokenExpired(token)) {
-
-            // Log valid token issue time, token expiration time, and current system time
-//            Log.d("---VALID_TOKEN_ISSUED", "---iat = $tokenIssuedAtTime (unix seconds)")
-//            Log.d("---VALID_TOKEN_EXPIRATION", "---exp = $tokenExpirationTime (unix seconds)")
-//            Log.d("---SYSTEM_TIME", "---now = $currentTime (unix seconds)")
             // Log valid token issue time, token expiration time, and current system time in readable format
             Log.d("---VALID_TOKEN_ISSUED", "---iat (readable) = ${Instant.ofEpochSecond(tokenIssuedAtTime ?: 0)}")
             Log.d("---VALID_TOKEN_EXPIRATION", "---exp (readable) = ${Instant.ofEpochSecond(tokenExpirationTime ?: 0)}")
             Log.d("---SYSTEM_TIME", "---now (readable) = ${Instant.ofEpochSecond(currentTime)}")
 
-            // Go to DocumentManagementActivity
-            DocumentManagementActivity::class.java
+            //// Go to DocumentManagementActivity - - TEMP CHANGE
+            LoginActivity::class.java
         } else {
-            // Log invalid token issue time, token expiration time, and current system time
-//            Log.d("---INVALID_TOKEN_ISSUED", "---iat = $tokenIssuedAtTime (unix seconds)")
-//            Log.d("---INVALID_TOKEN_EXPIRATION", "---exp = $tokenExpirationTime (unix seconds)")
-//            Log.d("---SYSTEM_TIME", "---now = $currentTime (unix seconds)")
             // Log invalid token issue time, token expiration time, and current system time in readable format
             Log.d("---INVALID_TOKEN_ISSUED", "---iat (readable) = ${Instant.ofEpochSecond(tokenIssuedAtTime ?: 0)}")
             Log.d("---INVALID_TOKEN_EXPIRATION", "---exp (readable) = ${Instant.ofEpochSecond(tokenExpirationTime ?: 0)}")
