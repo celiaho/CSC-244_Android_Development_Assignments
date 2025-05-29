@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/share_popup_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/darker_gray"
-    android:padding="24dp">
+    android:background="@color/light_gray"
+    android:padding="24dp"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <!-- Close Button aligned to right -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-36dp">
 
-        <!-- Title -->
+            <ImageButton
+                android:id="@+id/close_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:contentDescription="Close" />
+        </FrameLayout>
+
+        <!-- Page Title -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Document Sharing"
             android:textSize="24sp"
@@ -22,9 +36,9 @@
 
         <!-- Instructions -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tap the user(s) you want to share this document with; tap again to remove access."
+            android:text="Tap the users you want to share this document with; tap again to remove access."
             android:textColor="@color/dark_gray"
             android:textSize="18sp"
             android:layout_marginBottom="12dp" />
@@ -33,9 +47,8 @@
         <ListView
             android:id="@+id/listViewUsers"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp"
-            android:textSize="16sp" />
-    </LinearLayout>
-</ScrollView>
+            android:dividerHeight="1dp"/>
+</LinearLayout>

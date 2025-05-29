@@ -3,6 +3,7 @@ package edu.bhcc.cho.noteserver.ui.document
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import android.view.ViewGroup as AndroidViewGroup
 
 class DocumentSharePopupActivity : AppCompatActivity() {
 
+    private lateinit var closeButton: ImageButton
     private lateinit var userListView: ListView
     private lateinit var adapter: ArrayAdapter<String>
 
@@ -37,24 +39,43 @@ class DocumentSharePopupActivity : AppCompatActivity() {
 
         // Init views and services
         userListView = findViewById(R.id.listViewUsers)
+        closeButton = findViewById(R.id.close_button)
         apiService = DocumentApiService(this)
         sessionManager = SessionManager(this)
 
         Log.d("---DOCUMENT_SHARE_POPUP_LOADED", "---DOCUMENT_SHARE_POPUP_LOADED")
+
+        // Configure popup window
+        window.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            (resources.displayMetrics.heightPixels * 0.8).toInt()
+        )
+        window.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Handle close button click
+        closeButton.setOnClickListener {
+            finish() // Return to DocumentActivity.kt
+        }
 
         // Start fetching users
         fetchSharableUsers()
     }
 
     private fun fetchSharableUsers() {
-        val currentUserId = sessionManager.getUserId() ?: return
+        val currentUserId = sessionManager.getUserId() ?: ""
+        Log.d("---CURRENT_USER_ID", "---" + currentUserId)
 
         apiService.getAllUsers(
             onSuccess = { users ->
+                Log.d("---RAW_USERS_RECEIVED", "---" + users.joinToString("\n") { "${it.firstName} (${it.id})" })
                 allUsers = users.filter { user -> user.id != currentUserId }.toMutableList()
                 fetchCurrentlySharedUsers()
+                Log.d("---USERS_FETCHED", "---USERS FETCHED =" + allUsers.joinToString(", "))
             },
-            onError = { showToast(it) }
+            onError = { error ->
+                Log.e("---USER_FETCH_ERROR", "---ERROR FETCHING ALL USERS = " + error)
+                showToast(error)
+            }
         )
     }
 
@@ -63,16 +84,20 @@ class DocumentSharePopupActivity : AppCompatActivity() {
             documentId,
             onSuccess = { ids ->
                 sharedUserIds = ids.toMutableSet()
+                Log.d("---FETCHED_SHARED_USER_IDS", "---FETCHED SHARED USER IDS = " + sharedUserIds.joinToString(", "))
                 renderUserList()
             },
-            onError = { showToast(it) }
+            onError = { error ->
+                Log.e("---SHARED_USER_FETCH_ERROR", "---ERROR FETCHING SHARED USERS = " + error)
+                showToast(error)
+            }
         )
     }
 
     private fun renderUserList() {
         adapter = object : ArrayAdapter<String>(
             this,
-            android.R.layout.simple_list_item_1,
+            R.layout.item_user_list_entry,
             allUsers.map { "${it.firstName} ${it.lastName} - ${it.email}" }
         ) {
             override fun getView(position: Int, convertView: AndroidView?, parent: AndroidViewGroup): AndroidView {
@@ -96,18 +121,26 @@ class DocumentSharePopupActivity : AppCompatActivity() {
             if (sharedUserIds.contains(user.id)) {
                 apiService.unshareDocumentWithUser(documentId, user.id,
                     onSuccess = {
+                        Log.d("---DOCUMENT_UNSHARED", "---DOCUMENT UNSHARED WITH USER IDS " + sharedUserIds.joinToString(", "))
                         sharedUserIds.remove(user.id)
                         renderUserList()
                     },
-                    onError = { showToast(it) }
+                    onError = {
+                        Log.e("---DOCUMENT_UNSHARE_ERROR", "---DOCUMENT UNSHARE ERROR = " + it)
+                        showToast(it)
+                    }
                 )
             } else {
                 apiService.shareDocumentWithUser(documentId, user.id,
                     onSuccess = {
+                        Log.d("---DOCUMENT_SHARED", "---DOCUMENT SHARED WITH USER IDS " + sharedUserIds.joinToString(", "))
                         sharedUserIds.add(user.id)
                         renderUserList()
                     },
-                    onError = { showToast(it) }
+                    onError = {
+                        Log.e("---DOCUMENT_SHARE_ERROR", "---DOCUMENT SHARE ERROR = " + it)
+                        showToast(it)
+                    }
                 )
             }
         }
