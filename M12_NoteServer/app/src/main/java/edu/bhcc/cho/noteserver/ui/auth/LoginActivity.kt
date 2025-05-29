@@ -22,7 +22,6 @@ import java.time.Instant
 import kotlin.toString
 
 class LoginActivity : AppCompatActivity() {
-    
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
@@ -61,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
         // Log token and User ID
         val prefs = getSharedPreferences("GottNotesSession", MODE_PRIVATE)
         for ((key, value) in prefs.all) {
-            Log.d("SharedPrefs", "$key = ${value.toString()}")
+            Log.d("---SHARED_PREFS", "---$key = ${value.toString()}")
         }
 
 //        // Attempt to automatically show the keyboard on email field
@@ -90,8 +89,6 @@ class LoginActivity : AppCompatActivity() {
 
             // Send login request to API via AuthApiService
             val loginRequest = LoginRequest(email, password)
-            println(loginRequest)
-            print("I'm here")
 
             // Call /auth/login and save token, user ID, and expiration time
             apiService.loginUser(
@@ -100,15 +97,16 @@ class LoginActivity : AppCompatActivity() {
                     val currentTime = System.currentTimeMillis() / 1000
                     val tokenExpirationTime = JwtUtils.getExpirationTime(token.toString())
                     val tokenIssuedAtTime = JwtUtils.getIssuedAtTime(token.toString())
+                    val patchedExpirationMillis = (tokenExpirationTime!! + 3600) * 1000
 
-                    // Log new token issue time, new token expiration time, and current system time
-//                    Log.d("---NEW_TOKEN_ISSUED", "---iat = $tokenIssuedAtTime (unix seconds)")
-//                    Log.d(
-//                        "---NEW_TOKEN_EXPIRATION",
-//                        "---exp = $tokenExpirationTime (unix seconds)"
-//                    ) // JwtUtils.getExpirationTime(token)?.toString() ?: "null"
-//                    Log.d("---SYSTEM_TIME", "---now = $currentTime (unix seconds)")
-                    // Log new token issue time, new token expiration time, and current system time in readable format
+                    sessionManager.saveSession(
+                        token,
+                        JwtUtils.getUserId(token) ?: "",
+                        patchedExpirationMillis
+                    )
+
+                    // Log new token details and current system time in readable format
+                    Log.d("---PRINT_NEW_TOKEN", "---token = $token")
                     Log.d(
                         "---NEW_TOKEN_ISSUED",
                         "---iat (readable) = ${Instant.ofEpochSecond(tokenIssuedAtTime ?: 0)}"
@@ -122,94 +120,33 @@ class LoginActivity : AppCompatActivity() {
                         "---now (readable) = ${Instant.ofEpochSecond(currentTime)}"
                     )
 
-                    // ⚠️BAND-AID PATCH: Wait 1s and extend token expiration by +1h to bypass server clock skew issue. Remove when server is fixed.
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        // Call /profiles/me to get user ID
-                        apiService.getMyProfile(
-                            onSuccess = { profile ->
-                                val userId = profile.optString("id", "")
-                                if (tokenExpirationTime != null) {
-                                    // original code
-//                                sessionManager.saveSession(token, userId, tokenExpirationTime * 1000)
-                                    // ⚠️TEMP PATCH: Add 1 hour (3600 seconds) buffer to expiration time to bypass server clock skew/401 "expired" error.
-                                    val patchedExpirationMillis =
-                                        (tokenExpirationTime + 3600) * 1000
-                                    sessionManager.saveSession(
-                                        token,
-                                        userId,
-                                        patchedExpirationMillis
-                                    )
-                                }
-                                errorTextView.visibility = View.GONE
-                                startActivity(Intent(this, DocumentActivity::class.java))
-                                finish()
-                            },
-                            onError = {
-                                errorTextView.text =
-                                    "Login succeeded but failed to fetch user profile."
-                                errorTextView.visibility = View.VISIBLE
-                            }
-                        )
-                    }, 1000) // ⚠️TEMP PATCH: Delay 1 second (1000ms)
+                    errorTextView.visibility = View.GONE
+                    val intent = Intent(this, DocumentManagementActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 },
                 onError = {
                     errorTextView.text = it
                     errorTextView.visibility = View.VISIBLE
                 }
             )
+        }
 
-//                    // OLD ⚠️getProfileById() WORKAROUND CODE FOR SERVER REJECTION OF TOKENS DUE TO server-side clock skew: patched via a 1s delay & extending expiration timestamp by +1h
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        if (tokenExpirationTime != null) {
-//                            val userId = JwtUtils.getUserId(token)
-//
-//                            //// TEST FIX
-////                            if (userId != null) {
-////                                apiService.getProfileById(
-////                                    userId = userId,
-////                                    onSuccess = { profile ->
-////                                        sessionManager.saveSession(token, userId, (tokenExpirationTime + 3600) * 1000)
-////                                        errorTextView.visibility = View.GONE
-////                                        startActivity(Intent(this, DocumentActivity::class.java))
-////                                        finish()
-////                                    },
-////                                    onError = {
-////                                        errorTextView.text = "Login succeeded but failed to fetch user profile (by ID)."
-////                                        errorTextView.visibility = View.VISIBLE
-////                                    }
-////                                )
-////                            } else {
-//                                errorTextView.text = "Login succeeded but user ID missing in token."
-//                                errorTextView.visibility = View.VISIBLE
-//                            }
-//                        } else {
-//                            errorTextView.text = "Login succeeded but token has no expiration."
-//                            errorTextView.visibility = View.VISIBLE
-//                        }
-//                    }, 1000)
-//                },
-//                onError = {
-//                    errorTextView.text = it
-//                    errorTextView.visibility = View.VISIBLE
-//                }
-//            )
-//        }
-//        //// ⚠️getProfileById() WORKAROUND CODE ENDS
+        // Handle "Forgot Password?" link
+        forgotPasswordLink.setOnClickListener {
+            val email = emailEditText.text.toString().trim()
+            Log.d("---FORGOT_PASSWORD_LINK_CLICKED", "---FORGOT_PASSWORD_LINK_CLICKED")
 
-            // Handle "Forgot Password?" link
-            forgotPasswordLink.setOnClickListener {
-                val email = emailEditText.text.toString().trim()
+            //// Pass Login email to PasswordForgot screen - DOESN'T WORK
+            val intent = Intent(this, PasswordForgotActivity::class.java)
+            intent.putExtra("EMAIL", email)
+            startActivity(intent)
+        }
 
-                //// Pass Login email to PasswordForgot screen - DOESN'T WORK
-                val intent = Intent(this, PasswordForgotActivity::class.java)
-                intent.putExtra("EMAIL", email)
-                startActivity(intent)
-            }
-
-            // Handle "Create Account" button
-            createAccountButton.setOnClickListener {
-                startActivity(Intent(this, SignupActivity::class.java))
-            }
+        // Handle "Create Account" button
+        createAccountButton.setOnClickListener {
+            Log.d("---CREATE_ACCOUNT_BUTTON_CLICKED", "---CREATE_ACCOUNT_BUTTON_CLICKED")
+            startActivity(Intent(this, SignupActivity::class.java))
         }
     }
 }
