@@ -11,7 +11,7 @@ import androidx.core.content.edit
 class SessionManager(context: Context) {
 
     // SharedPreferences file name (private to the app)
-    private val prefsFileName = "GOTTNotesSession"
+    private val prefsFileName = "GottNotesSession"
 
     // Reference to the SharedPreferences object
     private val prefs: SharedPreferences =
