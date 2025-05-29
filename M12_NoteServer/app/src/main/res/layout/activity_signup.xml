@@ -148,14 +148,14 @@
                 android:textColor="@android:color/black"
                 tools:ignore="SpeakableTextPresentCheck" />
 
-            <!-- Continue Button (max width, centered) -->
+            <!-- Complete Signup Button (max width, centered) -->
             <Button
                 android:id="@+id/signup_button"
                 style="@style/CustomButton"
                 android:layout_width="320dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Continue"
+                android:text="Complete Sign Up"
                 android:textSize="18sp"/>
 
             <!-- Login Redirect -->
