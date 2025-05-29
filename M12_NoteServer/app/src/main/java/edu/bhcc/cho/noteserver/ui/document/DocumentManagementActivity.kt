@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,14 @@ import edu.bhcc.cho.noteserver.ui.auth.LoginActivity
 import edu.bhcc.cho.noteserver.ui.settings.SettingsActivity
 
 class DocumentManagementActivity : AppCompatActivity() {
+    private val editDocLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK && result.data?.getBooleanExtra("REFRESH_NEEDED", false) == true) {
+            loadDocuments()
+        }
+    }
+
     // Declare tab buttons
     private lateinit var tabMyFiles: Button
     private lateinit var tabSharedFiles: Button
@@ -31,7 +40,6 @@ class DocumentManagementActivity : AppCompatActivity() {
     private lateinit var emptySharedFiles: TextView
 
     // Declare adapters
-    private lateinit var myFilesNoAdapter: DocumentAdapter
     private lateinit var sharedFilesAdapter: DocumentAdapter
 
     // Declare DocumentAPIService
@@ -48,7 +56,9 @@ class DocumentManagementActivity : AppCompatActivity() {
         // *Handle toolbar clicks*
         // New Document Icon
         findViewById<ImageButton>(R.id.icon_new_doc).setOnClickListener {
-            startActivity(Intent(this, DocumentActivity::class.java))
+            val intent = Intent(this, DocumentActivity::class.java)
+            editDocLauncher.launch(intent)
+
         }
         // Document Management Icon - Already here
         findViewById<ImageButton>(R.id.icon_open_folder).setOnClickListener {
@@ -86,6 +96,7 @@ class DocumentManagementActivity : AppCompatActivity() {
         // *Handle tab clicks*
         // My Files tab
         tabMyFiles.setOnClickListener {
+            Log.d("---MY_FILES_TAB_CLICKED", "---MY_FILES_TAB_CLICKED")
             tabMyFiles.setBackgroundColor(getColor(R.color.blue))
             tabMyFiles.setTextColor(getColor(R.color.white))
             tabSharedFiles.setBackgroundColor(getColor(R.color.light_gray))
@@ -95,6 +106,7 @@ class DocumentManagementActivity : AppCompatActivity() {
         }
         // Shared Files tab
         tabSharedFiles.setOnClickListener {
+            Log.d("---SHARED_FILES_TAB_CLICKED", "---SHARED_FILES_TAB_CLICKED")
             tabSharedFiles.setBackgroundColor(getColor(R.color.blue))
             tabSharedFiles.setTextColor(getColor(R.color.white))
             tabMyFiles.setBackgroundColor(getColor(R.color.light_gray))
@@ -107,14 +119,35 @@ class DocumentManagementActivity : AppCompatActivity() {
         loadDocuments()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1001 && resultCode == RESULT_OK) {
+            val refresh = data?.getBooleanExtra("REFRESH_NEEDED", false) ?: false
+            if (refresh) {
+                Log.d("---REFRESHING_DOC_LIST", "---Detected document change, reloading list")
+                loadDocuments()
+            }
+        }
+    }
+
     /**
      * Loads documents from the backend API and updates the corresponding views.
      */
     private fun loadDocuments() {
         apiService.getDocuments(
             onSuccess = { documents ->
-                val myFiles = documents.filter { it.sharedWith.isEmpty() }
-                val sharedFiles = documents.filter { it.sharedWith.isNotEmpty() }
+                val myFiles = documents // Show everything for now
+                val sharedFiles = emptyList<Document>() // Placeholder for future sharing support
+                // TEMPORARILY COMMENTED OUT FOR DEV
+//                val myFiles = documents.filter { it.sharedWith.isEmpty() }
+//                val sharedFiles = documents.filter { it.sharedWith.isNotEmpty() }
+
+                // Log API response to verify
+                Log.d("---DOCUMENTS_RECEIVED", "---Loaded ${documents.size} documents")
+                documents.forEach { doc ->
+                    Log.d("---DOC", "---ID=${doc.id}, title=${doc.title}, modified=${doc.lastModifiedDate}")
+                }
 
                 // Update My Files tab
                 if (myFiles.isEmpty()) {
@@ -138,6 +171,7 @@ class DocumentManagementActivity : AppCompatActivity() {
                 }
             },
             onError = {
+                Log.d("---ERROR_LOADING_DOCUMENTS", "---Error loading documents: $it")
                 Toast.makeText(this, "Error loading documents.", Toast.LENGTH_SHORT).show()
                 emptyMyFiles.visibility = View.VISIBLE
                 emptySharedFiles.visibility = View.VISIBLE
