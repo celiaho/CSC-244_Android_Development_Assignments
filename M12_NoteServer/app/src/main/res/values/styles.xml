@@ -20,4 +20,13 @@
         <item name="android:insetBottom">8dp</item>
     </style>
 
+    <!-- Style override for DocumentSharePopupActivity.kt -->
+    <style name="Theme.GOTTNotes.PopupDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@color/light_gray</item>
+        <item name="android:textColorPrimary">@color/dark_gray</item>
+    </style>
+
 </resources>
