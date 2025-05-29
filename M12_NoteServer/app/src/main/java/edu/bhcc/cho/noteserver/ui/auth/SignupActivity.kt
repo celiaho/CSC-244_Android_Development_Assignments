@@ -21,8 +21,6 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var loginRedirect: TextView
     private lateinit var apiService: AuthApiService
 
-    private lateinit var authApiService: AuthApiService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -53,6 +51,7 @@ class SignupActivity : AppCompatActivity() {
 
         // Handle signup logic
         signupButton.setOnClickListener {
+            Log.d("---CONTINUE_BUTTON_CLICKED", "---CONTINUE_BUTTON_CLICKED")
             val firstName = firstNameEditText.text.toString().trim()
             val lastName = lastNameEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
@@ -73,15 +72,17 @@ class SignupActivity : AppCompatActivity() {
 
             // Call the API
             val request = SignupRequest(email, password, firstName, lastName, extra = null)
-            authApiService.signupUser(
+            apiService.signupUser(
                 request,
                 onSuccess = {
+                    Log.d("---SIGNUP_SUCCESS", "---SIGNUP_SUCCESS")
                     errorTextView.visibility = View.GONE
                     Toast.makeText(this, "Signup successful. Please log in.", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, SignupVerificationActivity::class.java))
-                    finish()
+                    startActivity(Intent(this, LoginActivity::class.java))
+
                 },
                 onError = {
+                    Log.d("---SIGNUP_ERROR", "---SIGNUP_ERROR")
                     errorTextView.text = it
                     errorTextView.visibility = View.VISIBLE
                 }
