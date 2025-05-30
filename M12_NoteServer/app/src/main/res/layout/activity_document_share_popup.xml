@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tap the users you want to share this document with; tap again to remove access."
+            android:text="GOTT Notes users can view and edit your document. Tap users to share; tap again to stop sharing."
             android:textColor="@color/dark_gray"
             android:textSize="18sp"
             android:layout_marginBottom="12dp" />
