@@ -28,12 +28,22 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <!-- Document Owner (bound dynamically in adapter to show actual document owner) -->
+        <TextView
+            android:id="@+id/text_document_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owner: FirstName LastName"
+            android:textColor="@color/dark_gray"
+            android:textSize="14sp"
+            android:paddingTop="4dp" />
+
         <!-- Document Last Modified Date (bound dynamically in adapter to show actual document modification date) -->
         <TextView
             android:id="@+id/text_document_last_modified_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Last modified: 2025-05-06"
+            android:text="Last modified: 0001-01-01"
             android:textColor="@color/medium_gray"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
