@@ -89,7 +89,11 @@ class DocumentSharePopupActivity : AppCompatActivity() {
             },
             onError = { error ->
                 Log.e("---SHARED_USER_FETCH_ERROR", "---ERROR FETCHING SHARED USERS = " + error)
-                showToast(error)
+                if (error.contains("403") || error.contains("Forbidden")) {
+                    showToast("Only the document owner can modify sharing.")
+                } else {
+                    showToast(error)
+                }
             }
         )
     }
@@ -98,7 +102,7 @@ class DocumentSharePopupActivity : AppCompatActivity() {
         adapter = object : ArrayAdapter<String>(
             this,
             R.layout.item_user_list_entry,
-            allUsers.map { "${it.firstName} ${it.lastName} - ${it.email}" }
+            allUsers.map { "${it.firstName} ${it.lastName} (${it.email})" }
         ) {
             override fun getView(position: Int, convertView: AndroidView?, parent: AndroidViewGroup): AndroidView {
                 val view = super.getView(position, convertView, parent)
@@ -124,6 +128,7 @@ class DocumentSharePopupActivity : AppCompatActivity() {
                         Log.d("---DOCUMENT_UNSHARED", "---DOCUMENT UNSHARED WITH USER IDS " + sharedUserIds.joinToString(", "))
                         sharedUserIds.remove(user.id)
                         renderUserList()
+                        showToast("Unshared with: ${user.firstName} ${user.lastName} (${user.email})")
                     },
                     onError = {
                         Log.e("---DOCUMENT_UNSHARE_ERROR", "---DOCUMENT UNSHARE ERROR = " + it)
@@ -136,6 +141,7 @@ class DocumentSharePopupActivity : AppCompatActivity() {
                         Log.d("---DOCUMENT_SHARED", "---DOCUMENT SHARED WITH USER IDS " + sharedUserIds.joinToString(", "))
                         sharedUserIds.add(user.id)
                         renderUserList()
+                        showToast("Shared with: ${user.firstName} ${user.lastName} (${user.email})")
                     },
                     onError = {
                         Log.e("---DOCUMENT_SHARE_ERROR", "---DOCUMENT SHARE ERROR = " + it)
