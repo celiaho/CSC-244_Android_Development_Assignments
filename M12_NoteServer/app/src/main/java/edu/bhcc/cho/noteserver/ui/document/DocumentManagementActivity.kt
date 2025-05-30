@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.bhcc.cho.noteserver.R
-import edu.bhcc.cho.noteserver.data.model.Document
+import edu.bhcc.cho.noteserver.utils.SessionManager
 import edu.bhcc.cho.noteserver.data.network.DocumentApiService
 import edu.bhcc.cho.noteserver.ui.settings.SettingsActivity
 
@@ -140,43 +140,52 @@ class DocumentManagementActivity : AppCompatActivity() {
     private fun loadDocuments() {
         apiService.getDocuments(
             onSuccess = { documents ->
-                val myFiles = documents // Show everything for now
-                val sharedFiles = emptyList<Document>() // Placeholder for future sharing support
-                // TEMPORARILY COMMENTED OUT FOR DEV
-//                val myFiles = documents.filter { it.sharedWith.isEmpty() }
-//                val sharedFiles = documents.filter { it.sharedWith.isNotEmpty() }
-
-                // Log API response to verify
+                // Log API response to verify that document list has loaded
                 Log.d("---DOCUMENTS_RECEIVED", "---Loaded ${documents.size} documents")
                 documents.forEach { doc ->
                     Log.d("---DOC", "---ID=${doc.id}, title=${doc.title}, modified=${doc.lastModifiedDate}")
                 }
 
-                // Update My Files tab
-                if (myFiles.isEmpty()) {
-                    recyclerMyFiles.visibility = View.GONE
-                    emptyMyFiles.visibility = View.VISIBLE
-                } else {
-                    // Set up adapter to connect documents to the views inside each item in the list
-                    recyclerMyFiles.adapter = DocumentAdapter(this, myFiles, editDocLauncher::launch)
-                    recyclerMyFiles.visibility = View.VISIBLE
-                    emptyMyFiles.visibility = View.GONE
-                }
+                // Get users to map owner names
+                apiService.getAllUsers(
+                    onSuccess = { users ->
+                        val currentUserId = SessionManager(this).getUserId()
 
-                // Update Shared Files tab
-                if (sharedFiles.isEmpty()) {
-                    recyclerSharedFiles.visibility = View.GONE
-                    emptySharedFiles.visibility = View.VISIBLE
-                } else {
-                    // Set up adapter to connect documents to the views inside each item in the list
-                    recyclerMyFiles.adapter = DocumentAdapter(this, sharedFiles, editDocLauncher::launch)
-                    recyclerSharedFiles.visibility = View.VISIBLE
-                    emptySharedFiles.visibility = View.GONE
-                }
+                        // Split My Files vs Shared tab
+                        val myFiles = documents.filter { it.ownerId == currentUserId }
+                        val sharedFiles = documents.filter { it.ownerId != currentUserId && it.sharedWith.contains(currentUserId) }
+
+                        // Pass users to adapter
+                        recyclerMyFiles.adapter = DocumentAdapter(this, myFiles, editDocLauncher::launch, users)
+                        recyclerSharedFiles.adapter = DocumentAdapter(this, sharedFiles, editDocLauncher::launch, users)
+
+                        // Show/hide empty views for My Files
+                        if (myFiles.isEmpty()) {
+                            recyclerMyFiles.visibility = View.GONE
+                            emptyMyFiles.visibility = View.VISIBLE
+                        } else {
+                            recyclerMyFiles.visibility = View.VISIBLE
+                            emptyMyFiles.visibility = View.GONE
+                        }
+
+                        // Show/hide empty views for Shared Files
+                        if (sharedFiles.isEmpty()) {
+                            recyclerSharedFiles.visibility = View.GONE
+                            emptySharedFiles.visibility = View.VISIBLE
+                        } else {
+                            recyclerSharedFiles.visibility = View.VISIBLE
+                            emptySharedFiles.visibility = View.GONE
+                        }
+                    },
+                    onError = {
+                        Log.e("---LOAD_USERS_ERROR", "---Error loading users: $it")
+                        Toast.makeText(this, "Error loading users", Toast.LENGTH_SHORT).show()
+                    }
+                )
             },
-            onError = {
-                Log.d("---ERROR_LOADING_DOCUMENTS", "---Error loading documents: $it")
-                Toast.makeText(this, "Error loading documents.", Toast.LENGTH_SHORT).show()
+            onError = { error ->
+                Log.e("---LOAD_DOCUMENTS_ERROR", "---Error loading documents: $error")
+                Toast.makeText(this, "Error loading documents", Toast.LENGTH_SHORT).show()
                 emptyMyFiles.visibility = View.VISIBLE
                 emptySharedFiles.visibility = View.VISIBLE
             }
