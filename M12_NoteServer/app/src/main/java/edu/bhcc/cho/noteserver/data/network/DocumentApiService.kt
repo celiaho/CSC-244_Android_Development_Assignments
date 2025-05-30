@@ -3,7 +3,6 @@ package edu.bhcc.cho.noteserver.data.network
 import android.content.Context
 import android.util.Log
 import com.android.volley.VolleyError
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import edu.bhcc.cho.noteserver.data.model.Document
@@ -33,6 +32,46 @@ class DocumentApiService(context: Context) {
         val request = object : JsonObjectRequest(Method.POST, url, content, onSuccess, onError) {
             override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
         }
+        requestQueue.add(request)
+    }
+
+    /**
+     * Retrieves a specific document by its ID from the server.
+     *
+     * @param documentId The ID of the document to retrieve.
+     * @param onSuccess Callback when the document is successfully fetched.
+     * @param onError Callback when an error occurs.
+     */
+    fun getDocumentById(
+        documentId: String,
+        onSuccess: (Document) -> Unit,
+        onError: (VolleyError) -> Unit
+    ) {
+        val url = "$baseUrl/documents/$documentId"
+        val request = object : JsonObjectRequest(Method.GET, url, null,
+            { response ->
+                try {
+                    val obj = response
+                    val content = obj.getJSONObject("content")
+                    val document = Document(
+                        id = obj.getString("id"),
+                        ownerId = obj.getString("owner_id"),
+                        creationDate = obj.getString("creation_date"),
+                        lastModifiedDate = obj.getString("last_modified_date"),
+                        title = content.getString("title"),
+                        content = content.getString("body")
+                    )
+                    onSuccess(document)
+                } catch (e: Exception) {
+                    Log.e("---GET_DOC_BY_ID_PARSE", "Error parsing document: ${e.message}")
+                    onError(VolleyError("Parse error"))
+                }
+            },
+            { error -> onError(error) }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
+        }
+
         requestQueue.add(request)
     }
 
@@ -107,6 +146,7 @@ class DocumentApiService(context: Context) {
      * - "content": JSONObject containing:
      *      - "title": String — document title
      *      - "body": String — document content
+     * - "shared_with": Array of user IDs (optional, can be empty)
      *
      * @param array The [JSONArray] to parse, typically received from the server response.
      * @return A [List] of [Document] objects with parsed fields.
@@ -115,56 +155,28 @@ class DocumentApiService(context: Context) {
         val list = mutableListOf<Document>()
         for (i in 0 until array.length()) {
             val obj = array.getJSONObject(i)
+            val content = obj.optJSONObject("content") ?: JSONObject()
+
+            val sharedWithArray = obj.optJSONArray("shared_with") ?: JSONArray()
+            val sharedWith = mutableListOf<String>()
+            for (j in 0 until sharedWithArray.length()) {
+                sharedWith.add(sharedWithArray.getString(j))
+            }
+
+            // Build document
             list.add(Document(
                 id = obj.getString("id"),
                 ownerId = obj.getString("owner_id"),
                 creationDate = obj.getString("creation_date"),
                 lastModifiedDate = obj.getString("last_modified_date"),
-                title = obj.getJSONObject("content").get("title").toString(),
-                content = obj.getJSONObject("content").get("body").toString()
+                title = obj.getJSONObject("content").get("title").toString(), // Tutor line, works
+                content = obj.getJSONObject("content").get("body").toString(), // Tutor line, works
+//                title = content.optString("title", ""), // Crash-safe in case of missing fields
+//                content = content.optString("body", ""), // Crash-safe in case of missing fields
+                sharedWith = sharedWith
             ))
         }
         return list
-    }
-
-    /**
-     * Retrieves a specific document by its ID from the server.
-     *
-     * @param documentId The ID of the document to retrieve.
-     * @param onSuccess Callback when the document is successfully fetched.
-     * @param onError Callback when an error occurs.
-     */
-    fun getDocumentById(
-        documentId: String,
-        onSuccess: (Document) -> Unit,
-        onError: (VolleyError) -> Unit
-    ) {
-        val url = "$baseUrl/documents/$documentId"
-        val request = object : JsonObjectRequest(Method.GET, url, null,
-            { response ->
-                try {
-                    val obj = response
-                    val content = obj.getJSONObject("content")
-                    val document = Document(
-                        id = obj.getString("id"),
-                        ownerId = obj.getString("owner_id"),
-                        creationDate = obj.getString("creation_date"),
-                        lastModifiedDate = obj.getString("last_modified_date"),
-                        title = content.getString("title"),
-                        content = content.getString("body")
-                    )
-                    onSuccess(document)
-                } catch (e: Exception) {
-                    Log.e("---GET_DOC_BY_ID_PARSE", "Error parsing document: ${e.message}")
-                    onError(VolleyError("Parse error"))
-                }
-            },
-            { error -> onError(error) }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
-        }
-
-        requestQueue.add(request)
     }
 
     fun getAllUsers(
@@ -202,15 +214,23 @@ class DocumentApiService(context: Context) {
         onError: (String) -> Unit
     ) {
         val url = "$baseUrl/documents/$documentId/shares"
-        val request = object : JsonArrayRequest(Method.GET, url, null,
+
+        val request = object : JsonObjectRequest(Method.GET, url, null,
             { response ->
                 try {
-                    val sharedIds = mutableListOf<String>()
-                    for (i in 0 until response.length()) {
-                        sharedIds.add(response.getString(i))
+                    // Check if response is object with "shared_with"
+                    if (response.has("shared_with")) {
+                        val sharedArray = response.getJSONArray("shared_with")
+                        val sharedIds = mutableListOf<String>()
+                        for (i in 0 until sharedArray.length()) {
+                            sharedIds.add(sharedArray.getString(i))
+                        }
+                        Log.d("---SHARED_USERS_FETCHED", "---SHARED USERS FETCHED (OBJECT fallback) = " + sharedIds.joinToString(", "))
+                        onSuccess(sharedIds)
+                    } else {
+                        Log.w("---SHARED_USERS_UNEXPECTED", "---Unexpected shared users response, treating as empty list")
+                        onSuccess(emptyList()) // Unexpected format — fallback to empty list
                     }
-                    Log.d("---SHARED_USERS_FETCHED", "---SHARED USERS FETCHED = " + sharedIds.joinToString(", "))
-                    onSuccess(sharedIds)
                 } catch (e: Exception) {
                     Log.e("---SHARED_USERS_PARSE_ERROR", "Error parsing shared user IDs: ${e.message}")
                     onError("Error parsing shared user IDs: ${e.message}")
@@ -219,16 +239,16 @@ class DocumentApiService(context: Context) {
             { error ->
                 if (error.networkResponse?.statusCode == 404) {
                     Log.w("---SHARED_USERS_EMPTY", "---No share record found, treating as empty list")
-                    onSuccess(emptyList()) // No users shared yet — valid state - fallback to blank list
+                    onSuccess(emptyList()) // valid state--fallback to empty list
                 } else {
                     Log.e("---SHARED_USERS_FETCH_ERROR", "---ERROR FETCHING SHARED USERS = " + error)
                     onError(error.message ?: "Error fetching shared users")
                 }
             }
-
         ) {
             override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
         }
+
         requestQueue.add(request)
     }
 
@@ -238,8 +258,8 @@ class DocumentApiService(context: Context) {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
-        val url = "$baseUrl/documents/$documentId/share/$userId"
-        val request = object : StringRequest(Method.POST, url, { onSuccess() }, { error ->
+        val url = "$baseUrl/documents/$documentId/shares/$userId"
+        val request = object : StringRequest(Method.PUT, url, { onSuccess() }, { error ->
             onError(error.message ?: "Error sharing document")
         }) {
             override fun getHeaders(): MutableMap<String, String> = authHeaders().toMutableMap()
@@ -253,7 +273,7 @@ class DocumentApiService(context: Context) {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
-        val url = "$baseUrl/documents/$documentId/share/$userId"
+        val url = "$baseUrl/documents/$documentId/shares/$userId"
         val request = object : StringRequest(Method.DELETE, url, { onSuccess() }, { error ->
             onError(error.message ?: "Error unsharing document")
         }) {
