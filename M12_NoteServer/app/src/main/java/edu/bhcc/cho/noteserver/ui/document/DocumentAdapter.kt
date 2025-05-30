@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.model.Document
+import edu.bhcc.cho.noteserver.data.network.DocumentApiService
+import edu.bhcc.cho.noteserver.utils.SessionManager
 
 /**
  * Displays a list of Document items in a RecyclerView using item_document_list_tab.xml.
@@ -17,13 +19,15 @@ class DocumentAdapter(
     private val context: Context,
     private var documents: List<Document>,
     // Lambda to launch DocumentActivity and receive RESULT_OK (used to trigger My Files refresh after edits)
-    private val startForResult: (Intent) -> Unit
+    private val startForResult: (Intent) -> Unit,
+    private val userProfiles: List<DocumentApiService.UserProfile>
 ) : RecyclerView.Adapter<DocumentAdapter.DocumentViewHolder>() {
     /**
      * ViewHolder represents one item view in the RecyclerView.
      */
     inner class DocumentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleText: TextView = view.findViewById(R.id.text_document_title)
+        val ownerTextView: TextView = view.findViewById(R.id.text_document_owner)
         val lastModifiedText: TextView = view.findViewById(R.id.text_document_last_modified_date)
 
         init {
@@ -63,6 +67,11 @@ class DocumentAdapter(
         val doc = documents[position]
         holder.titleText.text = doc.title
         holder.lastModifiedText.text = "Last modified: ${doc.lastModifiedDate}"
+
+        val currentUserId = SessionManager(context).getUserId()
+        val ownerUser = userProfiles.find { it.id == doc.ownerId }
+        val ownerLabel = if (doc.ownerId == currentUserId) "You" else "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
+        holder.ownerTextView.text = "Document Owner: $ownerLabel"
     }
 
     /**
