@@ -13,9 +13,11 @@ import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.network.DocumentApiService
 import edu.bhcc.cho.noteserver.ui.settings.SettingsActivity
 import edu.bhcc.cho.noteserver.ui.auth.LoginActivity
+import edu.bhcc.cho.noteserver.utils.SessionManager
 import org.json.JSONObject
 import android.os.Handler
 import android.os.Looper
+import android.widget.TextView
 import androidx.core.content.edit
 
 /**
@@ -25,6 +27,7 @@ import androidx.core.content.edit
 class DocumentActivity : AppCompatActivity() {
     private lateinit var titleEditText: EditText
     private lateinit var contentEditText: EditText
+    private lateinit var ownerLabel: TextView
     private lateinit var apiService: DocumentApiService
 
     private var documentId: String? = null // UUID from server
@@ -56,12 +59,12 @@ class DocumentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_document)
 
         // Highlight New Document icon
-        findViewById<ImageButton>(R.id.icon_new_doc)
-            .setColorFilter(ContextCompat.getColor(this, R.color.orange))
+        findViewById<ImageButton>(R.id.icon_new_doc).setColorFilter(ContextCompat.getColor(this, R.color.orange))
 
         // Initialize views and API
         titleEditText = findViewById(R.id.document_title)
         contentEditText = findViewById(R.id.document_content)
+        ownerLabel = findViewById(R.id.document_owner)
         apiService = DocumentApiService(this)
 
         Log.d("---DOCUMENT_PAGE_LOADED", "---DOCUMENT_PAGE_LOADED")
@@ -134,6 +137,22 @@ class DocumentActivity : AppCompatActivity() {
                 onSuccess = { doc ->
                     titleEditText.setText(doc.title)
                     contentEditText.setText(doc.content)
+
+                    // Call getAllUsers to display formatted Document Owner
+                    apiService.getAllUsers(
+                        onSuccess = { users ->
+                            val currentUserId = SessionManager(this).getUserId()
+                            val ownerUser = users.find { it.id == doc.ownerId }
+                            val ownerText = if (doc.ownerId == currentUserId) "You" else "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
+
+                            ownerLabel.text = "Owner: $ownerText"
+                        },
+                        onError = {
+                            Log.e("---OWNER_LOOKUP_ERROR", "---Error loading users: $it")
+                            Toast.makeText(this, "Error loading owner info", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+
                     isDocumentLoaded = true
                     Log.d("---DOCUMENT_LOADED", "---DOCUMENT_LOADED")
                 },
