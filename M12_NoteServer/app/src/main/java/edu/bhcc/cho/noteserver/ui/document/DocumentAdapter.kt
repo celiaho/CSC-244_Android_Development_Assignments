@@ -15,7 +15,9 @@ import edu.bhcc.cho.noteserver.data.model.Document
  */
 class DocumentAdapter(
     private val context: Context,
-    private var documents: List<Document>
+    private var documents: List<Document>,
+    // Lambda to launch DocumentActivity and receive RESULT_OK (used to trigger My Files refresh after edits)
+    private val startForResult: (Intent) -> Unit
 ) : RecyclerView.Adapter<DocumentAdapter.DocumentViewHolder>() {
     /**
      * ViewHolder represents one item view in the RecyclerView.
@@ -29,13 +31,12 @@ class DocumentAdapter(
             view.setOnClickListener {
                 val document = documents[adapterPosition]
                 val intent = Intent(context, DocumentActivity::class.java).apply {
-                    val (parsedTitle, parsedBody) = document.getParsedContent()
                     putExtra("DOCUMENT_ID", document.id)
-                    putExtra("DOCUMENT_TITLE", parsedTitle)
-                    putExtra("DOCUMENT_CONTENT", parsedBody)
                 }
-                context.startActivity(intent)
+                // Invoke editDocLauncher from DocumentManagementActivity to open DocumentActivity and receive RESULT_OK + REFRESH_NEEDED for list refresh
+                startForResult(intent)
             }
+
         }
     }
 

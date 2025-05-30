@@ -4,7 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.model.Document
 import edu.bhcc.cho.noteserver.data.network.DocumentApiService
-import edu.bhcc.cho.noteserver.ui.auth.LoginActivity
 import edu.bhcc.cho.noteserver.ui.settings.SettingsActivity
 
 class DocumentManagementActivity : AppCompatActivity() {
@@ -123,7 +126,7 @@ class DocumentManagementActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 1001 && resultCode == RESULT_OK) {
-            val refresh = data?.getBooleanExtra("REFRESH_NEEDED", false) ?: false
+            val refresh = data?.getBooleanExtra("REFRESH_NEEDED", false) == true
             if (refresh) {
                 Log.d("---REFRESHING_DOC_LIST", "---Detected document change, reloading list")
                 loadDocuments()
@@ -154,8 +157,8 @@ class DocumentManagementActivity : AppCompatActivity() {
                     recyclerMyFiles.visibility = View.GONE
                     emptyMyFiles.visibility = View.VISIBLE
                 } else {
-                    // Set up adapter to connect the documents to the views inside each item in the list
-                    recyclerMyFiles.adapter = DocumentAdapter(this, myFiles)
+                    // Set up adapter to connect documents to the views inside each item in the list
+                    recyclerMyFiles.adapter = DocumentAdapter(this, myFiles, editDocLauncher::launch)
                     recyclerMyFiles.visibility = View.VISIBLE
                     emptyMyFiles.visibility = View.GONE
                 }
@@ -165,7 +168,8 @@ class DocumentManagementActivity : AppCompatActivity() {
                     recyclerSharedFiles.visibility = View.GONE
                     emptySharedFiles.visibility = View.VISIBLE
                 } else {
-                    recyclerSharedFiles.adapter = DocumentAdapter(this, sharedFiles)
+                    // Set up adapter to connect documents to the views inside each item in the list
+                    recyclerMyFiles.adapter = DocumentAdapter(this, sharedFiles, editDocLauncher::launch)
                     recyclerSharedFiles.visibility = View.VISIBLE
                     emptySharedFiles.visibility = View.GONE
                 }

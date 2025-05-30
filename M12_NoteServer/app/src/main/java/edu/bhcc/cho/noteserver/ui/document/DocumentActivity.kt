@@ -29,6 +29,7 @@ class DocumentActivity : AppCompatActivity() {
 
     private var documentId: String? = null // UUID from server
     private var isNewDoc = false
+    private var isDocumentLoaded = false
 
     // For autosaving
     private val autosaveHandler = Handler(Looper.getMainLooper())
@@ -46,7 +47,7 @@ class DocumentActivity : AppCompatActivity() {
     }
 
     /**
-     * Called when the DocumentActivity is created to nitialize the activity UI and document state.
+     * Called when the DocumentActivity is created to initialize activity UI and document state.
      *  Handles all toolbar button setup, determines if the document is new or existing,
      *  and loads document content either from local cache (new) or server (existing).
      */
@@ -88,8 +89,7 @@ class DocumentActivity : AppCompatActivity() {
             Log.d("---SHARE_DOCUMENT_BUTTON_CLICKED", "---SHARE_DOCUMENT_BUTTON_CLICKED")
 
             if (documentId.isNullOrEmpty()) {
-                Toast.makeText(this, "Please save the document before sharing.", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Please save the document before sharing.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -111,10 +111,7 @@ class DocumentActivity : AppCompatActivity() {
         // Handle Logout Button
         findViewById<ImageButton>(R.id.icon_logout).setOnClickListener {
             Log.d("---LOGOUT_BUTTON_CLICKED", "---LOGOUT_BUTTON_CLICKED")
-            getSharedPreferences(
-                "DocumentCache",
-                MODE_PRIVATE
-            ).edit { clear() } // Clear local cache on logout
+            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache on logout
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
@@ -137,6 +134,8 @@ class DocumentActivity : AppCompatActivity() {
                 onSuccess = { doc ->
                     titleEditText.setText(doc.title)
                     contentEditText.setText(doc.content)
+                    isDocumentLoaded = true
+                    Log.d("---DOCUMENT_LOADED", "---DOCUMENT_LOADED")
                 },
                 onError = {
                     Log.e("---DOCUMENT_LOAD_FAILED", "Failed to load document from server")
@@ -177,10 +176,15 @@ class DocumentActivity : AppCompatActivity() {
         val title = titleEditText.text.toString().trim()
         val content = contentEditText.text.toString().trim()
 
-        // Skip autosave if it's a new document and both title and content are empty
+        // Skip autosave if document is new and has no title/body content
         if (documentId == null && title.isEmpty() && content.isEmpty()) {
             Log.d("---AUTOSAVE_SKIPPED", "---AUTOSAVE SKIPPED: empty new document")
             return // Exit saveDocument() without running remaining code
+        }
+        // Skip autosave if existing document has not fully loaded from server via getDocumentById()--this fixes the blank reload bug
+        if (!isNewDoc && !isDocumentLoaded) {
+            Log.d("---AUTOSAVE_SKIPPED", "---AUTOSAVE SKIPPED: document not yet loaded from server")
+            return
         }
 
         // Construct JSON payload
@@ -208,9 +212,9 @@ class DocumentActivity : AppCompatActivity() {
                 content = wrapper,
                 onSuccess = { response ->
                     documentId = response.optString("id", "") // Save doc ID so future saves are updates
-                    Log.d("---NEW_DOCUMENT_SAVED", "---NEW DOCUMENT SAVED at ${java.time.Instant.now()}")
+                    Log.d("---NEW_DOCUMENT_SAVED_TO_SERVER", "---NEW DOCUMENT SAVED TO SERVER at ${java.time.Instant.now()}")
                     Log.d("---DOCUMENT_RESPONSE", "Response: $response") // Log full response
-                    Toast.makeText(this, "New document saved.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "New document saved to server.", Toast.LENGTH_SHORT).show()
                     prefs.edit { clear() } // Clear cache after server save
                     // Signal refresh
                     val resultIntent = Intent()
@@ -218,8 +222,8 @@ class DocumentActivity : AppCompatActivity() {
                     setResult(RESULT_OK, resultIntent)
                 },
                 onError = {
-                    Log.d("---NEW_DOCUMENT_SAVE_FAILED", "---NEW_DOCUMENT_SAVE_FAILED")
-                    Toast.makeText(this, "Failed to save document.", Toast.LENGTH_SHORT).show()
+                    Log.d("---NEW_DOCUMENT_SERVER_SAVE_FAILED", "---NEW_DOCUMENT_SERVER_SAVE_FAILED")
+                    Toast.makeText(this, "Failed to save document to server.", Toast.LENGTH_SHORT).show()
                 }
             )
         } else {
@@ -228,7 +232,7 @@ class DocumentActivity : AppCompatActivity() {
                 documentId!!,
                 content = wrapper,
                 onSuccess = {
-                    Log.d("---DOCUMENT_UPDATED", "---DOCUMENT UPDATED at ${java.time.Instant.now()}")
+                    Log.d("---DOCUMENT_UPDATED_TO_SERVER", "---DOCUMENT UPDATED TO SERVER at ${java.time.Instant.now()}")
                     prefs.edit { clear() } // Clear cache after server update
                     // Signal refresh
                     val resultIntent = Intent()
@@ -236,7 +240,7 @@ class DocumentActivity : AppCompatActivity() {
                     setResult(RESULT_OK, resultIntent)
                 },
                 onError = {
-                    Log.d("---DOCUMENT_UPDATE_FAILED", "---DOCUMENT_UPDATE_FAILED")
+                    Log.d("---DOCUMENT_UPDATE_TO_SERVER_FAILED", "---DOCUMENT_UPDATE_TO_SERVER_FAILED")
                     Toast.makeText(this, "Failed to update document.", Toast.LENGTH_SHORT).show()
                 }
             )
