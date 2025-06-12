@@ -1,25 +1,20 @@
 package edu.bhcc.cho.noteserver.ui.auth
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.model.LoginRequest
 import edu.bhcc.cho.noteserver.data.network.AuthApiService
-import edu.bhcc.cho.noteserver.ui.document.DocumentActivity
 import edu.bhcc.cho.noteserver.ui.document.DocumentManagementActivity
 import edu.bhcc.cho.noteserver.utils.JwtUtils
 import edu.bhcc.cho.noteserver.utils.SessionManager
-import org.json.JSONObject
 import java.time.Instant
-import kotlin.toString
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
@@ -106,19 +101,11 @@ class LoginActivity : AppCompatActivity() {
                     )
 
                     // Log new token details and current system time in readable format
-                    Log.d("---PRINT_NEW_TOKEN", "---token = $token")
-                    Log.d(
-                        "---NEW_TOKEN_ISSUED",
-                        "---iat (readable) = ${Instant.ofEpochSecond(tokenIssuedAtTime ?: 0)}"
-                    )
-                    Log.d(
-                        "---NEW_TOKEN_EXPIRATION",
-                        "---exp (readable) = ${Instant.ofEpochSecond(tokenExpirationTime ?: 0)}"
-                    )
-                    Log.d(
-                        "---SYSTEM_TIME",
-                        "---now (readable) = ${Instant.ofEpochSecond(currentTime)}"
-                    )
+                    Log.d("---PRINT_NEW_JWT", "---TOKEN = $token")
+                    Log.d("---NEW_JWT_ISSUED", "---TOKEN iat = ${Instant.ofEpochSecond(tokenIssuedAtTime ?: 0)}")
+                    Log.d("---NEW_JWT_EXPIRATION", "---TOKEN exp = ${Instant.ofEpochSecond(tokenExpirationTime ?: 0)}")
+                    Log.d("---SYSTEM_TIME", "---SYSTEM TIME now = ${Instant.ofEpochSecond(currentTime)}")
+                    Log.d("---JWT_USER_ID", "---TOKEN sub (userId) = ${JwtUtils.getUserId(token) ?: "null"}")
 
                     errorTextView.visibility = View.GONE
                     val intent = Intent(this, DocumentManagementActivity::class.java)
