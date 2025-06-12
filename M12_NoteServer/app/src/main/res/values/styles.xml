@@ -24,9 +24,10 @@
     <style name="Theme.GOTTNotes.PopupDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowMinWidthMajor">90%</item>
         <item name="android:windowMinWidthMinor">90%</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:windowBackground">@color/light_gray</item>
+        <item name="android:backgroundDimEnabled">true</item> <!-- dims background -->
+        <item name="android:windowBackground">@color/light_gray</item> <!-- background inside dialog -->
         <item name="android:textColorPrimary">@color/dark_gray</item>
+        <item name="windowNoTitle">true</item> <!-- hides title bar -->
     </style>
 
 </resources>
