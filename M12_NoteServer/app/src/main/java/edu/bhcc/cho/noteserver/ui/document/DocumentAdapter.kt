@@ -1,5 +1,6 @@
 package edu.bhcc.cho.noteserver.ui.document
 
+import android.util.Log
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -29,19 +30,6 @@ class DocumentAdapter(
         val titleText: TextView = view.findViewById(R.id.text_document_title)
         val ownerTextView: TextView = view.findViewById(R.id.text_document_owner)
         val lastModifiedText: TextView = view.findViewById(R.id.text_document_last_modified_date)
-
-        init {
-            // When a document card is tapped, launch DocumentActivity with document ID
-            view.setOnClickListener {
-                val document = documents[adapterPosition]
-                val intent = Intent(context, DocumentActivity::class.java).apply {
-                    putExtra("DOCUMENT_ID", document.id)
-                }
-                // Invoke editDocLauncher from DocumentManagementActivity to open DocumentActivity and receive RESULT_OK + REFRESH_NEEDED for list refresh
-                startForResult(intent)
-            }
-
-        }
     }
 
     /**
@@ -58,20 +46,32 @@ class DocumentAdapter(
     }
 
     /**
-     * Binds document data to each item view in the RecyclerView to override dummy text for Document Title and Last Modified Date.
-     *
+     * Binds document data to each item view in the RecyclerView to override dummy text for Document
+     * Title, Document Owner, and Last Modified Date.
      * @param holder The DocumentViewHolder which should be updated.
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(holder: DocumentViewHolder, position: Int) {
-        val doc = documents[position]
+        val doc = documents[holder.adapterPosition]
+
         holder.titleText.text = doc.title
         holder.lastModifiedText.text = "Last modified: ${doc.lastModifiedDate}"
 
         val currentUserId = SessionManager(context).getUserId()
         val ownerUser = userProfiles.find { it.id == doc.ownerId }
-        val ownerLabel = if (doc.ownerId == currentUserId) "You" else "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
-        holder.ownerTextView.text = "Document Owner: $ownerLabel"
+        val ownerLabel = if (doc.ownerId == currentUserId) "You" else
+            "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
+        holder.ownerTextView.text = "Owner: $ownerLabel"
+        Log.d("---DOC_ADAPTER_OWNER_LOOKUP", "DOC_ADAPTER ownerId=${doc.ownerId}, " +
+                "matchedUser=${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})")
+
+        holder.itemView.setOnClickListener {
+            Log.d("---DOC_ADAPTER_LAUNCHING_DOC", "---DOCUMENT ADAPTER launching DocumentActivity with DOCUMENT_ID = ${doc.id}")
+            val intent = Intent(context, DocumentActivity::class.java).apply {
+                putExtra("DOCUMENT_ID", doc.id)
+            }
+            startForResult(intent)
+        }
     }
 
     /**
