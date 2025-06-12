@@ -51,19 +51,26 @@ class DocumentApiService(context: Context) {
         val request = object : JsonObjectRequest(Method.GET, url, null,
             { response ->
                 try {
-                    val obj = response
-                    val content = obj.getJSONObject("content")
+                    val content = response.getJSONObject("content")
+
+                    val sharedArray = response.optJSONArray("shared_with") ?: JSONArray()
+                    val sharedWith = mutableListOf<String>()
+                    for (i in 0 until sharedArray.length()) {
+                        sharedWith.add(sharedArray.getString(i))
+                    }
+
                     val document = Document(
-                        id = obj.getString("id"),
-                        ownerId = obj.getString("owner_id"),
-                        creationDate = obj.getString("creation_date"),
-                        lastModifiedDate = obj.getString("last_modified_date"),
+                        id = response.getString("id"),
+                        ownerId = response.getString("owner_id"),
+                        creationDate = response.getString("creation_date"),
+                        lastModifiedDate = response.getString("last_modified_date"),
                         title = content.getString("title"),
-                        content = content.getString("body")
+                        content = content.getString("body"),
+                        sharedWith = sharedWith
                     )
                     onSuccess(document)
                 } catch (e: Exception) {
-                    Log.e("---GET_DOC_BY_ID_PARSE", "Error parsing document: ${e.message}")
+                    Log.e("---GET_DOC_BY_ID_PARSE", "---Error parsing document: ${e.message}")
                     onError(VolleyError("Parse error"))
                 }
             },
@@ -163,16 +170,16 @@ class DocumentApiService(context: Context) {
                 sharedWith.add(sharedWithArray.getString(j))
             }
 
+            Log.d("---DOC", "Parsed = ${obj.getString("id")}, sharedWith=${sharedWith.joinToString(",")}")
+
             // Build document
             list.add(Document(
                 id = obj.getString("id"),
                 ownerId = obj.getString("owner_id"),
                 creationDate = obj.getString("creation_date"),
                 lastModifiedDate = obj.getString("last_modified_date"),
-                title = obj.getJSONObject("content").get("title").toString(), // Tutor line, works
-                content = obj.getJSONObject("content").get("body").toString(), // Tutor line, works
-//                title = content.optString("title", ""), // Crash-safe in case of missing fields
-//                content = content.optString("body", ""), // Crash-safe in case of missing fields
+                title = content.optString("title", ""),
+                content = content.optString("body", ""),
                 sharedWith = sharedWith
             ))
         }
