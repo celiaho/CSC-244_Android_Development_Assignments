@@ -1,6 +1,5 @@
 package edu.bhcc.cho.noteserver.ui.settings
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -12,10 +11,9 @@ import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.data.model.Profile
 import edu.bhcc.cho.noteserver.data.network.ProfileApiService
 import edu.bhcc.cho.noteserver.utils.SessionManager
-import org.json.JSONObject
+import android.view.View
 
 class SettingsActivity : AppCompatActivity() {
-
     private lateinit var themeToggle: SwitchCompat
     private lateinit var firstNameInput: EditText
     private lateinit var lastNameInput: EditText
