@@ -36,11 +36,11 @@
         android:baselineAligned="false">
 
         <ImageButton
-            android:id="@+id/icon_new_doc"
+            android:id="@+id/icon_document"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_add"
-            android:contentDescription="New Document"
+            android:src="@drawable/ic_document"
+            android:contentDescription="Document"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/white" />
 
