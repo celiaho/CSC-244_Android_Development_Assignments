@@ -17,6 +17,7 @@ import edu.bhcc.cho.noteserver.utils.SessionManager
 import org.json.JSONObject
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.TextView
 import androidx.core.content.edit
 
@@ -25,14 +26,21 @@ import androidx.core.content.edit
  * Also manages loading from local cache and syncing with server.
  */
 class DocumentActivity : AppCompatActivity() {
+    private lateinit var documentButton: ImageButton
+    private lateinit var saveButton: ImageButton
+    private lateinit var shareButton: ImageButton
+    private lateinit var deleteButton: ImageButton
     private lateinit var titleEditText: EditText
     private lateinit var contentEditText: EditText
     private lateinit var ownerLabel: TextView
+    private lateinit var autosaveNote: TextView
     private lateinit var apiService: DocumentApiService
 
     private var documentId: String? = null // UUID from server
     private var isNewDoc = false
     private var isDocumentLoaded = false
+    private var isOwner = false
+    private var isSharedWithMe = false
 
     // For autosaving
     private val autosaveHandler = Handler(Looper.getMainLooper())
@@ -58,60 +66,67 @@ class DocumentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document)
 
-        // Highlight New Document icon
-        findViewById<ImageButton>(R.id.icon_new_doc).setColorFilter(ContextCompat.getColor(this, R.color.orange))
-
         // Initialize views and API
+        documentButton = findViewById(R.id.icon_document)
+        saveButton = findViewById(R.id.icon_save)
+        shareButton = findViewById(R.id.icon_share)
+        deleteButton = findViewById(R.id.icon_delete)
         titleEditText = findViewById(R.id.document_title)
         contentEditText = findViewById(R.id.document_content)
-        ownerLabel = findViewById(R.id.document_owner)
+        ownerLabel = findViewById(R.id.document_owner_label)
+        autosaveNote = findViewById(R.id.autosave_note)
         apiService = DocumentApiService(this)
 
         Log.d("---DOCUMENT_PAGE_LOADED", "---DOCUMENT_PAGE_LOADED")
 
+        // Highlight Document View icon
+        documentButton.setColorFilter(ContextCompat.getColor(this, R.color.orange))
+
         // *Handle toolbar clicks*
-        // Handle New Document Button
-        findViewById<ImageButton>(R.id.icon_new_doc).setOnClickListener {
+        // New Document Button
+        documentButton.setOnClickListener {
             Log.d("---NEW_DOCUMENT_BUTTON_CLICKED", "---NEW_DOCUMENT_BUTTON_CLICKED")
-            startActivity(Intent(this, DocumentActivity::class.java).apply {
+            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache
+            startActivity(Intent(this, DocumentActivity::class.java).apply { // Open new document
                 putExtra("newDoc", true)
             })
         }
-        // Handle Document Management Button
+        // Document Management Button
         findViewById<ImageButton>(R.id.icon_open_folder).setOnClickListener {
             Log.d("---DOCUMENT_MANAGEMENT_BUTTON_CLICKED", "---DOCUMENT_MANAGEMENT_BUTTON_CLICKED")
             startActivity(Intent(this, DocumentManagementActivity::class.java))
         }
-        // Handle Save Document Button
-        findViewById<ImageButton>(R.id.icon_save).setOnClickListener {
+        // Save Document Button
+        saveButton.setOnClickListener {
             Log.d("---SAVE_DOCUMENT_BUTTON_CLICKED", "---SAVE_DOCUMENT_BUTTON_CLICKED")
             saveDocument()
         }
-        // Handle Share Document Button
-        findViewById<ImageButton>(R.id.icon_share).setOnClickListener {
+        // Share Document Button
+        shareButton.setOnClickListener {
             Log.d("---SHARE_DOCUMENT_BUTTON_CLICKED", "---SHARE_DOCUMENT_BUTTON_CLICKED")
 
+            // Prevent sharing if document has not been saved
             if (documentId.isNullOrEmpty()) {
-                Toast.makeText(this, "Please save the document before sharing.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please save the document before sharing.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
-            val intent = Intent(this, DocumentSharePopupActivity::class.java).apply {
+            val intent = Intent(this, DocumentSharePopupActivity::class.java).apply { // Open share popup
                 putExtra("DOCUMENT_ID", documentId)
             }
             startActivity(intent)
         }
-        // Handle Delete Document Button
-        findViewById<ImageButton>(R.id.icon_delete).setOnClickListener {
+        // Delete Document Button
+        deleteButton.setOnClickListener {
             Log.d("---DELETE_DOCUMENT_BUTTON_CLICKED", "---DELETE_DOCUMENT_BUTTON_CLICKED")
-            confirmDelete()
+            confirmDelete() // Open delete confirmation dialog
         }
-        // Handle Settings Button
+        // Settings Button
         findViewById<ImageButton>(R.id.icon_settings).setOnClickListener {
             Log.d("---SETTINGS_BUTTON_CLICKED", "---SETTINGS_BUTTON_CLICKED")
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-        // Handle Logout Button
+        // Logout Button
         findViewById<ImageButton>(R.id.icon_logout).setOnClickListener {
             Log.d("---LOGOUT_BUTTON_CLICKED", "---LOGOUT_BUTTON_CLICKED")
             getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache on logout
@@ -121,6 +136,7 @@ class DocumentActivity : AppCompatActivity() {
 
         // Load any data passed from previous screen
         documentId = intent.getStringExtra("DOCUMENT_ID")
+        Log.d("---DOCUMENT_INTENT", "---DOCUMENT_ID from Intent = $documentId")
         isNewDoc = documentId == null
 
         if (isNewDoc) {
@@ -134,27 +150,63 @@ class DocumentActivity : AppCompatActivity() {
             // Load document fresh from server using document ID
             apiService.getDocumentById(
                 documentId = documentId!!,
-                onSuccess = { doc ->
+                onSuccess = { doc ->          // DOCUMENT ON SUCCESS BLOCK
                     titleEditText.setText(doc.title)
                     contentEditText.setText(doc.content)
 
-                    // Call getAllUsers to display formatted Document Owner
+                    val currentUserId = SessionManager(this).getUserId()
+                    isOwner = (doc.ownerId == currentUserId)
+                    isSharedWithMe = doc.sharedWith.contains(currentUserId)
+                    Log.d("---DOCUMENT_PERMISSIONS", "---isOwner=$isOwner, isSharedWithMe=$isSharedWithMe")
+
+                    // Update Document Owner label
                     apiService.getAllUsers(
                         onSuccess = { users ->
-                            val currentUserId = SessionManager(this).getUserId()
                             val ownerUser = users.find { it.id == doc.ownerId }
-                            val ownerText = if (doc.ownerId == currentUserId) "You" else "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
-
+                            val ownerText = if (isOwner) "You" else "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
                             ownerLabel.text = "Owner: $ownerText"
+
+                            // Now that ALL fields are loaded, mark as loaded!
+                            isDocumentLoaded = true
+                            Log.d("---DOCUMENT_LOADED", "---DOCUMENT_LOADED (Owner=$isOwner Shared=$isSharedWithMe)")
+
+                            // If user does not own the document
+                            if (!isOwner) {
+                                // Stop autosave
+                                isAutosaveRunning = false
+                                autosaveHandler.removeCallbacks(autosaveRunnable)
+
+                                // Hide Share/Delete buttons
+                                saveButton.visibility = View.GONE
+                                shareButton.visibility = View.GONE
+                                deleteButton.visibility = View.GONE
+
+                                // Disable editing fields
+                                titleEditText.isFocusable = false
+                                titleEditText.isFocusableInTouchMode = false
+                                titleEditText.isCursorVisible = false
+                                titleEditText.isLongClickable = false
+                                titleEditText.isEnabled = false
+
+                                contentEditText.isFocusable = false
+                                contentEditText.isFocusableInTouchMode = false
+                                contentEditText.isCursorVisible = false
+                                contentEditText.isLongClickable = false
+                                contentEditText.isEnabled = false
+
+                                // Show view-only message instead of autosave note
+                                autosaveNote.text = "You have view-only access to this document."
+                            }
                         },
                         onError = {
                             Log.e("---OWNER_LOOKUP_ERROR", "---Error loading users: $it")
                             Toast.makeText(this, "Error loading owner info", Toast.LENGTH_SHORT).show()
+
+                            // Even on error, allow editing but mark as loaded
+                            isDocumentLoaded = true
+                            Log.d("---DOCUMENT_LOADED", "---DOCUMENT_LOADED (Owner=$isOwner Shared=$isSharedWithMe)")
                         }
                     )
-
-                    isDocumentLoaded = true
-                    Log.d("---DOCUMENT_LOADED", "---DOCUMENT_LOADED")
                 },
                 onError = {
                     Log.e("---DOCUMENT_LOAD_FAILED", "Failed to load document from server")
@@ -241,7 +293,7 @@ class DocumentActivity : AppCompatActivity() {
                     setResult(RESULT_OK, resultIntent)
                 },
                 onError = {
-                    Log.d("---NEW_DOCUMENT_SERVER_SAVE_FAILED", "---NEW_DOCUMENT_SERVER_SAVE_FAILED")
+                    Log.e("---NEW_DOCUMENT_SERVER_SAVE_FAILED", "---NEW_DOCUMENT_SERVER_SAVE_FAILED")
                     Toast.makeText(this, "Failed to save document to server.", Toast.LENGTH_SHORT).show()
                 }
             )
@@ -259,7 +311,7 @@ class DocumentActivity : AppCompatActivity() {
                     setResult(RESULT_OK, resultIntent)
                 },
                 onError = {
-                    Log.d("---DOCUMENT_UPDATE_TO_SERVER_FAILED", "---DOCUMENT_UPDATE_TO_SERVER_FAILED")
+                    Log.e("---DOCUMENT_UPDATE_TO_SERVER_FAILED", "---DOCUMENT_UPDATE_TO_SERVER_FAILED")
                     Toast.makeText(this, "Failed to update document.", Toast.LENGTH_SHORT).show()
                 }
             )
@@ -304,7 +356,7 @@ class DocumentActivity : AppCompatActivity() {
                 finish()
             },
             onError = {
-                Log.d("---DOCUMENT_DELETE_FAILED", "---DOCUMENT_DELETE_FAILED")
+                Log.e("---DOCUMENT_DELETE_FAILED", "---DOCUMENT_DELETE_FAILED")
                 Toast.makeText(this, "Failed to delete document", Toast.LENGTH_SHORT).show()
             }
         )
