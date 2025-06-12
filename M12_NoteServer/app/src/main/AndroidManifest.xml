@@ -30,9 +30,6 @@
             android:name=".ui.document.DocumentSharePopupActivity"
             android:theme="@style/Theme.GOTTNotes.PopupDialog"/>
         <activity
-            android:name=".ui.auth.SignupVerificationActivity"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
             android:name=".ui.auth.SignupActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity
