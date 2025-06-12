@@ -12,18 +12,24 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.utils.SessionManager
 import edu.bhcc.cho.noteserver.data.network.DocumentApiService
+import edu.bhcc.cho.noteserver.data.model.Document
 import edu.bhcc.cho.noteserver.ui.settings.SettingsActivity
 
 class DocumentManagementActivity : AppCompatActivity() {
     private val editDocLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_OK && result.data?.getBooleanExtra("REFRESH_NEEDED", false) == true) {
+        if (result.resultCode == RESULT_OK && result.data?.getBooleanExtra(
+                "REFRESH_NEEDED",
+                false
+            ) == true
+        ) {
             loadDocuments()
         }
     }
@@ -42,9 +48,6 @@ class DocumentManagementActivity : AppCompatActivity() {
     private lateinit var emptyMyFiles: TextView
     private lateinit var emptySharedFiles: TextView
 
-    // Declare adapters
-    private lateinit var sharedFilesAdapter: DocumentAdapter
-
     // Declare DocumentAPIService
     private lateinit var apiService: DocumentApiService
 
@@ -57,11 +60,14 @@ class DocumentManagementActivity : AppCompatActivity() {
             .setColorFilter(ContextCompat.getColor(this, R.color.orange))
 
         // *Handle toolbar clicks*
-        // New Document Icon
-        findViewById<ImageButton>(R.id.icon_new_doc).setOnClickListener {
-            val intent = Intent(this, DocumentActivity::class.java)
-            editDocLauncher.launch(intent)
-
+        // New Document Button
+        findViewById<ImageButton>(R.id.icon_document).setOnClickListener {
+            Log.d("---NEW_DOCUMENT_BUTTON_CLICKED", "---NEW_DOCUMENT_BUTTON_CLICKED")
+            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache
+            // Open new document
+            startActivity(Intent(this, DocumentActivity::class.java).apply {
+                putExtra("newDoc", true)
+            })
         }
         // Document Management Icon - Already here
         findViewById<ImageButton>(R.id.icon_open_folder).setOnClickListener {
@@ -143,7 +149,10 @@ class DocumentManagementActivity : AppCompatActivity() {
                 // Log API response to verify that document list has loaded
                 Log.d("---DOCUMENTS_RECEIVED", "---Loaded ${documents.size} documents")
                 documents.forEach { doc ->
-                    Log.d("---DOC", "---ID=${doc.id}, title=${doc.title}, modified=${doc.lastModifiedDate}")
+                    Log.d(
+                        "---DOC",
+                        "---ID=${doc.id}, title=${doc.title}, modified=${doc.lastModifiedDate}"
+                    )
                 }
 
                 // Get users to map owner names
@@ -151,31 +160,10 @@ class DocumentManagementActivity : AppCompatActivity() {
                     onSuccess = { users ->
                         val currentUserId = SessionManager(this).getUserId()
 
-                        // Split My Files vs Shared tab
+                        // Split My Files (owned) vs Shared With Me tab (shared)
                         val myFiles = documents.filter { it.ownerId == currentUserId }
-                        val sharedFiles = documents.filter { it.ownerId != currentUserId && it.sharedWith.contains(currentUserId) }
-
-                        // Pass users to adapter
-                        recyclerMyFiles.adapter = DocumentAdapter(this, myFiles, editDocLauncher::launch, users)
-                        recyclerSharedFiles.adapter = DocumentAdapter(this, sharedFiles, editDocLauncher::launch, users)
-
-                        // Show/hide empty views for My Files
-                        if (myFiles.isEmpty()) {
-                            recyclerMyFiles.visibility = View.GONE
-                            emptyMyFiles.visibility = View.VISIBLE
-                        } else {
-                            recyclerMyFiles.visibility = View.VISIBLE
-                            emptyMyFiles.visibility = View.GONE
-                        }
-
-                        // Show/hide empty views for Shared Files
-                        if (sharedFiles.isEmpty()) {
-                            recyclerSharedFiles.visibility = View.GONE
-                            emptySharedFiles.visibility = View.VISIBLE
-                        } else {
-                            recyclerSharedFiles.visibility = View.VISIBLE
-                            emptySharedFiles.visibility = View.GONE
-                        }
+                        val sharedFiles = documents.filter { it.ownerId != currentUserId }
+                        updateTabs(myFiles, sharedFiles, users)
                     },
                     onError = {
                         Log.e("---LOAD_USERS_ERROR", "---Error loading users: $it")
@@ -190,5 +178,37 @@ class DocumentManagementActivity : AppCompatActivity() {
                 emptySharedFiles.visibility = View.VISIBLE
             }
         )
+    }
+
+    /**
+     * Helper to update My Files and Shared Files tabs after documents and shares are loaded.
+     */
+    private fun updateTabs(
+        myFiles: List<Document>,
+        sharedFiles: List<Document>,
+        users: List<DocumentApiService.UserProfile>
+    ) {
+        // Pass users to adapters so Owner labels can be mapped
+        recyclerMyFiles.adapter = DocumentAdapter(this, myFiles, editDocLauncher::launch, users)
+        recyclerSharedFiles.adapter =
+            DocumentAdapter(this, sharedFiles, editDocLauncher::launch, users)
+
+        // Show/hide empty views for My Files
+        if (myFiles.isEmpty()) {
+            recyclerMyFiles.visibility = View.GONE
+            emptyMyFiles.visibility = View.VISIBLE
+        } else {
+            recyclerMyFiles.visibility = View.VISIBLE
+            emptyMyFiles.visibility = View.GONE
+        }
+
+        // Show/hide empty views for Shared Files
+        if (sharedFiles.isEmpty()) {
+            recyclerSharedFiles.visibility = View.GONE
+            emptySharedFiles.visibility = View.VISIBLE
+        } else {
+            recyclerSharedFiles.visibility = View.VISIBLE
+            emptySharedFiles.visibility = View.GONE
+        }
     }
 }
