@@ -2,8 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/blue"
-    android:gravity="center">
+    android:gravity="center"
+    tools:context=".ui.launcher.LauncherActivity">
 
     <TextView
         android:id="@+id/splash_app_name"
