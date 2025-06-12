@@ -1,85 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?android:colorBackground">
+    android:background="?android:colorBackground"
+    tools:context=".ui.document.DocumentActivity">
 
-    <!-- Hardcoded App Bar -->
-    <include layout="@layout/toolbar_postauth" />
+    <!-- App Bar -->
+    <include
+        android:id="@+id/toolbar_postauth"
+        layout="@layout/toolbar_postauth"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Scrollable document content area -->
-    <ScrollView
+    <!-- Document Title Label -->
+    <TextView
+        android:id="@+id/document_title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:text="Document Title"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_postauth"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Document Title EditText -->
+    <EditText
+        android:id="@+id/document_title"
+        android:hint="Enter title"
+        android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
+        style="@style/RoundedEditText"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:minHeight="48dp"
+        android:textColor="@color/dark_gray"
+        app:layout_constraintTop_toBottomOf="@id/document_title_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Document Body Field -->
+    <EditText
+        android:id="@+id/document_content"
+        android:hint="Enter your note here"
+        android:inputType="textCapSentences|textMultiLine|textAutoCorrect|textAutoComplete"
+        style="@style/RoundedEditText"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="24dp">
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        app:layout_constraintTop_toBottomOf="@id/document_title"
+        app:layout_constraintBottom_toTopOf="@id/document_owner_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:minHeight="450dp"
+        android:gravity="top"
+        android:scrollbars="vertical"
+        android:textColor="@color/dark_gray" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <!-- Document Owner Label -->
+    <TextView
+        android:id="@+id/document_owner_label"
+        android:text="Owner: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toBottomOf="@id/document_content"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-            <!-- Label for document title -->
-            <TextView
-                android:id="@+id/document_title_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Document Title"
-                android:textColor="@color/dark_gray"
-                android:textSize="16sp" />
-
-            <!-- Title EditText -->
-            <EditText
-                android:id="@+id/document_title"
-                style="@style/RoundedEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rounded_input"
-                android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
-                android:autofillHints="username"
-                android:labelFor="@id/document_title_label"
-                android:hint="Enter title"
-                android:textColor="@color/dark_gray" />
-
-            <!-- Document content field -->
-            <EditText
-                android:id="@+id/document_content"
-                style="@style/RoundedEditText"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:minHeight="48dp"
-                android:background="@drawable/rounded_input"
-                android:gravity="top"
-                android:hint="Enter your note here"
-                android:inputType="textCapSentences|textMultiLine|textAutoCorrect|textAutoComplete"
-                android:autofillHints="text"
-                android:textColor="@color/dark_gray" />
-
-            <TextView
-                android:id="@+id/document_owner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_gray"
-                android:textSize="16sp"
-                android:paddingTop="8dp"
-                android:paddingBottom="12dp"
-                android:text="Document Owner: " />
-
-            <!-- Autosave info -->
-            <TextView
-                android:id="@+id/document_autosave_note"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:text="This document autosaves as you type."
-                android:textColor="@color/dark_gray"
-                android:textSize="14sp"
-                android:textStyle="italic" />
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    <!-- Autosave Status -->
+    <TextView
+        android:id="@+id/autosave_note"
+        android:text="Documents autosave as you type."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:textColor="@color/dark_gray"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/document_owner_label" />
+</androidx.constraintlayout.widget.ConstraintLayout>
