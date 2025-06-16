@@ -130,6 +130,7 @@ class DocumentActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.icon_logout).setOnClickListener {
             Log.d("---LOGOUT_BUTTON_CLICKED", "---LOGOUT_BUTTON_CLICKED")
             getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache on logout
+            SessionManager(this).clearSession() // Clear token + userId
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }

@@ -19,6 +19,7 @@ import edu.bhcc.cho.noteserver.R
 import edu.bhcc.cho.noteserver.utils.SessionManager
 import edu.bhcc.cho.noteserver.data.network.DocumentApiService
 import edu.bhcc.cho.noteserver.data.model.Document
+import edu.bhcc.cho.noteserver.ui.auth.LoginActivity
 import edu.bhcc.cho.noteserver.ui.settings.SettingsActivity
 
 class DocumentManagementActivity : AppCompatActivity() {
@@ -79,14 +80,15 @@ class DocumentManagementActivity : AppCompatActivity() {
         }
         // Logout Icon
         findViewById<ImageButton>(R.id.icon_logout).setOnClickListener {
-            // TODO: Clear auth token if stored, return to Login
-            startActivity(Intent(this, edu.bhcc.cho.noteserver.ui.auth.LoginActivity::class.java))
+            SessionManager(this).clearSession() // Clear token + userId
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
+        // Initialize API
         apiService = DocumentApiService(this)
 
-        // Initialize views
+        // Connect UI elements
         tabMyFiles = findViewById(R.id.tab_my_files)
         tabSharedFiles = findViewById(R.id.tab_shared_files)
         layoutMyFiles = findViewById(R.id.layout_my_files)
