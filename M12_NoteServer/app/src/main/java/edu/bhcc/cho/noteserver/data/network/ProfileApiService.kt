@@ -1,10 +1,10 @@
 package edu.bhcc.cho.noteserver.data.network
 
 import android.content.Context
-import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import edu.bhcc.cho.noteserver.data.model.Profile
 import edu.bhcc.cho.noteserver.utils.SessionManager
 import edu.bhcc.cho.noteserver.utils.VolleySingleton
@@ -14,7 +14,7 @@ import org.json.JSONObject
 /**
  * Handles profile-related network operations via the /profiles endpoint.
  */
-class ProfileApiService(context: Context) {
+class ProfileApiService(private val context: Context) {
     private val requestQueue = VolleySingleton.getInstance(context).requestQueue
     private val sessionManager = SessionManager(context)
     private val baseUrl = "http://10.0.2.2:8080"
@@ -125,7 +125,34 @@ class ProfileApiService(context: Context) {
         return profiles
     }
 
-    fun cancelRequests() {
+    /**
+     * Cancels all Volley requests in the queue that match the given tag.
+     * Can be used to clean up network requests when an activity is destroyed/a user logs out to
+     * prevent memory leaks or unintended callbacks.
+     *
+     * @param tag The tag associated with the requests to cancel.
+     */
+    fun cancelRequests(tag: Any) {
         requestQueue.cancelAll(tag)
+    }
+
+    /**
+     * Deletes the currently logged-in user's profile.
+     * This action is irreversible and removes all owned data.
+     */
+    fun deleteProfile(onSuccess: () -> Unit, onError: (String) -> Unit) {
+        val url = "$baseUrl/profiles/me"
+        val appContext = context
+
+        val request = object : StringRequest(Method.DELETE, url,
+            { onSuccess() },
+            { error -> onError("Delete failed: ${error.message}") }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf("Authorization" to "Bearer ${SessionManager(appContext).getToken()}")
+            }
+        }
+
+        requestQueue.add(request)
     }
 }

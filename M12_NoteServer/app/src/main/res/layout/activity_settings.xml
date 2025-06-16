@@ -41,7 +41,7 @@
             android:baselineAligned="false">
 
             <ImageButton
-                android:id="@+id/icon_doc"
+                android:id="@+id/icon_document"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_document"
@@ -98,38 +98,45 @@
                 android:textSize="28sp"
                 android:textColor="@color/blue"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Theme toggle -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Change app theme"
-                android:textStyle="bold"
-                android:textColor="@color/dark_gray"
-                android:textSize="20sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="3dp" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/theme_toggle"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Enable Dark Mode"
-                android:textColor="@color/dark_gray"
-                android:textSize="16sp"
-                android:minHeight="48dp"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Update account details -->
+            <!-- Change App Theme Section -->
             <TextView
+                android:text="Change app theme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/dark_gray"
+                android:textSize="20sp"/>
+
+            <!-- Enable Dark Mode Text & Toggle Button -->
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/theme_toggle"
+                android:text="Enable Dark Mode"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="@color/dark_gray"
+                android:textSize="18sp"
+                android:minHeight="48dp"
+                android:layout_marginTop="-4dp"/>
+
+            <!-- Update Account Details Section -->
+            <TextView
                 android:text="Update account details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textColor="@color/dark_gray"
                 android:textSize="20sp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp" />
+
+            <!-- Name Usage Help Text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your name appears in sharing lists and on shared documents to identify you as the owner. You can change how it appears here."
+                android:textColor="@color/dark_gray"
+                android:textSize="18sp"
                 android:layout_marginBottom="12dp" />
 
             <!-- First Name -->
@@ -139,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:text="First Name"
                 android:textColor="@color/dark_gray"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <EditText
                 android:id="@+id/settings_first_name"
@@ -151,7 +158,7 @@
                 android:inputType="textPersonName|textAutoComplete|textCapWords"
                 android:autofillHints="givenName"
                 android:labelFor="@id/label_first_name"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="10dp" />
 
             <!-- Last Name -->
             <TextView
@@ -171,60 +178,48 @@
                 android:background="@drawable/rounded_input"
                 android:inputType="textPersonName|textAutoComplete|textCapWords"
                 android:autofillHints="familyName"
-                android:labelFor="@id/label_last_name"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Current Password -->
-            <TextView
-                android:id="@+id/label_current_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Current Password"
-                android:textColor="@color/dark_gray"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/settings_current_password"
-                style="@style/RoundedEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:background="@drawable/rounded_input"
-                android:inputType="textPassword"
-                android:autofillHints="password"
-                android:labelFor="@id/label_current_password"
-                android:layout_marginBottom="12dp" />
-
-            <!-- New Password -->
-            <TextView
-                android:id="@+id/label_new_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Password (minimum 8 characters)"
-                android:textColor="@color/dark_gray"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/settings_new_password"
-                style="@style/RoundedEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:background="@drawable/rounded_input"
-                android:inputType="textPassword"
-                android:autofillHints="newPassword"
-                android:labelFor="@id/label_new_password"
-                android:layout_marginBottom="16dp" />
+                android:labelFor="@id/label_last_name" />
 
             <!-- Save Button -->
             <Button
                 android:id="@+id/settings_save_changes"
+                android:text="Save Changes"
                 style="@style/CustomButton"
                 android:layout_width="320dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:text="Save Changes"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"/>
+
+            <!-- Delete Account Section -->
+            <TextView
+                android:text="Delete account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/dark_gray"
+                android:textSize="20sp"
+                android:layout_marginTop="12dp"/>
+
+            <!-- Delete Account Help Text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This permanently erases your profile and documents, even if they're shared."
+                android:textColor="@color/dark_gray"
                 android:textSize="18sp"/>
+
+            <!-- Delete Account Button -->
+            <Button
+                android:id="@+id/settings_delete_account"
+                android:text="Delete My Account"
+                style="@style/CustomButton"
+                android:layout_width="320dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
