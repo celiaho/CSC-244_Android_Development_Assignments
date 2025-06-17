@@ -27,9 +27,12 @@ import androidx.core.content.edit
  */
 class DocumentActivity : AppCompatActivity() {
     private lateinit var documentButton: ImageButton
+    private lateinit var documentManagementButton: ImageButton
     private lateinit var saveButton: ImageButton
     private lateinit var shareButton: ImageButton
     private lateinit var deleteButton: ImageButton
+    private lateinit var settingsButton: ImageButton
+    private lateinit var logoutButton: ImageButton
     private lateinit var titleEditText: EditText
     private lateinit var contentEditText: EditText
     private lateinit var ownerLabel: TextView
@@ -68,9 +71,12 @@ class DocumentActivity : AppCompatActivity() {
 
         // Initialize views and API
         documentButton = findViewById(R.id.icon_document)
+        documentManagementButton = findViewById(R.id.icon_open_folder)
         saveButton = findViewById(R.id.icon_save)
         shareButton = findViewById(R.id.icon_share)
         deleteButton = findViewById(R.id.icon_delete)
+        settingsButton = findViewById(R.id.icon_settings)
+        logoutButton = findViewById(R.id.icon_logout)
         titleEditText = findViewById(R.id.document_title)
         contentEditText = findViewById(R.id.document_content)
         ownerLabel = findViewById(R.id.document_owner_label)
@@ -92,9 +98,10 @@ class DocumentActivity : AppCompatActivity() {
             })
         }
         // Document Management Button
-        findViewById<ImageButton>(R.id.icon_open_folder).setOnClickListener {
+       documentManagementButton.setOnClickListener {
             Log.d("---DOCUMENT_MANAGEMENT_BUTTON_CLICKED", "---DOCUMENT_MANAGEMENT_BUTTON_CLICKED")
             startActivity(Intent(this, DocumentManagementActivity::class.java))
+            finish()
         }
         // Save Document Button
         saveButton.setOnClickListener {
@@ -122,17 +129,26 @@ class DocumentActivity : AppCompatActivity() {
             confirmDelete() // Open delete confirmation dialog
         }
         // Settings Button
-        findViewById<ImageButton>(R.id.icon_settings).setOnClickListener {
+        settingsButton.setOnClickListener {
             Log.d("---SETTINGS_BUTTON_CLICKED", "---SETTINGS_BUTTON_CLICKED")
             startActivity(Intent(this, SettingsActivity::class.java))
+            finish()
         }
         // Logout Button
-        findViewById<ImageButton>(R.id.icon_logout).setOnClickListener {
+        logoutButton.setOnClickListener {
             Log.d("---LOGOUT_BUTTON_CLICKED", "---LOGOUT_BUTTON_CLICKED")
-            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache on logout
+            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache
             SessionManager(this).clearSession() // Clear token + userId
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
+        }
+
+        // Fallback protection in case DOCUMENT_ID is missing
+        if (!intent.hasExtra("DOCUMENT_ID") && !intent.getBooleanExtra("newDoc", false)) {
+            Log.e("---MISSING_DOCUMENT_ID", "Missing document ID and not a new doc — exiting DocumentActivity.")
+            Toast.makeText(this, "Could not load document", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
         // Load any data passed from previous screen

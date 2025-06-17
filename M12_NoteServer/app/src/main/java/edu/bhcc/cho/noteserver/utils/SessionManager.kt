@@ -2,13 +2,14 @@ package edu.bhcc.cho.noteserver.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.system.Os.remove
 import androidx.core.content.edit
 
 /**
  * Manages session data e.g. JWT auth token, user ID, and token expiration timestamp.
  * Uses SharedPreferences to persist data across app launches.
  */
-class SessionManager(context: Context) {
+class SessionManager(private val context: Context) {
 
     // SharedPreferences file name (private to the app)
     private val prefsFileName = "GottNotesSession"
@@ -73,6 +74,15 @@ class SessionManager(context: Context) {
      * Clears all stored session values.
      */
     fun clearSession() {
-        prefs.edit() { clear() } // Preferred syntax for prefs.edit().clear().apply()
+        prefs.edit {
+            remove(keyAuthToken)
+            remove(keyUserId)
+            clear()
+        }
+
+        // Clear document cache as part of logout
+        val docCache = context.getSharedPreferences("DocumentCache", Context.MODE_PRIVATE)
+        docCache.edit { clear() } //// added line to ensure cache is cleared on logout from anywhere
+
     }
 }

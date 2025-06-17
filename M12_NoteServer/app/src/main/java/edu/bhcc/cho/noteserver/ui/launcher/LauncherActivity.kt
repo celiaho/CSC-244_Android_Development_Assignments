@@ -30,6 +30,11 @@ class LauncherActivity : AppCompatActivity() {
         val tokenIssuedAtTime = JwtUtils.getIssuedAtTime(token.toString())
 
         // Check token validity and route accordingly
+        if (token.isNullOrBlank()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
         val nextActivity = if (!token.isNullOrBlank() && !JwtUtils.isTokenExpired(token)) {
             // Log valid token issue time, token expiration time, and current system time in readable format
             Log.d("---VALID_TOKEN_ISSUED", "---iat (readable) = ${Instant.ofEpochSecond(tokenIssuedAtTime ?: 0)}")

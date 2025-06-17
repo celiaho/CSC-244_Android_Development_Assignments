@@ -56,6 +56,9 @@ class DocumentManagementActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document_management)
 
+        // Clear stale document cache on screen entry
+        getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() }
+
         // Highlight Document Management icon in toolbar
         findViewById<ImageButton>(R.id.icon_open_folder)
             .setColorFilter(ContextCompat.getColor(this, R.color.orange))
@@ -80,6 +83,7 @@ class DocumentManagementActivity : AppCompatActivity() {
         }
         // Logout Icon
         findViewById<ImageButton>(R.id.icon_logout).setOnClickListener {
+            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache
             SessionManager(this).clearSession() // Clear token + userId
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -125,6 +129,10 @@ class DocumentManagementActivity : AppCompatActivity() {
             layoutSharedFiles.visibility = View.VISIBLE
             layoutMyFiles.visibility = View.GONE
         }
+
+        // Patch: Clear stale cache before loading documents
+        getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() }
+        Log.d("---DOCUMENT_CACHE_CLEARED", "---DOCUMENT_CACHE_CLEARED")
 
         // Fetch and display documents from the server
         loadDocuments()

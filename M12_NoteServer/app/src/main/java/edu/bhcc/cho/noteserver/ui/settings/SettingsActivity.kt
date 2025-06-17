@@ -50,16 +50,19 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent(this, DocumentActivity::class.java).apply {
                 putExtra("newDoc", true)
             })
+            finish()
         }
         // Document Management Icon
         findViewById<ImageButton>(R.id.icon_open_folder).setOnClickListener {
             startActivity(Intent(this, DocumentManagementActivity::class.java))
+            finish()
         }
         // Settings Icon
         findViewById<ImageButton>(R.id.icon_settings).setOnClickListener {
             Toast.makeText(this, "You are already in Settings.", Toast.LENGTH_SHORT).show()        }
         // Logout Icon
         findViewById<ImageButton>(R.id.icon_logout).setOnClickListener {
+            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() } // Clear local cache
             SessionManager(this).clearSession() // Clear token + userId
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -126,17 +129,23 @@ class SettingsActivity : AppCompatActivity() {
         deleteAccountButton.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Delete Your Account?")
-                .setMessage("This will permanently delete your account and all notes. Are you sure?")
+                .setMessage("Are you sure you want to delete your account and documents? This action cannot be undone.")
                 .setPositiveButton("Delete") { _, _ ->
                     apiService.deleteProfile(
                         onSuccess = {
+                            showToast("Account deleted successfully. You’ve been logged out.")
+
+                            // Clear cache and session
+                            getSharedPreferences("DocumentCache", MODE_PRIVATE).edit { clear() }
                             sessionManager.clearSession()
-                            showToast("Account deleted.")
-                            startActivity(Intent(this, LoginActivity::class.java))
-                            finish()
+
+                            // Redirect to Login screen and finish Settings screen
+                            val intent = Intent(this, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
                         },
                         onError = { err ->
-                            showToast("Delete failed: $err")
+                            showToast("Failed to delete account: $err")
                         }
                     )
                 }
@@ -149,6 +158,12 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadProfile() {
+        // Abort process if no user session (e.g., after account deletion)
+        if (sessionManager.getToken() == null || sessionManager.getUserId() == null) {
+            Log.d("---LOAD_PROFILE_ABORTED", "---Skipped profile load: no session")
+            return
+        }
+
         apiService.getProfile(
             onSuccess = { profile ->
                 firstNameInput.setText(profile.firstName)

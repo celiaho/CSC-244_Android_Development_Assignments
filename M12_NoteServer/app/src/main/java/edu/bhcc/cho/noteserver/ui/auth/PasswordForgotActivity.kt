@@ -70,6 +70,7 @@ class PasswordForgotActivity : AppCompatActivity() {
                     val intent = Intent(this, PasswordResetActivity::class.java)
                     intent.putExtra("EMAIL", email)
                     startActivity(intent)
+                    finish()
                 },
                 onError = {
                     errorText.text = it

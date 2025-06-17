@@ -79,7 +79,7 @@ class SignupActivity : AppCompatActivity() {
                     errorTextView.visibility = View.GONE
                     Toast.makeText(this, "Signup successful. Please log in.", Toast.LENGTH_LONG).show()
                     startActivity(Intent(this, LoginActivity::class.java))
-
+                    finish()
                 },
                 onError = {
                     Log.d("---SIGNUP_ERROR", "---SIGNUP_ERROR")
