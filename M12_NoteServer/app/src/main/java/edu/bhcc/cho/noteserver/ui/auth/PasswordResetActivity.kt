@@ -80,7 +80,6 @@ class PasswordResetActivity : AppCompatActivity() {
                     intent.putExtra("EMAIL", email)
                     startActivity(intent)
                     finish()
-
                 },
                 onError = {
                     errorText.text = it

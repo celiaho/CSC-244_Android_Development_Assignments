@@ -74,7 +74,7 @@
                 android:labelFor="@id/login_email_label"
                 android:minHeight="48dp"
                 tools:ignore="SpeakableTextPresentCheck" />
-                <!-- 3 lines above = Attempted fix for click in/keyboard display issues -->
+                <!-- 3 lines above = Failed fix for click in/keyboard display bug. May be Emulator issue. -->
 
             <!-- Password -->
             <TextView
