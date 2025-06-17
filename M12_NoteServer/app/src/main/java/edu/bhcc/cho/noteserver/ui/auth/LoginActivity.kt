@@ -128,6 +128,7 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, PasswordForgotActivity::class.java)
             intent.putExtra("EMAIL", email)
             startActivity(intent)
+            finish()
         }
 
         // Handle "Create Account" button
