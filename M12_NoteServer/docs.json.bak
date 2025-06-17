@@ -1,109 +1,100 @@
 {
   "profiles": {
-    "278e050edfd749439dc340f2be9df57a": {
-      "id": "278e050edfd749439dc340f2be9df57a",
-      "first_name": "user",
-      "last_name": "ii",
-      "email": "userii@gmail.com",
-      "password_hash": "$2a$12$hNXd4fuq/YfW8D5K.UDkc.2.FnsSXpd8QUVQfxVy7Cm5xYzNakC.i",
-      "creation_date": "2025-05-09T03:29:22.809096Z",
-      "last_modified_date": "2025-05-09T03:29:22.8126464Z"
-    },
-    "2e9837e7d5004894aacdd40159b1016b": {
-      "id": "2e9837e7d5004894aacdd40159b1016b",
-      "first_name": "User",
-      "last_name": "One",
-      "email": "user1@u.co",
-      "password_hash": "$2a$12$9z4Bb6xZKVxR5W8nE3ihs.D525j6RX0En8y1Q33VDy6WxjfBHs5de",
-      "creation_date": "2025-05-08T20:06:46.9061544Z",
-      "last_modified_date": "2025-05-08T20:06:46.9071716Z"
-    },
-    "6ccd276d050346848e9533ee0d0c6929": {
-      "id": "6ccd276d050346848e9533ee0d0c6929",
-      "first_name": "B",
-      "last_name": "B",
-      "email": "b@b.b",
-      "password_hash": "$2a$12$Ct2dOgcqp1GAWRiKwkCbEOIjgMRcF.2N6C3.ZWjn4KPnhT0YYc8QW",
-      "creation_date": "2025-05-27T18:12:46.69968Z",
-      "last_modified_date": "2025-05-27T18:12:46.69968Z"
-    },
-    "8233859da890425b9662e0287e6f2174": {
-      "id": "8233859da890425b9662e0287e6f2174",
-      "first_name": "User",
-      "last_name": "iii",
-      "email": "useriii@gmail.com",
-      "password_hash": "$2a$12$cYA3WgMso4MEnfRZf/fbSudQe/S87/qijoasM7nb4vafINNptl4R6",
-      "creation_date": "2025-05-12T21:56:24.9725023Z",
-      "last_modified_date": "2025-05-16T13:35:04.107567Z"
-    },
-    "a92be6cb96f0497485f08ef86b0093d6": {
-      "id": "a92be6cb96f0497485f08ef86b0093d6",
-      "first_name": "user",
-      "last_name": "i",
-      "email": "useri@gmail.com",
-      "password_hash": "$2a$12$jYBH4txE9uiKzx6sfEfpHebln4wjg8g1piOkG0eQBXwpWMM/tGPN2",
-      "creation_date": "2025-05-09T03:19:55.5837239Z",
-      "last_modified_date": "2025-05-09T03:19:55.584711Z"
+    "16cefe733c834c7a88f8655a544d9f67": {
+      "id": "16cefe733c834c7a88f8655a544d9f67",
+      "first_name": "Alpha",
+      "last_name": "User",
+      "email": "userA@gottnotes.com",
+      "password_hash": "$2a$12$xd8c2r/vHV0xkLYZFI2OIukTK7dyYxOahp8AJeIW2bJHpZXI7uida",
+      "creation_date": "2025-06-16T08:16:38.2282666Z",
+      "last_modified_date": "2025-06-16T08:16:38.2282666Z"
     },
     "b873fcf01e0340288de420c50c0ff95a": {
       "id": "b873fcf01e0340288de420c50c0ff95a",
-      "first_name": "aaa",
-      "last_name": "aaa",
+      "first_name": "A",
+      "last_name": "A",
       "email": "a@a.a",
       "password_hash": "$2a$12$uHbUnfHQflB15gUOzSuZVO/IrWlIeG9FUer0kkYyu/f5SKU1XIznS",
       "creation_date": "2025-05-14T20:46:14.8688108Z",
-      "last_modified_date": "2025-05-15T03:09:14.8107694Z",
-      "extra": {
-        "current_password": "87654321",
-        "new_password": "aaaaaaaa"
-      }
-    },
-    "bd85f9797a9049919d24c76fa21ed3b2": {
-      "id": "bd85f9797a9049919d24c76fa21ed3b2",
-      "first_name": "User",
-      "last_name": "2",
-      "email": "user2@u.co",
-      "password_hash": "$2a$12$umHyt76Vs/Jp/KxmCT9YWushES.rKFNXbw3lni4yBizSQ9ZhV9RM.",
-      "creation_date": "2025-05-08T23:18:23.2894973Z",
-      "last_modified_date": "2025-05-08T23:18:23.2905172Z"
+      "last_modified_date": "2025-06-12T21:35:40.4093411Z",
+      "extra": {}
     }
   },
   "documents": {
-    "890ed2548ebb4fbbba138a4e3da63e95": {
-      "id": "890ed2548ebb4fbbba138a4e3da63e95",
-      "owner_id": "6ccd276d050346848e9533ee0d0c6929",
+    "04efa2c94a774e0bbeb9c15262984080": {
+      "id": "04efa2c94a774e0bbeb9c15262984080",
+      "owner_id": "a92be6cb96f0497485f08ef86b0093d6",
       "content": {
-        "body": "B Owner Not Shared",
-        "title": "B Owner Not Shared"
+        "body": "Document 5 at 5:35 PM\n\n\nChanges made at 5:3",
+        "title": "Title5"
       },
-      "creation_date": "2025-05-30T20:01:35.7442187Z",
-      "last_modified_date": "2025-06-11T18:48:35.1963792Z"
+      "creation_date": "2025-05-14T21:35:41.7057863Z",
+      "last_modified_date": "2025-06-16T05:24:35.2042601Z"
     },
-    "b4db1d4a399441058edf8b49919b5f93": {
-      "id": "b4db1d4a399441058edf8b49919b5f93",
-      "owner_id": "6ccd276d050346848e9533ee0d0c6929",
-      "content": {
-        "body": "B Owner 2 Shared With A",
-        "title": "B Owner 2 Shared With A"
-      },
-      "creation_date": "2025-05-30T20:02:18.7657699Z",
-      "last_modified_date": "2025-06-11T18:48:25.6685649Z"
-    },
-    "dd9743db05964210b8cdcef60b08fbaf": {
-      "id": "dd9743db05964210b8cdcef60b08fbaf",
+    "10e0b81c6600486486b5dc71d0a1368f": {
+      "id": "10e0b81c6600486486b5dc71d0a1368f",
       "owner_id": "b873fcf01e0340288de420c50c0ff95a",
       "content": {
-        "body": "A's Doc - Not Shared\n\nHello Harris!",
-        "title": "A's Doc - Not Shared"
+        "body": "A's Doc 2 - Not shared",
+        "title": "A's Doc 3 - Not shared"
       },
-      "creation_date": "2025-06-03T22:29:07.0487398Z",
-      "last_modified_date": "2025-06-11T19:00:36.9832988Z"
+      "creation_date": "2025-05-14T20:47:55.6653498Z",
+      "last_modified_date": "2025-06-16T05:21:13.4018005Z"
+    },
+    "3fc719c2d9b7406d8428e03376bdae46": {
+      "id": "3fc719c2d9b7406d8428e03376bdae46",
+      "owner_id": "16cefe733c834c7a88f8655a544d9f67",
+      "content": {
+        "body": "...divisa est.",
+        "title": "Alpha's Doc 2 - Shared"
+      },
+      "creation_date": "2025-06-16T08:32:39.9398603Z",
+      "last_modified_date": "2025-06-16T08:33:32.1339105Z"
+    },
+    "4fc5f5b66e114d109347a2238f11b348": {
+      "id": "4fc5f5b66e114d109347a2238f11b348",
+      "owner_id": "a92be6cb96f0497485f08ef86b0093d6",
+      "content": {
+        "body": "Doc4",
+        "title": "Title4"
+      },
+      "creation_date": "2025-05-14T21:14:09.0870913Z",
+      "last_modified_date": "2025-05-14T21:14:09.0870913Z"
+    },
+    "d035514ee67b4a2bb2ed42c55e21a54c": {
+      "id": "d035514ee67b4a2bb2ed42c55e21a54c",
+      "owner_id": "b873fcf01e0340288de420c50c0ff95a",
+      "content": {
+        "body": "Document3",
+        "title": "A's Doc 2 - Not shared"
+      },
+      "creation_date": "2025-05-14T20:50:17.1003377Z",
+      "last_modified_date": "2025-06-12T21:33:20.1705576Z"
+    },
+    "e3833244223a416fbdcafe2c98b0debd": {
+      "id": "e3833244223a416fbdcafe2c98b0debd",
+      "owner_id": "b873fcf01e0340288de420c50c0ff95a",
+      "content": {
+        "body": "A's Doc 1 -  shared",
+        "title": "A's Doc 1 -  shared"
+      },
+      "creation_date": "2025-05-19T22:59:46.5667319Z",
+      "last_modified_date": "2025-06-16T05:21:02.4620153Z"
     }
   },
   "share_records": {
-    "b4db1d4a399441058edf8b49919b5f93": {
+    "3fc719c2d9b7406d8428e03376bdae46": {
       "shared_with": [
         "b873fcf01e0340288de420c50c0ff95a"
+      ]
+    },
+    "e3833244223a416fbdcafe2c98b0debd": {
+      "shared_with": [
+        "278e050edfd749439dc340f2be9df57a",
+        "8233859da890425b9662e0287e6f2174",
+        "2e9837e7d5004894aacdd40159b1016b",
+        "a92be6cb96f0497485f08ef86b0093d6",
+        "bd85f9797a9049919d24c76fa21ed3b2"
       ]
     }
   }
