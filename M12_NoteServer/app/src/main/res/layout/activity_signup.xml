@@ -80,7 +80,6 @@
                 android:background="@drawable/rounded_input"
                 android:inputType="textEmailAddress|textAutoComplete"
                 android:labelFor="@id/label_email"
-                android:textColor="@android:color/black"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <!-- First Name -->
@@ -102,7 +101,6 @@
                 android:background="@drawable/rounded_input"
                 android:inputType="textPersonName|textAutoComplete|textCapWords"
                 android:labelFor="@id/label_first_name"
-                android:textColor="@android:color/black"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <!-- Last Name -->
@@ -124,7 +122,6 @@
                 android:background="@drawable/rounded_input"
                 android:inputType="textPersonName|textAutoComplete|textCapWords"
                 android:labelFor="@id/label_last_name"
-                android:textColor="@android:color/black"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <!-- Password -->
@@ -146,7 +143,6 @@
                 android:background="@drawable/rounded_input"
                 android:inputType="textPassword"
                 android:labelFor="@id/label_password"
-                android:textColor="@android:color/black"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <!-- Complete Signup Button (max width, centered) -->

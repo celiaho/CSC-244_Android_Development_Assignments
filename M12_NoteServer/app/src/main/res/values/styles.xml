@@ -4,9 +4,16 @@
     <!-- Style for rounded text input fields -->
     <style name="RoundedEditText">
         <item name="android:background">@drawable/rounded_input</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:padding">12dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:minHeight">48dp</item>
+    </style>
+
+    <!-- Dark theme style override for input field text color -->
+    <style name="DarkEditText" parent="Widget.MaterialComponents.TextInputEditText.FilledBox">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">#303030</item>
     </style>
 
     <!-- Style for primary app buttons -->

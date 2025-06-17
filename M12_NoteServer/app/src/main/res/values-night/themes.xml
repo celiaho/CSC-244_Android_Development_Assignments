@@ -3,30 +3,61 @@
 
     <!-- Base application theme in Dark mode -->
     <style name="Theme.GOTTNotes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Ensure status bar is not covered by the app toolbar -->
+        <!-- Status bar behavior -->
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:fitsSystemWindows">true</item>
 
-        <!-- Primary brand colors -->
+        <!-- Brand colors -->
         <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/blue</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
 
-        <!-- Secondary color -->
+        <!-- Accent -->
         <item name="colorSecondary">@color/orange</item>
         <item name="colorOnSecondary">@color/black</item>
 
         <!-- Backgrounds -->
         <item name="android:colorBackground">@color/black</item>
         <item name="colorSurface">@color/light_background</item>
-        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurface">@color/dark_gray</item>
 
-        <!-- Text colors -->
-        <item name="android:textColorPrimary">@color/dark_gray</item>
+        <!-- Text -->
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/medium_gray</item>
 
-        <!-- Toolbar -->
+        <!-- Ripple + toolbar -->
+        <item name="colorControlHighlight">@color/light_gray</item>
         <item name="toolbarStyle">@style/CustomToolbar</item>
+
+        <!-- Dark Mode EditText style -->
+        <item name="editTextStyle">@style/DarkEditText</item>
     </style>
+
+<!--    &lt;!&ndash; Base application theme in Dark mode &ndash;&gt;-->
+<!--    <style name="Theme.GOTTNotes" parent="Theme.MaterialComponents.DayNight.NoActionBar">-->
+<!--        &lt;!&ndash; Ensure status bar is not covered by the app toolbar &ndash;&gt;-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        <item name="android:fitsSystemWindows">true</item>-->
+
+<!--        &lt;!&ndash; Primary brand colors &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/blue</item>-->
+<!--        <item name="colorPrimaryVariant">@color/blue</item>-->
+<!--        <item name="colorOnPrimary">@color/black</item>-->
+
+<!--        &lt;!&ndash; Secondary color &ndash;&gt;-->
+<!--        <item name="colorSecondary">@color/orange</item>-->
+<!--        <item name="colorOnSecondary">@color/black</item>-->
+
+<!--        &lt;!&ndash; Backgrounds &ndash;&gt;-->
+<!--        <item name="android:colorBackground">@color/black</item>-->
+<!--        <item name="colorSurface">@color/light_background</item>-->
+<!--        <item name="colorOnSurface">@color/white</item>-->
+
+<!--        &lt;!&ndash; Text colors &ndash;&gt;-->
+<!--        <item name="android:textColorPrimary">@color/dark_gray</item>-->
+<!--        <item name="android:textColorSecondary">@color/medium_gray</item>-->
+
+<!--        &lt;!&ndash; Toolbar &ndash;&gt;-->
+<!--        <item name="toolbarStyle">@style/CustomToolbar</item>-->
+<!--    </style>-->
 
 </resources>
