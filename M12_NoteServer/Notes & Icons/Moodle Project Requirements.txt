@@ -34,3 +34,13 @@ Create a user 2 https://bhcc.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=00a
 Create and share a document https://bhcc.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=31d18c1c-3899-4945-9fac-ad6d0131ed79
 
 Display shared documents from User 2 https://bhcc.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=64caa9b1-4507-4a7e-8fbc-ad6d0131ed79
+
+
+NoteServer app video should demo:
+1) Create user A
+2) create user b
+3) user A sign in
+4) user A creates a note
+5) user A shared note with user b
+6) user B sign in
+7) User B views note shared with them
