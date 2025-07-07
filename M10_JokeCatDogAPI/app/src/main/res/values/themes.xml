@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
     <style name="Theme.JokeCatDogAPI" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorOnPrimary">@color/light_onPrimary</item>
@@ -11,7 +13,7 @@
         <item name="colorSecondaryContainer">@color/light_secondaryContainer</item>
         <item name="colorOnSecondaryContainer">@color/light_onSecondaryContainer</item>
 
-        <item name="android:colorBackground">@color/light_background</item> <!-- system background -->
+        <item name="android:colorBackground">@color/light_background</item>
         <item name="colorOnBackground">@color/light_onBackground</item>
 
         <item name="colorSurface">@color/light_surface</item>
@@ -20,7 +22,42 @@
         <item name="colorError">@color/light_error</item>
         <item name="colorOnError">@color/light_onError</item>
 
+
+        <!-- ??? DOESN'T WORK - Set the status bar color -->
+        <item name="android:statusBarColor">@color/light_primary</item>
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Apply custom ActionBar globally -->
+        <item name="actionBarStyle">@style/Widget.JokeCatDogAPI.ActionBar</item>
+
         <!-- Apply custom button style globally -->
         <item name="materialButtonStyle">@style/Widget.JokeCatDogAPI.Button</item>
     </style>
+
+
+    <!-- Custom ActionBar style -->
+    <style name="Widget.JokeCatDogAPI.ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/light_primary</item>
+        <item name="titleTextStyle">@style/Widget.JokeCatDogAPI.ActionBar.Title</item>
+    </style>
+
+    <!-- Custom ActionBar title style -->
+    <style name="Widget.JokeCatDogAPI.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/light_onPrimary</item>
+<!--        <item name="android:textSize">20sp</item> -->
+    </style>
+
+    <!-- Custom button style -->
+    <style name="Widget.JokeCatDogAPI.Button" parent="Widget.Material3.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.JokeCatDogAPI.RoundedSquare</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Custom shape appearance for buttons -->
+    <style name="ShapeAppearance.JokeCatDogAPI.RoundedSquare" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerSize">8dp</item>
+    </style>
+
 </resources>
+
