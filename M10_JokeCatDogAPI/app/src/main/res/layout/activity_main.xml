@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -11,36 +12,47 @@
         android:id="@+id/appbar"
         layout="@layout/appbar" />
 
-    <TextView
-        android:id="@+id/tv_last_selection"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You last saw a _____."
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="188dp"/>
+
+    <TextView
+        android:id="@+id/tv_last_selection"
+        android:text="@string/last_selection_text"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:gravity="center"
+        android:visibility="visible"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/btn_joke"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
-        app:layout_constraintVertical_bias="0.33" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_cat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="96dp"
-        android:text="Show me a cat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.365" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_joke"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:text="Tell me a joke"
+        android:layout_marginBottom="52dp"
+        android:text="@string/joke_button_label"
+        app:layout_constraintBottom_toTopOf="@+id/btn_cat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:text="@string/cat_button_label"
         app:layout_constraintBottom_toTopOf="@+id/btn_dog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -50,11 +62,11 @@
         android:id="@+id/btn_dog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:text="Show me a dog"
-        app:layout_constraintBottom_toTopOf="@+id/btn_cat"
+        android:layout_marginBottom="88dp"
+        android:text="@string/dog_button_label"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
