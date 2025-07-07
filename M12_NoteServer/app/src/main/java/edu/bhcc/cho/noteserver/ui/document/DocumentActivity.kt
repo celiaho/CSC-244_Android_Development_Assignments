@@ -180,7 +180,7 @@ class DocumentActivity : AppCompatActivity() {
                     apiService.getAllUsers(
                         onSuccess = { users ->
                             val ownerUser = users.find { it.id == doc.ownerId }
-                            val ownerText = if (isOwner) "You" else "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
+                            val ownerText = if (isOwner) "${ownerUser?.firstName} ${ownerUser?.lastName} (You)" else "${ownerUser?.firstName} ${ownerUser?.lastName}"
                             ownerLabel.text = "Owner: $ownerText"
 
                             // Now that ALL fields are loaded, mark as loaded!
@@ -347,7 +347,7 @@ class DocumentActivity : AppCompatActivity() {
 
         AlertDialog.Builder(this)
             .setTitle("Delete Document")
-            .setMessage("Are you sure you want to delete this document?")
+            .setMessage("Are you sure you want to delete this document? Neither you nor shared users will be able to recover it.")
             .setPositiveButton("Delete") { _, _ -> deleteDocument() }
             .setNegativeButton("Cancel", null)
             .show()

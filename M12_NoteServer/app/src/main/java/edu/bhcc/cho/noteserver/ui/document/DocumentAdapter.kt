@@ -59,11 +59,11 @@ class DocumentAdapter(
 
         val currentUserId = SessionManager(context).getUserId()
         val ownerUser = userProfiles.find { it.id == doc.ownerId }
-        val ownerLabel = if (doc.ownerId == currentUserId) "You" else
-            "${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})"
+        val ownerLabel = if (doc.ownerId == currentUserId) "${ownerUser?.firstName} ${ownerUser?.lastName} (You)" else
+            "${ownerUser?.firstName} ${ownerUser?.lastName}"
         holder.ownerTextView.text = "Owner: $ownerLabel"
         Log.d("---DOC_ADAPTER_OWNER_LOOKUP", "DOC_ADAPTER ownerId=${doc.ownerId}, " +
-                "matchedUser=${ownerUser?.firstName} ${ownerUser?.lastName} (${ownerUser?.email})")
+                "matchedUser=${ownerUser?.firstName} ${ownerUser?.lastName}")
 
         holder.itemView.setOnClickListener {
             Log.d("---DOC_ADAPTER_LAUNCHING_DOC", "---DOCUMENT ADAPTER launching DocumentActivity with DOCUMENT_ID = ${doc.id}")

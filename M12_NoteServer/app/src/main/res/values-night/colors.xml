@@ -5,10 +5,10 @@
     <color name="orange">#FF9A33</color>
 
     <!-- Backgrounds -->
+    <color name="popup_background">#2A2A2A</color> <!-- existing light gray -->
     <color name="light_gray">#2A2A2A</color>
     <color name="medium_gray">#888888</color>
     <color name="dark_gray">#CCCCCC</color>
-
     <color name="white">#FFFFFF</color>
     <color name="black">#121212</color> <!-- not true black -->
 
@@ -18,22 +18,3 @@
     <!-- Background tint (editable, e.g., document editor) -->
     <color name="light_background">#1C1C1C</color>
 </resources>
-
-<!--<resources>-->
-<!--    &lt;!&ndash; Primary brand colors (same hue to maintain brand, good contrast on dark bg) &ndash;&gt;-->
-<!--    <color name="blue">#5E9EFF</color>-->
-<!--    <color name="orange">#FF8A00</color>-->
-
-<!--    &lt;!&ndash; Backgrounds &ndash;&gt;-->
-<!--    <color name="light_gray">#444444</color>-->
-<!--    <color name="medium_gray">#AAAAAA</color>-->
-<!--    <color name="dark_gray">#EEEEEE</color>-->
-<!--    <color name="white">#000000</color>-->
-<!--    <color name="black">#FFFFFF</color>-->
-
-<!--    &lt;!&ndash; Input/Error feedback &ndash;&gt;-->
-<!--    <color name="red">#FF8A80</color>-->
-
-<!--    &lt;!&ndash; Background tint (editable, e.g., document editor) &ndash;&gt;-->
-<!--    <color name="light_background">#1C1C1C</color>-->
-<!--</resources>-->

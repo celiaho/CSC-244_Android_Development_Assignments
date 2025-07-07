@@ -3,11 +3,14 @@
     android:id="@+id/document_share_popup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:colorBackground"
+    android:background="@color/popup_background"
     android:elevation="6dp"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:padding="24dp">
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="24dp"
+    android:paddingBottom="36dp">
 
     <!-- Close Button aligned to right -->
     <FrameLayout
@@ -44,6 +47,20 @@
         android:textSize="18sp"
         android:layout_marginBottom="12dp" />
 
+    <!-- No Users Message -->
+    <TextView
+        android:id="@+id/text_no_users"
+        android:text="You are currently the only user.\nInvite people to GOTT Notes—\nyou'll see a user list once they register."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:visibility="gone" />
+
     <!-- Scrollable User List -->
     <ListView
         android:id="@+id/listViewUsers"
@@ -51,5 +68,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:scrollbars="vertical"/>
 </LinearLayout>

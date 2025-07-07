@@ -1,36 +1,16 @@
 {
   "profiles": {
-    "16cefe733c834c7a88f8655a544d9f67": {
-      "id": "16cefe733c834c7a88f8655a544d9f67",
+    "7218ce2a363d462498aec5b4e71a1c01": {
+      "id": "7218ce2a363d462498aec5b4e71a1c01",
       "first_name": "Alpha",
       "last_name": "User",
-      "email": "userA@gottnotes.com",
-      "password_hash": "$2a$12$xd8c2r/vHV0xkLYZFI2OIukTK7dyYxOahp8AJeIW2bJHpZXI7uida",
-      "creation_date": "2025-06-16T08:16:38.2282666Z",
-      "last_modified_date": "2025-06-16T08:16:38.2282666Z"
-    },
-    "b873fcf01e0340288de420c50c0ff95a": {
-      "id": "b873fcf01e0340288de420c50c0ff95a",
-      "first_name": "A",
-      "last_name": "A",
-      "email": "a@a.a",
-      "password_hash": "$2a$12$uHbUnfHQflB15gUOzSuZVO/IrWlIeG9FUer0kkYyu/f5SKU1XIznS",
-      "creation_date": "2025-05-14T20:46:14.8688108Z",
-      "last_modified_date": "2025-06-12T21:35:40.4093411Z",
-      "extra": {}
+      "email": "usera@gott.com",
+      "password_hash": "$2a$12$bZ/opcrAdh.ZzDKntYDnDuXYEbY.ySzuuplfpQFcqvmlXDIdbhQke",
+      "creation_date": "2025-06-17T19:51:48.436604Z",
+      "last_modified_date": "2025-06-17T19:51:48.436604Z"
     }
   },
   "documents": {
-    "04efa2c94a774e0bbeb9c15262984080": {
-      "id": "04efa2c94a774e0bbeb9c15262984080",
-      "owner_id": "a92be6cb96f0497485f08ef86b0093d6",
-      "content": {
-        "body": "Document 5 at 5:35 PM\n\n\nChanges made at 5:3",
-        "title": "Title5"
-      },
-      "creation_date": "2025-05-14T21:35:41.7057863Z",
-      "last_modified_date": "2025-06-16T05:24:35.2042601Z"
-    },
     "10e0b81c6600486486b5dc71d0a1368f": {
       "id": "10e0b81c6600486486b5dc71d0a1368f",
       "owner_id": "b873fcf01e0340288de420c50c0ff95a",
@@ -41,25 +21,45 @@
       "creation_date": "2025-05-14T20:47:55.6653498Z",
       "last_modified_date": "2025-06-16T05:21:13.4018005Z"
     },
-    "3fc719c2d9b7406d8428e03376bdae46": {
-      "id": "3fc719c2d9b7406d8428e03376bdae46",
-      "owner_id": "16cefe733c834c7a88f8655a544d9f67",
+    "2697dc2ab4584c4abdb7cfc8c85d0d9c": {
+      "id": "2697dc2ab4584c4abdb7cfc8c85d0d9c",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
       "content": {
-        "body": "...divisa est.",
-        "title": "Alpha's Doc 2 - Shared"
+        "body": "Alright, alright, alright! Let's get after it, team. Remember, even if the pitch is muddy, our spirits can still be high. We're gonna take it slow, one biscuit at a time. Be a goldfish, folks, forget about that last play. It's all about the little things, the small victories that lead to the big ones. And hey, if you're feeling down, just remember, \"Believe\" in yourselves, and we'll get through this together. Now, who's got a funny story? Because laughter is like sunshine on a cloudy day, and we could all use a little bit of that.",
+        "title": "Alpha's Lasso Lovelies 1"
       },
-      "creation_date": "2025-06-16T08:32:39.9398603Z",
-      "last_modified_date": "2025-06-16T08:33:32.1339105Z"
+      "creation_date": "2025-06-17T20:43:00.8706151Z",
+      "last_modified_date": "2025-06-17T21:52:49.4644826Z"
     },
-    "4fc5f5b66e114d109347a2238f11b348": {
-      "id": "4fc5f5b66e114d109347a2238f11b348",
-      "owner_id": "a92be6cb96f0497485f08ef86b0093d6",
+    "2f30404fb3f04f169813f3c93af94abe": {
+      "id": "2f30404fb3f04f169813f3c93af94abe",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
       "content": {
-        "body": "Doc4",
-        "title": "Title4"
+        "body": "☑ Wake up and choose kindness (and coffee)\n☑ Tell someone they matter (even if it’s just the mailman)\n☑ Do one thing that scares me (like karaoke or therapy)\n☑ Believe in “Believe”\n☑ Avoid saying “sorry” for no reason—unless I spill tea on someone\n☑ Ask, “What would Ted do?”\n\n    Bonus: Eat a biscuit. Smile. Repeat.",
+        "title": "Game Plan – Win the Day, Lasso Style"
       },
-      "creation_date": "2025-05-14T21:14:09.0870913Z",
-      "last_modified_date": "2025-05-14T21:14:09.0870913Z"
+      "creation_date": "2025-06-17T21:53:03.9003427Z",
+      "last_modified_date": "2025-06-17T21:53:24.1475495Z"
+    },
+    "59557a9833194804b574aea62d6fd013": {
+      "id": "59557a9833194804b574aea62d6fd013",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "“You know what the happiest animal on Earth is? It’s a goldfish. Know why? Got a 10-second memory. Be a goldfish.”\n– Ted Lasso",
+        "title": "Aspirational Thoughts"
+      },
+      "creation_date": "2025-06-17T21:54:40.5691781Z",
+      "last_modified_date": "2025-06-18T16:19:43.7606817Z"
+    },
+    "b6bdce17dbbe483cac66464ee0ce10d4": {
+      "id": "b6bdce17dbbe483cac66464ee0ce10d4",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "You know, life’s kinda like coaching a football team when you don’t know the rules: confusing, hilarious, and filled with accidental wins.\n\nToday I felt like quitting. But then I remembered Ted said, “Taking on a challenge is a lot like riding a horse…if you’re comfortable while you’re doing it, you’re probably doing it wrong.”\n\nSo I’m staying on this wild horse. No saddle, just vibes.",
+        "title": "When It Rains, Let It Pour (Then Dance in It)"
+      },
+      "creation_date": "2025-06-17T21:53:52.2831652Z",
+      "last_modified_date": "2025-06-17T21:54:16.0150384Z"
     },
     "d035514ee67b4a2bb2ed42c55e21a54c": {
       "id": "d035514ee67b4a2bb2ed42c55e21a54c",
@@ -69,20 +69,35 @@
         "title": "A's Doc 2 - Not shared"
       },
       "creation_date": "2025-05-14T20:50:17.1003377Z",
-      "last_modified_date": "2025-06-12T21:33:20.1705576Z"
+      "last_modified_date": "2025-06-17T19:10:10.4146609Z"
     },
     "e3833244223a416fbdcafe2c98b0debd": {
       "id": "e3833244223a416fbdcafe2c98b0debd",
       "owner_id": "b873fcf01e0340288de420c50c0ff95a",
       "content": {
         "body": "A's Doc 1 -  shared",
-        "title": "A's Doc 1 -  shared"
+        "title": "A's Doc 1 -  shared with Alpha"
       },
       "creation_date": "2025-05-19T22:59:46.5667319Z",
-      "last_modified_date": "2025-06-16T05:21:02.4620153Z"
+      "last_modified_date": "2025-06-17T20:59:30.2972905Z"
+    },
+    "ff4bd101903e43cd8c368a71364e18ee": {
+      "id": "ff4bd101903e43cd8c368a71364e18ee",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "I believe in hope. I believe in “rom-communism.” That means we’re all in this together, and we believe that everything’s gonna work out in the end. Even if the journey's messy as a barbecue sauce stain on a tuxedo.\n\nSo yeah, maybe I’ve made some mistakes—like using peanut butter as hair gel. But believing in happy endings? That’s never been one of them.\n\nTrust the process. Hug your friends. Believe in biscuits.",
+        "title": "The Gospel According to Rom-Communism"
+      },
+      "creation_date": "2025-06-17T21:51:47.0346027Z",
+      "last_modified_date": "2025-06-17T21:52:37.5085895Z"
     }
   },
   "share_records": {
+    "2697dc2ab4584c4abdb7cfc8c85d0d9c": {
+      "shared_with": [
+        "b873fcf01e0340288de420c50c0ff95a"
+      ]
+    },
     "3fc719c2d9b7406d8428e03376bdae46": {
       "shared_with": [
         "b873fcf01e0340288de420c50c0ff95a"
@@ -94,7 +109,8 @@
         "8233859da890425b9662e0287e6f2174",
         "2e9837e7d5004894aacdd40159b1016b",
         "a92be6cb96f0497485f08ef86b0093d6",
-        "bd85f9797a9049919d24c76fa21ed3b2"
+        "bd85f9797a9049919d24c76fa21ed3b2",
+        "7218ce2a363d462498aec5b4e71a1c01"
       ]
     }
   }

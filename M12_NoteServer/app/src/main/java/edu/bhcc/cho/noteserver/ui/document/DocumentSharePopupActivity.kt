@@ -2,9 +2,11 @@ package edu.bhcc.cho.noteserver.ui.document
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -19,6 +21,7 @@ import android.view.ViewGroup as AndroidViewGroup
 class DocumentSharePopupActivity : AppCompatActivity() {
 
     private lateinit var closeButton: ImageButton
+    private lateinit var noUsersText: TextView
     private lateinit var userListView: ListView
     private lateinit var adapter: ArrayAdapter<String>
 
@@ -38,8 +41,9 @@ class DocumentSharePopupActivity : AppCompatActivity() {
         documentId = intent.getStringExtra("DOCUMENT_ID") ?: ""
 
         // Init views and services
-        userListView = findViewById(R.id.listViewUsers)
         closeButton = findViewById(R.id.close_button)
+        noUsersText = findViewById<TextView>(R.id.text_no_users)
+        userListView = findViewById(R.id.listViewUsers)
         apiService = DocumentApiService(this)
         sessionManager = SessionManager(this)
 
@@ -67,7 +71,7 @@ class DocumentSharePopupActivity : AppCompatActivity() {
 
         apiService.getAllUsers(
             onSuccess = { users ->
-                Log.d("---RAW_USERS_RECEIVED", "---" + users.joinToString("\n") { "${it.firstName} (${it.id})" })
+                Log.d("---RAW_USERS_RECEIVED", "---" + users.joinToString("\n") { "${it.firstName} ${it.lastName} (${it.id})" })
                 allUsers = users.filter { user -> user.id != currentUserId }.toMutableList()
                 fetchCurrentlySharedUsers()
                 Log.d("---USERS_FETCHED", "---USERS FETCHED =" + allUsers.joinToString(", "))
@@ -99,6 +103,16 @@ class DocumentSharePopupActivity : AppCompatActivity() {
     }
 
     private fun renderUserList() {
+        if (allUsers.isEmpty()) {
+            // Hide the list and show empty message
+            userListView.visibility = View.GONE
+            noUsersText.visibility = View.VISIBLE
+            return
+        } else {
+            userListView.visibility = View.VISIBLE
+            noUsersText.visibility = View.GONE
+        }
+
         adapter = object : ArrayAdapter<String>(
             this,
             R.layout.item_user_list_entry,
@@ -128,7 +142,7 @@ class DocumentSharePopupActivity : AppCompatActivity() {
                         Log.d("---DOCUMENT_UNSHARED", "---DOCUMENT UNSHARED WITH USER IDS " + sharedUserIds.joinToString(", "))
                         sharedUserIds.remove(user.id)
                         renderUserList()
-                        showToast("Unshared with: ${user.firstName} ${user.lastName} (${user.email})")
+                        showToast("Unshared with: ${user.firstName} ${user.lastName}")
                     },
                     onError = {
                         Log.e("---DOCUMENT_UNSHARE_ERROR", "---DOCUMENT UNSHARE ERROR = " + it)
@@ -141,7 +155,7 @@ class DocumentSharePopupActivity : AppCompatActivity() {
                         Log.d("---DOCUMENT_SHARED", "---DOCUMENT SHARED WITH USER IDS " + sharedUserIds.joinToString(", "))
                         sharedUserIds.add(user.id)
                         renderUserList()
-                        showToast("Shared with: ${user.firstName} ${user.lastName} (${user.email})")
+                        showToast("Shared with: ${user.firstName} ${user.lastName}")
                     },
                     onError = {
                         Log.e("---DOCUMENT_SHARE_ERROR", "---DOCUMENT SHARE ERROR = " + it)
