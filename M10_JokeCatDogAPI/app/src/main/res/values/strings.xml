@@ -1,3 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">JokeCatDogAPI</string>
+    <string name="app_name">JokeCatDog</string>
+    <string name="last_selection_text">You last saw a _____.</string>
+    <string name="joke_button_label">Tell me a joke</string>
+    <string name="cat_button_label">Show me a cat</string>
+    <string name="dog_button_label">Show me a dog</string>
+    <string name="back_button_label">Back</string>
+    <string name="joke_text">Knock, knock. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed libero at nisl pellentesque dignissim.</string>
+    <string name="cat_image_view_description">Image of a cat</string>
+    <string name="dog_image_view_description">Image of a dog</string>
 </resources>
