@@ -5,15 +5,12 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.util.LruCache
 import android.view.View
 import android.view.WindowInsets
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.ImageLoader
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.NetworkImageView
 import com.android.volley.toolbox.Volley
 import com.google.android.material.button.MaterialButton
@@ -40,29 +37,46 @@ class CatActivity : AppCompatActivity() {
         catNetworkImageView = findViewById(R.id.niv_cat)
         backButton = findViewById(R.id.btn_back)
 
-        // API request
-        val url = "https://cataas.com/cat"
+        // Set up image loader with cache
+        val url = "https://cataas.com/cat?type=square"
         val queue = Volley.newRequestQueue(this)
         val imageLoader = ImageLoader(queue, object : ImageLoader.ImageCache {
-            private val mCache: LruCache<String, Bitmap> = LruCache<String, Bitmap>(10)
+            private val mCache = LruCache<String, Bitmap>(10)
+            override fun getBitmap(url: String): Bitmap? = mCache.get(url)
             override fun putBitmap(url: String, bitmap: Bitmap) {
                 mCache.put(url, bitmap)
-//                catNetworkImageView.setImageBitmap(bitmap)
-            }
-
-            override fun getBitmap(url: String): Bitmap? {
-                return mCache.get(url)
             }
         })
 
-        // Load image
+        // Set image
         catNetworkImageView.setImageUrl(url, imageLoader)
 
         // Handle back button click
         backButton.setOnClickListener {
+            val lastSelectionMessage = "You last saw a cat."
+
+            // Save last selection to disk
+            val prefs = getSharedPreferences("JokeCatDogPrefs", MODE_PRIVATE)
+            prefs.edit().putString("lastSelection", lastSelectionMessage).apply()
+
+            // Pass last selection back to MainActivity
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("LAST_SELECTION_MESSAGE", "You last saw a cat.")
+            intent.putExtra("LAST_SELECTION_MESSAGE", lastSelectionMessage)
             startActivity(intent)
+        }
+
+        // Adjust top guideline to be 18% down after ActionBar
+        val root = findViewById<View>(R.id.cat)
+        val guideline = findViewById<View>(R.id.guideline_top)
+
+        root.viewTreeObserver.addOnGlobalLayoutListener {
+            val screenHeight = root.height
+            val actionBarHeight = supportActionBar?.height ?: 0
+
+            val offset = ((screenHeight - actionBarHeight) * 0.18f + actionBarHeight).toInt()
+            val params = guideline.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            params.guideBegin = offset
+            guideline.layoutParams = params
         }
     }
 

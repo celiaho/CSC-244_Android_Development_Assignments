@@ -10,8 +10,6 @@ import android.view.WindowInsets
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -40,10 +38,10 @@ class JokeActivity : AppCompatActivity() {
         jokeTextView = findViewById(R.id.tv_joke)
         backButton = findViewById(R.id.btn_back)
 
-        // API request
+        // Call API and set textview
         val url = "https://v2.jokeapi.dev/joke/Any?type=single"
         val queue = Volley.newRequestQueue(this)
-        val jsonObjectRequest = JsonObjectRequest(
+        val request = JsonObjectRequest(
             Request.Method.GET, url, null, Response.Listener { response ->
                 jokeTextView.text = response.get("joke").toString()
                 Log.d("JokeActivity", "Joke: ${response.get("joke")}")
@@ -53,23 +51,35 @@ class JokeActivity : AppCompatActivity() {
                 Log.d("JokeActivity", "Error: ${error.message}")
             }
         )
-        queue.add(jsonObjectRequest)
+        queue.add(request)
 
         // Handle back button click
         backButton.setOnClickListener {
+            val lastSelectionMessage = "You last saw a joke."
+
+            // Save last selection to disk
+            val prefs = getSharedPreferences("JokeCatDogPrefs", MODE_PRIVATE)
+            prefs.edit().putString("lastSelection", lastSelectionMessage).apply()
+
+            // Pass last selection back to MainActivity
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("LAST_SELECTION_MESSAGE", "You last saw a joke.")
+            intent.putExtra("LAST_SELECTION_MESSAGE", lastSelectionMessage)
             startActivity(intent)
         }
 
-//        private fun switchActivities() {
-//            val switchActivityIntent: Intent = Intent(
-//                this,
-//                MainActivity::class.java
-//            )
-//            switchActivityIntent.putExtra("page", "last visited dog image")
-//            startActivity(switchActivityIntent)
-//        }
+        // Adjust top guideline to be 18% down after ActionBar
+        val root = findViewById<View>(R.id.joke)
+        val guideline = findViewById<View>(R.id.guideline_top)
+
+        root.viewTreeObserver.addOnGlobalLayoutListener {
+            val screenHeight = root.height
+            val actionBarHeight = supportActionBar?.height ?: 0
+
+            val offset = ((screenHeight - actionBarHeight) * 0.18f + actionBarHeight).toInt()
+            val params = guideline.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            params.guideBegin = offset
+            guideline.layoutParams = params
+        }
     }
 
 // Handle orientation changes
