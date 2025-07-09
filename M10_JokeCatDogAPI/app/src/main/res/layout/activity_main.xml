@@ -11,11 +11,11 @@
 <!--    <include-->
 <!--        android:id="@+id/appbar"-->
 <!--        layout="@layout/appbar" />-->
+
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline25"
+        android:id="@+id/guideline_top"
+        app:layout_constraintGuide_percent="0.18"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="0dp"
-        app:layout_constraintGuide_percent="0.25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -29,42 +29,72 @@
         android:layout_marginEnd="36dp"
         android:gravity="center_horizontal"
         app:layout_constraintVertical_bias="0"
-        app:layout_constraintTop_toTopOf="@+id/guideline25"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top"
         app:layout_constraintBottom_toTopOf="@+id/btn_joke"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_joke"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        app:layout_constraintGuide_percent="0.95"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- *BUTTONS* -->
+    <!-- Flow to manage buttons layout direction -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/btn_flow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
-        android:text="@string/joke_button_label"
-        app:layout_constraintBottom_toTopOf="@+id/btn_cat"
+        app:constraint_referenced_ids="btn_joke,btn_cat,btn_dog"
+        app:flow_horizontalGap="16dp"
+        app:flow_verticalGap="16dp"
+        app:flow_wrapMode="none"
+        app:flow_horizontalAlign="center"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tv_last_selection"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+        app:layout_constraintVertical_bias="1"/>
+
+<!--    <androidx.constraintlayout.helper.widget.Flow-->
+<!--        android:id="@+id/btn_flow"-->
+<!--        app:constraint_referenced_ids="btn_joke,btn_cat,btn_dog"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="18dp"-->
+<!--        android:layout_marginEnd="18dp"-->
+<!--        app:flow_horizontalGap="16dp"-->
+<!--        app:flow_verticalGap="16dp"-->
+<!--        app:flow_wrapMode="none"-->
+<!--        app:flow_verticalAlign="bottom"-->
+<!--        app:flow_horizontalAlign="center"-->
+<!--        app:layout_constraintVertical_bias="1"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/guideline95"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_last_selection"-->
+<!--        app:flow_orientation="auto" />-->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_joke"
+        android:text="@string/joke_button_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cat"
+        android:text="@string/cat_button_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
-        android:text="@string/cat_button_label"
-        app:layout_constraintBottom_toTopOf="@+id/btn_dog"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_dog"
+        android:text="@string/dog_button_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="88dp"
-        android:text="@string/dog_button_label"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
