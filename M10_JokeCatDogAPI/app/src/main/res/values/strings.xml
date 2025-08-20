@@ -7,4 +7,5 @@
     <string name="back_button_label">Back</string>
     <string name="cat_image_view_description">Image of a cat</string>
     <string name="dog_image_view_description">Image of a dog</string>
+    <string name="pokemon_image_view_description">Image of a pokemon</string>
 </resources>
