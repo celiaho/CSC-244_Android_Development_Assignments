@@ -40,13 +40,30 @@ class MainActivity : AppCompatActivity() {
     private var operand1: Double? = null
     private var pendingOperand2: String = ""
     private var currentOperation: String? = null
-    private var equalsJustPressed: Boolean = false  // Flag to indicate if = button was just pressed
-    private var operationJustPressed: Boolean =
-        false // Flag to indicate if an operation button (+,-,*,/) was just pressed
+    private var equalsJustPressed: Boolean = false    // Flag to indicate if = button was just pressed
+    private var operationJustPressed: Boolean = false // Flag to indicate if an operation button (+,-,*,/) was just pressed
 
     // For history storage
     private val calculationHistory = mutableListOf<HistoryItem>()
     private val historyLimit = 100 // Max number of history items to store
+
+    // Activity Result launcher to receive selected result from HistoryActivity
+    private val pickHistoryResult = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // Pull the chosen result string and inject it as the new starting value
+            val chosen = result.data?.getStringExtra("selected_result")
+            if (!chosen.isNullOrBlank()) {
+                display.text = chosen // Put it on screen
+                operand1 = chosen.toDoubleOrNull() // Prep as first operand
+                pendingOperand2 = ""               // Clear 2nd operand
+                currentOperation = null            // Clear pending op
+                equalsJustPressed = false
+                operationJustPressed = false
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,8 +127,11 @@ class MainActivity : AppCompatActivity() {
         btnHistory.setOnClickListener {
             // Create an Intent to start the HistoryActivity
             val intent = android.content.Intent(this, HistoryActivity::class.java)
-            startActivity(intent) // Start the HistoryActivity
-            Log.d("Calculator", "History button clicked") //// Delete later
+            // Last 100 calculations are copied to ArrayList for Intent
+            val payload = ArrayList(calculationHistory.takeLast(historyLimit))
+            intent.putExtra("history_list", payload) // Serializable
+            pickHistoryResult.launch(intent) // Start for result
+            Log.d("MainActivity", "History button clicked")
         }
     }
 

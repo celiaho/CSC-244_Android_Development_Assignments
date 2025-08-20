@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,6 +10,7 @@
     android:textColor="@android:color/white"
     tools:context=".MainActivity">
 
+    <!-- Display -->
     <TextView
         android:id="@+id/tv_display"
         android:layout_width="0dp"
@@ -16,33 +18,83 @@
         android:gravity="end"
         android:text="@string/initial_display_value"
         android:textSize="44sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_buttons"
-        app:layout_constraintEnd_toEndOf="@+id/btnGridPortrait"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintBottom_toTopOf="@+id/btnGridLandscape"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
+    <!-- Landscape splits into two clusters: left = scientific column, right = button grid from portrait view -->
     <LinearLayout
-        android:id="@+id/btnGridPortrait"
+        android:id="@+id/btnGridLandscape"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
+        android:layout_height="0dp"
         android:divider="@drawable/divider_horizontal"
         android:orientation="horizontal"
         android:showDividers="middle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_buttons">
+        app:layout_constraintTop_toBottomOf="@id/tv_display">
 
+        <!-- Left: Scientific column -->
+        <LinearLayout
+            android:id="@+id/btnColumnScientific"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:showDividers="middle">
+
+            <Button
+                android:id="@+id/btn_sqrt"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="√x"
+                android:backgroundTint="@color/dark_gray"/>
+
+            <Button
+                android:id="@+id/btn_nth_root"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="n√x"
+                android:backgroundTint="@color/dark_gray"/>
+
+            <Button
+                android:id="@+id/btn_square"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="x²"
+                android:backgroundTint="@color/dark_gray"/>
+
+            <Button
+                android:id="@+id/btn_power"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="xⁿ"
+                android:backgroundTint="@color/dark_gray"/>
+
+            <Button
+                android:id="@+id/btn_log10"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="log"
+                android:backgroundTint="@color/dark_gray"/>
+
+            <Button
+                android:id="@+id/btn_ln"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="ln"
+                android:backgroundTint="@color/dark_gray"/>
+        </LinearLayout>
+
+        <!-- Right: Copy of button grid from portrait view -->
         <LinearLayout
             android:id="@+id/btnColumn_1"
             android:layout_width="0dp"
@@ -55,35 +107,35 @@
             <Button
                 android:id="@+id/btn_clear"
                 android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_gray"
                 android:text="@string/CLEAR"
-                android:textSize="11sp"
-                android:layout_height="0dp"/>
+                android:textSize="11sp" />
 
             <Button
                 android:id="@+id/btn_7"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_7"
-                android:backgroundTint="@color/medium_gray" />
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_7" />
 
             <Button
                 android:id="@+id/btn_4"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_4"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_4" />
 
             <Button
                 android:id="@+id/btn_1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_1"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_1" />
 
             <Button
                 android:id="@+id/btn_history"
@@ -117,32 +169,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_8"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_8" />
 
             <Button
                 android:id="@+id/btn_5"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_5"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_5" />
 
             <Button
                 android:id="@+id/btn_2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_2"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_2" />
 
             <Button
                 android:id="@+id/btn_0"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_0"
-            android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_0" />
         </LinearLayout>
 
         <LinearLayout
@@ -167,32 +219,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_9"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_9" />
 
             <Button
                 android:id="@+id/btn_6"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_6"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_6" />
 
             <Button
                 android:id="@+id/btn_3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/_3"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/_3" />
 
             <Button
                 android:id="@+id/btn_decimal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/decimalSymbol"
-                android:backgroundTint="@color/medium_gray"/>
+                android:backgroundTint="@color/medium_gray"
+                android:text="@string/decimalSymbol" />
         </LinearLayout>
 
         <LinearLayout
