@@ -1,0 +1,16 @@
+ANDROID CALCULATOR APP PROJECT CONTEXT 
+Use this project context file to develop my Android with Kotlin calculator app. Mockups and existing files have been uploaded to Project Files for reference. The next steps are to develop the History feature and the landscape activity with its additional functions. Below are Project Requirements and other relevant details; focus on following the basic requirements and developing the app to a point where the demo video is good enough for submission. I need to turn in the demo video tomorrow, 8/20/2025 by 11 PM so help me work as efficiently as possible. 
+
+PROFESSOR’S PROJECT REQUIREMENTS
+Create a calculator app. When the app is in portrait mode it should provide the user with the ability to calculate basic arithmetic operations (add, subtract, multiply, divide) When the app is in landscape mode it should provide the user with the ability to perform the aforementioned operations as well a square root (2√x), n'th root (n√x), squaring (x^2), exponentiation (x^n), log. and the natural log. For simplicity, the calculator should operate using the tabulation approach. This means only one operation is handled at a time. Meaning the user will specify a number then an operation, then another number, and press the equals button. In the event, the equals button is not pressed but another operation button is pressed, the calculator should calculate the preceding value display it on the screen then proceed to use the recently calculated value as the first value of the next operation. The calculator does NOT have to operate like a scientific calculator where all the options are specified then calculated but if you are feeling ambitious try to make it a scientific calculator. For an example of a tabulation calculator interface take a look at this calculator: https://calculator.com/standard-tape/. 
+
+Aside from the operations specified above the calculator should have a button that clears its memory of the current operation and value. It should also have a button that opens a scrollable list activity that displays the past 100 instructions and answers. The user should be able to click one of these past answers and it should automatically be input at the first value of on the calculator main screen. 
+
+There are no guidelines for the presentation and GUI, it is entirely up to you. Your application will be assessed on the functionality and that it has the necessary capabilities. You are NOT allowed to work in groups for this assignment. Please submit a video of you using your calculator via the android emulator or present it to me in class. 
+
+This video demonstrates what is to be expected in this assignment:https://bhcc.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=51379f52-cdaa-4526-bc6e-ad6d0131ed79
+
+Please submit a video of your app.
+
+--
+MOCKUP OF CALCULATOR IN LANDSCAPE MODE

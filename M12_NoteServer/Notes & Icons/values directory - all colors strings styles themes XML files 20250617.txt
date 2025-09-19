@@ -1,0 +1,203 @@
+// M12_NoteServer/app/src/main/res/values/colors.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand colors adjusted for accessibility -->
+    <color name="blue">#1659C7</color> <!-- Darker blue for better contrast -->
+    <color name="orange">#D15600</color> <!-- Deeper orange for better contrast -->
+
+    <!-- Backgrounds -->
+    <color name="light_gray">#E0E0E0</color>
+    <color name="medium_gray">#757575</color>
+    <color name="dark_gray">#333333</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="popup_background">#FFFFFF</color> <!-- white for light mode -->
+
+    <!-- Input/Error feedback -->
+    <color name="red">#B00020</color> <!-- Error red used by Material guidelines -->
+
+    <!-- Background tint (editable, e.g., document editor) -->
+    <color name="light_background">#FAFAFA</color>
+</resources>
+
+...
+
+// M12_NoteServer/app/src/main/res/values/strings.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GOTT NOTES</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
+    <string name="send_reset_link">Send Reset Link</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="document_title">Document Title</string>
+    <string name="save">Save</string>
+    <string name="share">Share</string>
+    <string name="settings">Settings</string>
+</resources>
+
+...
+
+// M12_NoteServer/app/src/main/res/values/styles.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Style for rounded text input fields -->
+    <style name="RoundedEditText">
+        <item name="android:background">@drawable/rounded_input</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <!-- Dark theme style override for input field text color -->
+    <style name="DarkEditText" parent="Widget.MaterialComponents.TextInputEditText.FilledBox">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">#303030</item>
+    </style>
+
+    <!-- Style for primary app buttons -->
+    <style name="CustomButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:insetTop">8dp</item>
+        <item name="android:insetBottom">8dp</item>
+    </style>
+
+    <!-- Style override for DocumentSharePopupActivity.kt -->
+    <style name="Theme.GOTTNotes.PopupDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="android:backgroundDimEnabled">true</item> <!-- dims background -->
+        <item name="android:windowBackground">@color/light_gray</item> <!-- background inside dialog -->
+        <item name="android:textColorPrimary">@color/dark_gray</item>
+        <item name="windowNoTitle">true</item> <!-- hides title bar -->
+    </style>
+
+</resources>
+
+...
+
+// M12_NoteServer/app/src/main/res/values/themes.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme in Light mode -->
+    <style name="Theme.GOTTNotes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Ensure status bar is not covered by the app toolbar -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+
+        <!-- Primary brand colors -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary (accent) color -->
+        <item name="colorSecondary">@color/orange</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Backgrounds -->
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorSurface">@color/light_background</item>
+        <item name="colorOnSurface">@color/black</item>
+
+        <!-- Default text colors -->
+        <item name="android:textColorPrimary">@color/dark_gray</item>
+        <item name="android:textColorSecondary">@color/medium_gray</item>
+
+        <!-- Override ripple and control highlight for accessibility contrast -->
+        <item name="colorControlHighlight">@color/light_gray</item>
+
+        <!-- Toolbar defaults -->
+        <item name="toolbarStyle">@style/CustomToolbar</item>
+    </style>
+
+    <!-- Toolbar style -->
+    <style name="CustomToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:minHeight">72dp</item>
+        <item name="android:background">@color/blue</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
+
+</resources>
+
+...
+
+// M12_NoteServer/app/src/main/res/values-night/colors.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand colors for dark mode -->
+    <color name="blue">#5E9EFF</color>
+    <color name="orange">#FF9A33</color>
+
+    <!-- Backgrounds -->
+    <color name="popup_background">#2A2A2A</color> <!-- existing light gray -->
+    <color name="light_gray">#2A2A2A</color>
+    <color name="medium_gray">#888888</color>
+    <color name="dark_gray">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#121212</color> <!-- not true black -->
+
+    <!-- Input/Error feedback -->
+    <color name="red">#FF6E6E</color>
+
+    <!-- Background tint (editable, e.g., document editor) -->
+    <color name="light_background">#1C1C1C</color>
+</resources>
+
+...
+
+// M12_NoteServer/app/src/main/res/values-night/themes.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme in Dark mode -->
+    <style name="Theme.GOTTNotes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Status bar behavior -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+
+        <!-- Brand colors -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Accent -->
+        <item name="colorSecondary">@color/orange</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <!-- Backgrounds -->
+        <item name="android:colorBackground">@color/black</item>
+        <item name="colorSurface">@color/light_background</item>
+        <item name="colorOnSurface">@color/dark_gray</item>
+
+        <!-- Text -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/medium_gray</item>
+
+        <!-- Ripple + toolbar -->
+        <item name="colorControlHighlight">@color/light_gray</item>
+        <item name="toolbarStyle">@style/CustomToolbar</item>
+
+        <!-- Dark Mode EditText style -->
+        <item name="editTextStyle">@style/DarkEditText</item>
+    </style>
+
+...
+</resources>

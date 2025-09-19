@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.gson) // For data persistence (history) via JSON serialization
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

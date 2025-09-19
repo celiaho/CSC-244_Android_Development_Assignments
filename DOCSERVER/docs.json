@@ -1,0 +1,200 @@
+{
+  "profiles": {
+    "7218ce2a363d462498aec5b4e71a1c01": {
+      "id": "7218ce2a363d462498aec5b4e71a1c01",
+      "first_name": "Alpha",
+      "last_name": "User",
+      "email": "usera@gott.com",
+      "password_hash": "$2a$12$2bmVH3lSosUUwDynHB4JteIkAMiFa0V.ShSPjqbLFf2VaS1o0QifC",
+      "creation_date": "2025-06-17T19:51:48.436604Z",
+      "last_modified_date": "2025-07-09T18:12:24.0388762Z"
+    },
+    "a6b185bfe4574ccb99c94f245f0b7c27": {
+      "id": "a6b185bfe4574ccb99c94f245f0b7c27",
+      "first_name": "Ted",
+      "last_name": "Lasso",
+      "email": "ted@richmond.afc",
+      "password_hash": "$2a$12$SPkP6/UTFfnagm2xlt3C1.pANHEcl09avnl1U8L9IN4hn.WYLAkOW",
+      "creation_date": "2025-07-24T19:34:23.590982Z",
+      "last_modified_date": "2025-08-21T03:40:50.2969643Z"
+    },
+    "d7db12eff1e245818a43eaf4d82e2648": {
+      "id": "d7db12eff1e245818a43eaf4d82e2648",
+      "first_name": "User",
+      "last_name": "1",
+      "email": "1@hf.com",
+      "password_hash": "$2a$12$Rr2bvWF7E/MV4vyvuNsNHObiY/3K4oopOUHVHNqvHBYXSIzLJ8MMS",
+      "creation_date": "2025-07-09T18:18:03.6719628Z",
+      "last_modified_date": "2025-07-24T16:27:54.7825609Z"
+    },
+    "ef7fbf34323949ffa384077326267b3d": {
+      "id": "ef7fbf34323949ffa384077326267b3d",
+      "first_name": "Keely",
+      "last_name": "The Best",
+      "email": "keeley@kpr.love",
+      "password_hash": "$2a$12$N/LQDSAJmgqkSN2WKvjmwO/ylUJ1x3vApD6HXxND2wB.WYhRGWYay",
+      "creation_date": "2025-08-21T03:39:37.0461045Z",
+      "last_modified_date": "2025-08-21T03:43:07.9038116Z",
+      "extra": {}
+    }
+  },
+  "documents": {
+    "2697dc2ab4584c4abdb7cfc8c85d0d9c": {
+      "id": "2697dc2ab4584c4abdb7cfc8c85d0d9c",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "Alright, alright, alright! Let's get after it, team. Remember, even if the pitch is muddy, our spirits can still be high. We're gonna take it slow, one biscuit at a time. Be a goldfish, folks, forget about that last play. It's all about the little things, the small victories that lead to the big ones. And hey, if you're feeling down, just remember, \"Believe\" in yourselves, and we'll get through this together. Now, who's got a funny story? Because laughter is like sunshine on a cloudy day, and we could all use a little bit of that.",
+        "title": "Alpha's Lasso Lovelies 1"
+      },
+      "creation_date": "2025-06-17T20:43:00.8706151Z",
+      "last_modified_date": "2025-06-17T21:52:49.4644826Z"
+    },
+    "2f30404fb3f04f169813f3c93af94abe": {
+      "id": "2f30404fb3f04f169813f3c93af94abe",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "☑ Wake up and choose kindness (and coffee)\n☑ Tell someone they matter (even if it’s just the mailman)\n☑ Do one thing that scares me (like karaoke or therapy)\n☑ Believe in “Believe”\n☑ Avoid saying “sorry” for no reason—unless I spill tea on someone\n☑ Ask, “What would Ted do?”\n\n    Bonus: Eat a biscuit. Smile. Repeat.",
+        "title": "Game Plan – Win the Day, Lasso Style"
+      },
+      "creation_date": "2025-06-17T21:53:03.9003427Z",
+      "last_modified_date": "2025-06-17T21:53:24.1475495Z"
+    },
+    "4069dcd1c1b54c95a3ecb4fa149186eb": {
+      "id": "4069dcd1c1b54c95a3ecb4fa149186eb",
+      "owner_id": "d7db12eff1e245818a43eaf4d82e2648",
+      "content": {
+        "q1_u_i": [
+          {
+            "id": "989e13c3-aaa8-4ac1-8f7e-a76d2737fb3e",
+            "isCompleted": false,
+            "text": "Submit application"
+          },
+          {
+            "id": "c323c53e-9895-43e3-886e-66a030b8d58f",
+            "isCompleted": true,
+            "text": "7/23 Commit code to Github"
+          }
+        ],
+        "q2_nu_i": [
+          {
+            "id": "770d5414-1afb-45b6-94bd-1448bab018cf",
+            "isCompleted": false,
+            "text": "Clean filter"
+          }
+        ],
+        "q3_u_ni": [
+          {
+            "id": "bfd71b56-110f-4daa-ba02-bde6b8690ad9",
+            "isCompleted": false,
+            "text": "8/1  Make mooncake"
+          }
+        ],
+        "q4_nu_ni": [
+          {
+            "id": "0e489d2d-c846-4cf7-9fa7-31371e7aa73c",
+            "isCompleted": false,
+            "text": "Watch TV"
+          },
+          {
+            "id": "453d6518-77c1-4cc8-ba72-69c8535ef40b",
+            "isCompleted": false,
+            "text": "Inbox zero"
+          },
+          {
+            "id": "4b9f8ccb-f403-400f-9845-0a2e096136e7",
+            "isCompleted": false,
+            "text": "Organize utensils"
+          }
+        ]
+      },
+      "creation_date": "2025-07-23T17:52:19.5212361Z",
+      "last_modified_date": "2025-07-24T14:39:12.6172303Z"
+    },
+    "59557a9833194804b574aea62d6fd013": {
+      "id": "59557a9833194804b574aea62d6fd013",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "“You know what the happiest animal on Earth is? It’s a goldfish. Know why? Got a 10-second memory. Be a goldfish.”\n– Ted Lasso",
+        "title": "Aspirational Thoughts"
+      },
+      "creation_date": "2025-06-17T21:54:40.5691781Z",
+      "last_modified_date": "2025-06-17T23:46:25.1294597Z"
+    },
+    "6a545368b6274e8db96d2c0f85c45b9a": {
+      "id": "6a545368b6274e8db96d2c0f85c45b9a",
+      "owner_id": "d7db12eff1e245818a43eaf4d82e2648",
+      "content": {
+        "q1_u_i": [
+          {
+            "id": "344cbf03-dea8-4063-bf09-5d52b5f1bfdd",
+            "isCompleted": true,
+            "text": "Schedule dentist"
+          }
+        ],
+        "q2_nu_i": [],
+        "q3_u_ni": [],
+        "q4_nu_ni": []
+      },
+      "creation_date": "2025-07-23T17:40:15.0699424Z",
+      "last_modified_date": "2025-07-23T17:40:24.0225493Z"
+    },
+    "b6bdce17dbbe483cac66464ee0ce10d4": {
+      "id": "b6bdce17dbbe483cac66464ee0ce10d4",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "You know, life’s kinda like coaching a football team when you don’t know the rules: confusing, hilarious, and filled with accidental wins.\n\nToday I felt like quitting. But then I remembered Ted said, “Taking on a challenge is a lot like riding a horse…if you’re comfortable while you’re doing it, you’re probably doing it wrong.”\n\nSo I’m staying on this wild horse. No saddle, just vibes.",
+        "title": "When It Rains, Let It Pour (Then Dance in It)"
+      },
+      "creation_date": "2025-06-17T21:53:52.2831652Z",
+      "last_modified_date": "2025-06-17T21:54:16.0150384Z"
+    },
+    "d035514ee67b4a2bb2ed42c55e21a54c": {
+      "id": "d035514ee67b4a2bb2ed42c55e21a54c",
+      "owner_id": "b873fcf01e0340288de420c50c0ff95a",
+      "content": {
+        "body": "Document3",
+        "title": "A's Doc 2 - Not shared"
+      },
+      "creation_date": "2025-05-14T20:50:17.1003377Z",
+      "last_modified_date": "2025-06-17T19:10:10.4146609Z"
+    },
+    "e3833244223a416fbdcafe2c98b0debd": {
+      "id": "e3833244223a416fbdcafe2c98b0debd",
+      "owner_id": "b873fcf01e0340288de420c50c0ff95a",
+      "content": {
+        "body": "A's Doc 1 -  shared",
+        "title": "A's Doc 1 -  shared with Alpha"
+      },
+      "creation_date": "2025-05-19T22:59:46.5667319Z",
+      "last_modified_date": "2025-06-17T20:59:30.2972905Z"
+    },
+    "ecac3fb355f34722b7519be402215207": {
+      "id": "ecac3fb355f34722b7519be402215207",
+      "owner_id": "a6b185bfe4574ccb99c94f245f0b7c27",
+      "content": {
+        "body": "!",
+        "title": "Believe"
+      },
+      "creation_date": "2025-08-21T03:41:23.0888341Z",
+      "last_modified_date": "2025-08-21T03:45:32.1020444Z"
+    },
+    "ff4bd101903e43cd8c368a71364e18ee": {
+      "id": "ff4bd101903e43cd8c368a71364e18ee",
+      "owner_id": "7218ce2a363d462498aec5b4e71a1c01",
+      "content": {
+        "body": "I believe in hope. I believe in “rom-communism.” That means we’re all in this together, and we believe that everything’s gonna work out in the end. Even if the journey's messy as a barbecue sauce stain on a tuxedo.\n\nSo yeah, maybe I’ve made some mistakes—like using peanut butter as hair gel. But believing in happy endings? That’s never been one of them.\n\nTrust the process. Hug your friends. Believe in biscuits.",
+        "title": "The Gospel According to Rom-Communism"
+      },
+      "creation_date": "2025-06-17T21:51:47.0346027Z",
+      "last_modified_date": "2025-06-17T21:52:37.5085895Z"
+    }
+  },
+  "share_records": {
+    "ecac3fb355f34722b7519be402215207": {
+      "shared_with": [
+        "ef7fbf34323949ffa384077326267b3d",
+        "a995f69dc5ef4a238eba4c5cbb574d7f"
+      ]
+    }
+  }
+}
